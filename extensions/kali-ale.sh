@@ -33,7 +33,7 @@ function pre_customize_image__install_kali_packages(){
 
 	display_alert "Updating package lists with Kali Linux repos" "Debian :: ${EXTENSION}" "info"
 	do_with_retries 3 chroot_sdcard_apt_get_update
-	display_alert "Installing packages: ${packages}" "Debian :: ${EXTENSIONS}" "info"
+	display_alert "Installing packages: ${packages}" "Debian :: ${EXTENSION}" "info"
 	do_with_retries 3 chroot_sdcard_apt_get_install --allow-downgrades ${packages}
 
 	# Optional preinstall top 10 tools
