@@ -59,7 +59,7 @@ ArmbianUserOverlayInstall()
 {
 	echo "Installing user overlays"
         if [ -d ${BOARD} ] && [ -f ${BOARD}/*.dts ]; then
-        for file in /tmp/overlay/${BOARD}/*.dts; do armbian-add-overlay ${file}; done
+        for file in /tmp/overlay/${BOARD}/*.dts; do armbian-add-overlay /tmp/overlay/${BOARD}/${file}; done
         fi
 
 }
