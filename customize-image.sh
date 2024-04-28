@@ -37,11 +37,12 @@ Main() {
 
 		bookworm|trixie|sid|jammy)
 			SetupStealthNetworking
-			DisableUARTS
+			DisableTTYs
 			EnableServices
 			ArmbianUserOverlayInstall
 			CopyConfigFiles
 			SetupGpsd
+			UpdateArmbianEnvTxt
 			;;
 
 	esac
@@ -78,13 +79,17 @@ SetupStealthNetworking()
 
 }
 
-DisableUARTS()
+DisableTTYs()
 {
 	echo "Disabling serial consoles"
         systemctl mask serial-getty@ttyS0.service
         systemctl mask serial-getty@ttyS1.service
         systemctl mask serial-getty@ttyS2.service
         systemctl mask serial-getty@ttyS5.service
+	echo "Disabling virtual consoles"
+	mkdir /etc/systemd/logind.conf.d/
+	cp /tmp/overlay/common/logind_00-disable-vtty.conf /etc/systemd/logind.conf.d/
+
 }
 
 EnableServices()
@@ -97,8 +102,9 @@ EnableServices()
 
 CopyConfigFiles()
 {
-	echo "Copying misc config files"
-	cp /tmp/overlay/common/kismet.conf /etc
+	echo "Blacklisting video and display output-related modules"
+	cp /tmp/overlay/common/blacklist-videoout.conf /etc/modprobe.d
+#	cp /tmp/overlay/common/kismet.conf /etc
 
 }
 
@@ -113,5 +119,17 @@ SetupGpsd()
 
 }
 
+UpdateArmbianEnvTxt()
+{
+	echo "Disabling verbosity, bootlogo, and console output in u-boot"
+	if [ -f /boot/armbianEnv.txt ]; then
+	sed -i 's/^verbosity.*/verbosity\=0/g' /boot/armbianEnv.txt
+	sed -i 's/^bootlogo.*/bootlogo\=false/g' /boot/armbianEnv.txt
+	sed -i 's/^console.*/console\=none/g' /boot/armbianEnv.txt
+	echo "Disabling Predictable net interface naming"
+	echo "extraargs=net.ifnames=0" >> /boot/armbianEnv.txt
+	fi
+
+}
 Main "$@"
 
