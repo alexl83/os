@@ -40,6 +40,8 @@ Main() {
 			DisableUARTS
 			EnableServices
 			ArmbianUserOverlayInstall
+			CopyConfigFiles
+			SetupGpsd
 			;;
 
 	esac
@@ -93,21 +95,23 @@ EnableServices()
 	systemctl enable rfcomm.service
 }
 
-#CopyConfigFiles()
-#{
-#	cp /tmp/overlay/common/kismet.conf /etc
+CopyConfigFiles()
+{
+	echo "Copying misc config files"
+	cp /tmp/overlay/common/kismet.conf /etc
 
-#}
+}
 
-#SetupGpsd()
-#{
-#       if [ ${BOARD} == "orangepizero3" ]; then
-#       sed -i 's/DEVICES=.*/DEVICES="\/dev\/ttyS0"/g' /etc/default/gpsd
-#       elif [ ${BOARD} == "orangepizero02w" ]; then
-#       sed -i 's/DEVICES=.*/DEVICES="\/dev\/ttyS5"/g' /etc/default/gpsd
-#       fi
+SetupGpsd()
+{
+	echo "Setting up GPSD"
+	if [ ${BOARD} == "orangepizero3" ]; then
+	sed -i 's/DEVICES=.*/DEVICES="\/dev\/ttyS0"/g' /etc/default/gpsd
+	elif [ ${BOARD} == "orangepizero02w" ]; then
+	sed -i 's/DEVICES=.*/DEVICES="\/dev\/ttyS5"/g' /etc/default/gpsd
+	fi
 
-#}
+}
 
 Main "$@"
 

@@ -4,6 +4,7 @@ function extension_prepare_config__docker() {
 }
 
 function pre_customize_image__install_kali_packages(){
+	packages="net-tools moreutils armbian-zsh armbian-config kismet wifite airgeddon byobu git dkms gpsd git zsh zsh-autosuggestions"
 	display_alert "Adding gpg-key for Kali repository" "${EXTENSION}" "info"
 	run_host_command_logged curl --max-time 60 -4 -fsSL "https://archive.kali.org/archive-key.asc" "|" gpg --dearmor -o "${SDCARD}"/usr/share/keyrings/kali.gpg
 
@@ -23,6 +24,8 @@ function pre_customize_image__install_kali_packages(){
 
 	display_alert "Updating package lists with Kali Linux repos" "${EXTENSION}" "info"
 	do_with_retries 3 chroot_sdcard_apt_get_update
+	display_alert "Installing packages: ${packages}" "${EXTENSIONS}" "info"
+	do_with_retries 3 chroot_sdcard_apt_get_install ${packages}
 
 	# Optional preinstall top 10 tools
 #	display_alert "Installing Top 10 Kali Linux tools" "${EXTENSION}" "info"
