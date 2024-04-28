@@ -1,6 +1,6 @@
 function extension_prepare_config__docker() {
 	EXTRA_IMAGE_SUFFIXES+=("-kali") # global array
-	display_alert "Target image will have Kali repository preinstalled and Kali packages prioritized" "${EXTENSION}" "info"
+	display_alert "Target image will have Kali repository preinstalled and Kali packages prioritized" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 }
 
 
