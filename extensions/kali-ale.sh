@@ -14,7 +14,7 @@ function extension_prepare_config__docker() {
 
 function pre_customize_image__install_kali_packages(){
 	packages="net-tools moreutils byobu git dkms gpsd git zsh zsh-autosuggestions macchanger"
-	display_alert "Adding gpg-key for Kali repository" "${EXTENSION}" "info"
+	display_alert "Adding gpg-key for Kali repository" "Debian :: ${EXTENSION}" "info"
 	run_host_command_logged curl --max-time 60 -4 -fsSL "https://archive.kali.org/archive-key.asc" "|" gpg --dearmor -o "${SDCARD}"/usr/share/keyrings/kali.gpg
 
 	# Add sources.list
