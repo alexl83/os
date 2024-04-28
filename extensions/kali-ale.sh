@@ -21,7 +21,7 @@ function pre_customize_image__install_kali_packages(){
 	if [[ "${DISTRIBUTION}" == "Debian" ]]; then
 		display_alert "Adding sources.list for Kali." "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 		run_host_command_logged echo "deb [arch=${ARCH} signed-by=/usr/share/keyrings/kali.gpg] http://http.kali.org/kali kali-rolling main non-free contrib" "|" tee "${SDCARD}"/etc/apt/sources.list.d/kali.list
-		display_alert "Pinning Kali package versions to apt for consistency." "Debian :: ${EXTENSION}" "info"
+		display_alert "Pinning Kali package versions to apt for consistency." "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 		run_host_command_logged cat <<- 'end' > "${SDCARD}"/etc/apt/preferences.d/kali
 			Package: *
 			Pin: release o=kali
