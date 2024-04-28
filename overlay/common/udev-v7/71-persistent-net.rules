@@ -1,0 +1,1 @@
+SUBSYSTEM=="net", ACTION!="remove", DRIVERS!="brcmfmac", ATTR{type}!="803", ENV{NM_UNMANAGED}="1", RUN+="/usr/local/sbin/createmon.sh $name %n"

@@ -1,0 +1,18 @@
+/dts-v1/;
+/plugin/;
+
+/ {
+        compatible = "allwinner,sun50i-h6-tcon-top";
+        fragment@0 {
+                target-path = "/soc/tcon-top@6510000";
+                __overlay__ {
+                status = "disabled";
+                            };
+                   };
+	fragment@1 {
+		target-path ="/soc/lcd-controller@6515000";
+		__overlay__ {
+		status = "disabled";
+			    };
+		   };
+  };

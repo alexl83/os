@@ -1,0 +1,2 @@
+sudo udevadm control --log-priority=info
+sudo udevadm control --log-priority=debug
