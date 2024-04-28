@@ -1,4 +1,4 @@
-<h1> orangepi-related configs/patches for **Armbian**</h1>
+<h1> orangepi-related configs/patches for Armbian </h1>
 
 <p>This is an attempt at creating an SBC-oriented "stealth" armian-based kali headless machine</p>
 
