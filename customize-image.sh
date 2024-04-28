@@ -58,7 +58,7 @@ Main() {
 ArmbianUserOverlayInstall()
 {
 	echo "Installing user overlays"
-        if [ -d /tmp/overlay/${BOARD} -f /tmp/overlay/${BOARD}/*.dts ]; then
+        if [ -d "/tmp/overlay/${BOARD}" -f "/tmp/overlay/${BOARD}/*.dts" ]; then
         for file in /tmp/overlay/${BOARD}/*.dts; do armbian-add-overlay /tmp/overlay/${BOARD}/${file}; done
         fi
 
