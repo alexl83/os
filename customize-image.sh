@@ -105,6 +105,9 @@ CopyConfigFiles()
 {
 	echo "Blacklisting video and display output-related modules"
 	cp /tmp/overlay/common/blacklist-videoout.conf /etc/modprobe.d
+	if [ -f /etc/avahi/avahi-daemon.conf ]; then
+	sed -i 's/^\#allow-interfaces.*/allow-interfaces\=eth0,sta0/g' /etc/avahi/avahi-daemon.conf
+	fi
 #	cp /tmp/overlay/common/kismet.conf /etc
 
 }
