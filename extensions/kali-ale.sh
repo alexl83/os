@@ -14,12 +14,12 @@ function extension_prepare_config__docker() {
 
 function pre_customize_image__install_kali_packages(){
 	packages="net-tools moreutils byobu git dkms gpsd git zsh zsh-autosuggestions macchanger"
-	display_alert "Adding gpg-key for Kali repository" "Debian :: ${EXTENSION}" "info"
+	display_alert "Adding gpg-key for Kali repository" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged curl --max-time 60 -4 -fsSL "https://archive.kali.org/archive-key.asc" "|" gpg --dearmor -o "${SDCARD}"/usr/share/keyrings/kali.gpg
 
 	# Add sources.list
 	if [[ "${DISTRIBUTION}" == "Debian" ]]; then
-		display_alert "Adding sources.list for Kali." "Debian :: ${EXTENSION}" "info"
+		display_alert "Adding sources.list for Kali." "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 		run_host_command_logged echo "deb [arch=${ARCH} signed-by=/usr/share/keyrings/kali.gpg] http://http.kali.org/kali kali-rolling main non-free contrib" "|" tee "${SDCARD}"/etc/apt/sources.list.d/kali.list
 		display_alert "Pinning Kali package versions to apt for consistency." "Debian :: ${EXTENSION}" "info"
 		run_host_command_logged cat <<- 'end' > "${SDCARD}"/etc/apt/preferences.d/kali
@@ -31,9 +31,9 @@ function pre_customize_image__install_kali_packages(){
 		exit_with_error "Unsupported distribution: ${DISTRIBUTION}"
 	fi
 
-	display_alert "Updating package lists with Kali Linux repos" "Debian :: ${EXTENSION}" "info"
+	display_alert "Updating package lists with Kali Linux repos" "${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	do_with_retries 3 chroot_sdcard_apt_get_update
-	display_alert "Installing packages: ${packages}" "Debian :: ${EXTENSION}" "info"
+	display_alert "Installing packages: ${packages}" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	do_with_retries 3 chroot_sdcard_apt_get_install --allow-downgrades ${packages}
 
 	# Optional preinstall top 10 tools
