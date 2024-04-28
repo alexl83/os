@@ -96,6 +96,7 @@ EnableServices()
 {
 	echo "Enabling additional/custom services"
 #	systemctl enable gpsd.service
+	systemctl enable avahi-daemon
 	cp /tmp/overlay/common/rfcomm.service /etc/systemd/system
 	systemctl enable rfcomm.service
 }
