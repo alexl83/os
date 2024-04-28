@@ -13,7 +13,7 @@ function extension_prepare_config__docker() {
 #} #<extension_method>__install_armbian_stuff()
 
 function pre_customize_image__install_kali_packages(){
-	packages="net-tools moreutils byobu git dkms gpsd git zsh-autosuggestions macchanger"
+	packages="net-tools moreutils byobu git dkms gpsd git zsh zsh-autosuggestions macchanger"
 	display_alert "Adding gpg-key for Kali repository" "${EXTENSION}" "info"
 	run_host_command_logged curl --max-time 60 -4 -fsSL "https://archive.kali.org/archive-key.asc" "|" gpg --dearmor -o "${SDCARD}"/usr/share/keyrings/kali.gpg
 
