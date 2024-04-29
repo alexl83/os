@@ -36,24 +36,19 @@ Main() {
 			;;
 
 		bookworm|trixie|sid|jammy)
-			SetupStealthNetworking
+
 			DisableTTYs
-			EnableServices
-			ArmbianUserOverlayInstall
+			SetupStealthNetworking
 			CopyConfigFiles
 			SetupGpsd
+			EnableServices
+			ArmbianUserOverlayInstall
 			UpdateArmbianEnvTxt
 			;;
 
 	esac
 
 } # Main
-
-#CustomizeForAle()
-#{
-#	apt-get install -yy net-tools moreutils armbian-zsh armbian-config kismet wifite airgeddon byobu git dkms gpsd git zsh zsh-autosuggestions
-
-#}
 
 ArmbianUserOverlayInstall()
 {
@@ -106,8 +101,9 @@ CopyConfigFiles()
 	echo "Blacklisting video and display output-related modules"
 	cp /tmp/overlay/common/blacklist-videoout.conf /etc/modprobe.d
 	if [ -f /etc/avahi/avahi-daemon.conf ]; then
-	sed -i 's/^\#allow-interfaces.*/allow-interfaces\=eth0,sta0/g' /etc/avahi/avahi-daemon.conf
+	sed -i 's/^\#allow-interfaces.*/allow-interfaces\=eth0,sta0,nzt7nnkpung/g' /etc/avahi/avahi-daemon.conf
 	fi
+	cp /tmp/overlay/zshrc_skel /etc/skel/.zshrc
 #	cp /tmp/overlay/common/kismet.conf /etc
 
 }
@@ -130,6 +126,8 @@ UpdateArmbianEnvTxt()
 	sed -i 's/^verbosity.*/verbosity\=0/g' /boot/armbianEnv.txt
 	sed -i 's/^bootlogo.*/bootlogo\=false/g' /boot/armbianEnv.txt
 	sed -i 's/^console.*/console\=none/g' /boot/armbianEnv.txt
+	echo "Enabling IR and UART5 overlays by default"
+	sed -i 's/^overlays.*/overlays\=ir uart5-ph/g' /boot/armbianEnv.txt
 	echo "Disabling Predictable net interface naming"
 	echo "extraargs=net.ifnames=0" >> /boot/armbianEnv.txt
 	fi
