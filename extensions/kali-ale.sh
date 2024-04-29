@@ -11,7 +11,7 @@ function pre_customize_image__install_armbian_stuff(){
         do_with_retries 3 chroot_sdcard_apt_get_update
 	display_alert "Adding packages: ${pkgs}" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	do_with_retries 3 chroot_sdcard_apt_get_install ${pkgs}
-        display_alert "Disnabling Armbian Repo" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+        display_alert "Disabling Armbian Repo" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
         run_host_command_logged mv "${SDCARD}"/etc/apt/sources.list.d/armbian.list "${SDCARD}"/etc/apt/sources.list.d/armbian.list.disabled
 	do_with_retries 3 chroot_sdcard_apt_get_update
 
