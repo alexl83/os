@@ -127,7 +127,7 @@ UpdateArmbianEnvTxt()
 	sed -i 's/^bootlogo.*/bootlogo\=false/g' /boot/armbianEnv.txt
 	sed -i 's/^console.*/console\=none/g' /boot/armbianEnv.txt
 	echo "Enabling IR and UART5 overlays by default"
-	sed -i 's/^overlays.*/overlays\=ir uart5-ph/g' /boot/armbianEnv.txt
+	sed -i 's/^overlays\=.*/overlays\=ir uart5-ph/g' /boot/armbianEnv.txt
 	echo "Disabling Predictable net interface naming"
 	echo "extraargs=net.ifnames=0" >> /boot/armbianEnv.txt
 	fi
