@@ -4,18 +4,25 @@ function extension_prepare_config__docker() {
 }
 
 
-#function image_tweaks_post_customize__install_armbian_stuff(){
-#	pkgs="armbian-zsh armbian-config"
-#	display_alert "Adding packages: ${pkgs}" "${EXTENSION}" "info"
-#        do_with_retries 3 chroot_sdcard_apt_get_update
-#	do_with_retries 3 chroot_sdcard_apt_get_install --allow-downgrades ${pkgs}
+function pre_customize_image__install_armbian_stuff(){
+	pkgs="armbian-zsh armbian-config net-tools moreutils byobu git dkms gpsd zsh-autosuggestions macchanger avahi-daemon vnstat xauth x11-utils gpsd-tools wireless-regdb"
+	display_alert "Temporarily enabling Armbian Repo" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+	run_host_command_logged mv "${SDCARD}"/etc/apt/sources.list.d/armbian.list.disabled "${SDCARD}"/etc/apt/sources.list.d/armbian.list
+        do_with_retries 3 chroot_sdcard_apt_get_update
+	display_alert "Adding packages: ${pkgs}" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+	do_with_retries 3 chroot_sdcard_apt_get_install ${pkgs}
+        display_alert "Disnabling Armbian Repo" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+        run_host_command_logged mv "${SDCARD}"/etc/apt/sources.list.d/armbian.list "${SDCARD}"/etc/apt/sources.list.d/armbian.list.disabled
+	do_with_retries 3 chroot_sdcard_apt_get_update
 
-#} #<extension_method>__install_armbian_stuff()
+} #<extension_method>__install_armbian_stuff()
 
 function pre_customize_image__install_kali_packages(){
-	packages="net-tools moreutils byobu git dkms gpsd git zsh zsh-autosuggestions macchanger"
+	packages="net-tools moreutils byobu git dkms gpsd git zsh zsh-autosuggestions macchanger avahi-daemon"
 	display_alert "Adding gpg-key for Kali repository" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged curl --max-time 60 -4 -fsSL "https://archive.kali.org/archive-key.asc" "|" gpg --dearmor -o "${SDCARD}"/usr/share/keyrings/kali.gpg
+	display_alert "Adding gpg-key for Zerotier repository" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+	run_host_command_logged curl --max-time 60 -4 -fsSL "http://download.zerotier.com/contact%40zerotier.com.gpg" "|" gpg --dearmor -o "${SDCARD}"/usr/share/keyrings/zerotier-debian-package-key.gpg
 
 	# Add sources.list
 	if [[ "${DISTRIBUTION}" == "Debian" ]]; then
@@ -27,14 +34,16 @@ function pre_customize_image__install_kali_packages(){
 			Pin: release o=kali
 			Pin-Priority: 1000
 		end
+
+		display_alert "Adding sources.list for Zerotier." "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+		run_host_command_logged echo "deb [arch=${ARCH} signed-by=/usr/share/keyrings/zerotier-debian-package-key.gpg] http://download.zerotier.com/debian/bookworm bookworm main" "|" tee "${SDCARD}"/etc/apt/sources.list.d/zerotier.list
+
 	else
 		exit_with_error "Unsupported distribution: ${DISTRIBUTION}"
 	fi
 
-	display_alert "Updating package lists with Kali Linux repos" "${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+	display_alert "Updating package lists with Kali Linux & Zerotier repositories" "${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	do_with_retries 3 chroot_sdcard_apt_get_update
-	display_alert "Installing packages: ${packages}" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-	do_with_retries 3 chroot_sdcard_apt_get_install --allow-downgrades ${packages}
 
 	# Optional preinstall top 10 tools
 #	display_alert "Installing Top 10 Kali Linux tools" "${EXTENSION}" "info"
