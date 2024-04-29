@@ -103,7 +103,7 @@ CopyConfigFiles()
 	if [ -f /etc/avahi/avahi-daemon.conf ]; then
 	sed -i 's/^\#allow-interfaces.*/allow-interfaces\=eth0,sta0,nzt7nnkpung/g' /etc/avahi/avahi-daemon.conf
 	fi
-	cp /tmp/overlay/zshrc_skel /etc/skel/.zshrc
+	cp /tmp/overlay/common/zshrc_skel /etc/skel/.zshrc
 #	cp /tmp/overlay/common/kismet.conf /etc
 
 }
