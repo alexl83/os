@@ -41,7 +41,7 @@ Main() {
 			SetupStealthNetworking
 			CopyConfigFiles
 			SetupGpsd
-			EnableServices
+			EnableDisableServices
 			ArmbianUserOverlayInstall
 			UpdateArmbianEnvTxt
 			;;
@@ -87,11 +87,15 @@ DisableTTYs()
 
 }
 
-EnableServices()
+EnableDisableServices()
 {
-	echo "Enabling additional/custom services"
+	echo "Enabling/disabling additional/custom services"
 #	systemctl enable gpsd.service
 #	systemctl enable avahi-daemon
+	systemctl disable zerotier-one.service
+	if [ -f /etc/systemd/system/multi-user.target.wants/unattended-upgrades.service ]; then
+	systemctl disable unattended-upgrades
+	fi
 	cp /tmp/overlay/common/rfcomm.service /etc/systemd/system
 	systemctl enable rfcomm.service
 }
