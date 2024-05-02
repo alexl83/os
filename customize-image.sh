@@ -42,6 +42,7 @@ Main() {
 			CopyConfigFiles
 			SetupGpsd
 			EnableDisableServices
+			InstallAgryOxide
 			ArmbianUserOverlayInstall
 			UpdateArmbianEnvTxt
 			;;
@@ -121,6 +122,20 @@ SetupGpsd()
 	sed -i 's/DEVICES=.*/DEVICES="\/dev\/ttyS5"/g' /etc/default/gpsd
 	fi
 
+}
+
+InstallAngryOxide()
+ {
+	echo "Downloading and installing angrixide latest build from gh:Ragnt/AngryOxide"
+	mkdir /tmpinst
+	cd /tmpinst
+	wget https://github.com/Ragnt/AngryOxide/releases/latest/download/angryoxide-linux-aarch64-musl.tar.gz
+	tar xfz angryoxide-linux-aarch64-musl.tar.gz
+	chmod +x ./install
+	./install install
+	cd /
+	rm -rf /tmpinst
+	echo "Done installing AngryOxide"
 }
 
 UpdateArmbianEnvTxt()
