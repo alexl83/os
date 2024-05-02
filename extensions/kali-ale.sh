@@ -3,15 +3,12 @@ function extension_prepare_config__docker() {
 	display_alert "Target image will have Kali repository preinstalled and Kali packages prioritized" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 }
 
-
-#function pre_customize_image__install_armbian_stuff(){
-
-#} #<extension_method>__install_armbian_stuff()
+#original extension_method "pre_install_kernel_deb"
+#working  extension_method pre t64 breakage "pre_custoize_image"
+#working  extension_methos post commit #6358 "post_install_kernel_debs"
 
 function post_install_kernel_debs__install_kali_packages(){
-	pkgs="net-tools moreutils byobu git dkms gpsd zsh-autosuggestions macchanger avahi-daemon vnstat xauth x11-utils gpsd-tools wireless-regdb libnss-mdns zerotier-one"
-#	display_alert "Temporarily enabling Armbian Repo" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-#	run_host_command_logged mv "${SDCARD}"/etc/apt/sources.list.d/armbian.list.disabled "${SDCARD}"/etc/apt/sources.list.d/armbian.list
+	pkgs="net-tools moreutils byobu git dkms gpsd zsh-autosuggestions macchanger avahi-daemon vnstat xauth x11-utils gpsd-tools libnss-mdns zerotier-one"
 
 	display_alert "Adding gpg-key for Kali repository" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged curl --max-time 60 -4 -fsSL "https://archive.kali.org/archive-key.asc" "|" gpg --dearmor -o "${SDCARD}"/usr/share/keyrings/kali.gpg
@@ -38,32 +35,19 @@ function post_install_kernel_debs__install_kali_packages(){
 
 	display_alert "Updating package lists with Kali Linux & Zerotier repositories" "${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	do_with_retries 3 chroot_sdcard_apt_get_update
+
 	display_alert "Adding packages: ${pkgs}" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-	do_with_retries 3 chroot_sdcard_apt_get_install ${pkgs}
-#        display_alert "Disabling Armbian Repo" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-#        run_host_command_logged mv "${SDCARD}"/etc/apt/sources.list.d/armbian.list "${SDCARD}"/etc/apt/sources.list.d/armbian.list.disabled
-#	do_with_retries 3 chroot_sdcard_apt_get_update
+	do_with_retries 3 chroot_sdcard_apt_get_install --allow-downgrades ${pkgs}
 
-
-	# Optional preinstall top 10 tools
-#	display_alert "Installing Top 10 Kali Linux tools" "${EXTENSION}" "info"
-#	chroot_sdcard_apt_get_install kali-tools-top10
 }
 
-#function post_customize_image__kali_tools() {
-#	display_alert "Adding Kali Linux profile package list show ${RELEASE}" "${EXTENSION}" "info"
-#	run_host_command_logged mkdir -p "${SDCARD}"/etc/armbian/
-#	run_host_command_logged cat <<- 'armbian-kali-motd' > "${SDCARD}"/etc/armbian/kali.sh
-		#!/bin/bash
-		#
-		# Copyright (c) Authors: https://www.armbian.com/authors
-		#
-#		echo -e "\n\e[0;92mAdditional security oriented packages you can install:\x1B[0m (sudo apt install kali-tools-package_name)\n"
-#		apt list 2>/dev/null | grep kali-tools | grep -v installed | cut -d"/" -f1 | pr -2 -t
-#		echo ""
-#	armbian-kali-motd
-#	run_host_command_logged chmod +x "${SDCARD}"/etc/armbian/kali.sh
-#	run_host_command_logged echo ". /etc/armbian/kali.sh" >> "${SDCARD}"/etc/skel/.bashrc
-#	run_host_command_logged echo ". /etc/armbian/kali.sh" >> "${SDCARD}"/etc/skel/.zshrc
-#	run_host_command_logged echo ". /etc/armbian/kali.sh" >> "${SDCARD}"/root/.bashrc
-#}
+#Do we need it?
+function post_customize_image__fix_broken_packages() {
+
+	display_alert "Fixing broken packages " "${RELEASE}" "${EXTENSION}" "info"
+	run_host_command_logged
+        do_with_retries 3 chroot_sdcard_apt_get_update --fix-missing
+	do_with_retries 3 chroot_sdcard_apt_get_install -f
+	do_with_retries 3 chroot_sdcard_apt_get_update
+
+}
