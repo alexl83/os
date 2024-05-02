@@ -91,12 +91,11 @@ DisableTTYs()
 EnableDisableServices()
 {
 	echo "Enabling/disabling additional/custom services"
-#	systemctl enable gpsd.service
-#	systemctl enable avahi-daemon
 	systemctl disable zerotier-one.service
 	if [ -f /etc/systemd/system/multi-user.target.wants/unattended-upgrades.service ]; then
 	systemctl disable unattended-upgrades
 	fi
+	systemctl disable avahi-daemon
 	cp /tmp/overlay/common/rfcomm.service /etc/systemd/system
 	systemctl enable rfcomm.service
 }
@@ -109,7 +108,6 @@ CopyConfigFiles()
 	sed -i 's/^\#allow-interfaces.*/allow-interfaces\=eth0,sta0,nzt7nnkpung/g' /etc/avahi/avahi-daemon.conf
 	fi
 	cp /tmp/overlay/common/zshrc_skel /etc/skel/.zshrc
-#	cp /tmp/overlay/common/kismet.conf /etc
 
 }
 
@@ -147,7 +145,6 @@ UpdateArmbianEnvTxt()
 	sed -i 's/^console.*/console\=none/g' /boot/armbianEnv.txt
 	echo "Enabling IR and UART5 overlays by default"
 	echo "overlays=ir uart5-ph" >> /boot/armbianEnv.txt
-	#sed -i 's/^overlays\=.*/overlays\=ir uart5-ph/g' /boot/armbianEnv.txt
 	echo "Disabling Predictable net interface naming"
 	echo "extraargs=net.ifnames=0" >> /boot/armbianEnv.txt
 	fi
