@@ -42,7 +42,7 @@ Main() {
 			CopyConfigFiles
 			SetupGpsd
 			EnableDisableServices
-			InstallAgryOxide
+			InstallAngryOxide
 			ArmbianUserOverlayInstall
 			UpdateArmbianEnvTxt
 			;;
