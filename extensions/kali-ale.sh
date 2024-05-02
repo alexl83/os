@@ -7,7 +7,7 @@ function extension_prepare_config__docker() {
 #working  extension_method pre t64 breakage "pre_custoize_image"
 #working  extension_methos post commit #6358 "post_install_kernel_debs"
 
-function post_install_kernel_debs__1_install_kali_packages(){
+function pre_customize_image__1_install_kali_packages(){
 	pkgs="net-tools moreutils byobu git dkms gpsd zsh-autosuggestions macchanger avahi-daemon vnstat xauth x11-utils gpsd-tools libnss-mdns zerotier-one"
 
 	display_alert "Adding gpg-key for Kali repository" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
@@ -23,7 +23,7 @@ function post_install_kernel_debs__1_install_kali_packages(){
 		run_host_command_logged cat <<- 'end' > "${SDCARD}"/etc/apt/preferences.d/kali
 			Package: *
 			Pin: release o=Kali
-			Pin-Priority: 1000
+			Pin-Priority: 50
 		end
 
 		display_alert "Adding sources.list for Zerotier." "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
@@ -33,21 +33,21 @@ function post_install_kernel_debs__1_install_kali_packages(){
 		exit_with_error "Unsupported distribution: ${DISTRIBUTION}"
 	fi
 
-	display_alert "Updating package lists with Kali Linux & Zerotier repositories" "${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+	display_alert "Updating package lists with Kali Linux & Zerotier repositories" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	do_with_retries 3 chroot_sdcard_apt_get_update
 
 	display_alert "Adding packages: ${pkgs}" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-	do_with_retries 3 chroot_sdcard_apt_get_install --allow-downgrades -o Dpkg::Options::='--force-confnew' ${pkgs}
+	do_with_retries 3 chroot_sdcard_apt_get_install ${pkgs}
 
 }
 
 #Do we need it?
-function post_install_kernel_debs__2_fix_broken_packages() {
+function pre_customize_image__2_fix_broken_packages() {
 
 	display_alert "Fixing broken packages" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+#	do_with_retries 3 chroot_sdcard_apt_get -o Dpkg::Options::='--force-confnew' -yy --allow-downgrades full-upgrade
         do_with_retries 3 chroot_sdcard_apt_get --fix-missing update
 	do_with_retries 3 chroot_sdcard_apt_get  -f install
 	do_with_retries 3 chroot_sdcard_apt_get_update
-	do_with_retries 3 chroot_sdcard_apt_get -o Dpkg::Options::='--force-confnew' -yy --allow-downgrades upgrade
 
 }
