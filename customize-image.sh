@@ -129,7 +129,7 @@ InstallAngryOxide()
 	echo "Downloading and installing angrixide latest build from gh:Ragnt/AngryOxide"
 	mkdir /tmpinst
 	cd /tmpinst
-	wget https://github.com/Ragnt/AngryOxide/releases/latest/download/angryoxide-linux-aarch64-musl.tar.gz
+	wget -q https://github.com/Ragnt/AngryOxide/releases/latest/download/angryoxide-linux-aarch64-musl.tar.gz
 	tar xfz angryoxide-linux-aarch64-musl.tar.gz
 	chmod +x ./install
 	./install install
