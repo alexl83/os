@@ -36,6 +36,7 @@ Main() {
 			;;
 
 		bookworm|trixie|sid|jammy)
+		if [ -f  "${SDCARD}/etc/apt/sources.list.d/kali.list" ]; then
 
 			DisableTTYs
 			SetupStealthNetworking
@@ -45,6 +46,7 @@ Main() {
 			InstallAngryOxide
 			ArmbianUserOverlayInstall
 			UpdateArmbianEnvTxt
+		fi
 			;;
 
 	esac
@@ -95,7 +97,7 @@ EnableDisableServices()
 	if [ -f /etc/systemd/system/multi-user.target.wants/unattended-upgrades.service ]; then
 	systemctl disable unattended-upgrades
 	fi
-	systemctl disable avahi-daemon
+#	systemctl disable avahi-daemon
 	cp /tmp/overlay/common/rfcomm.service /etc/systemd/system
 	systemctl enable rfcomm.service
 }

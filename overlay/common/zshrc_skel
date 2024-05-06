@@ -268,8 +268,8 @@ if [ -z "$_motd_listed" ]; then
 fi
 
 alias wifite='sudo wifite -ab --showb --showm --no-wps --skip-crack'
-alias kismet='if [ ! -d ${HOME/kismet ]; then mkdir ${HOME}/kismet fi && cd ${HOME}/kismet && kismet -s --override wardrive'
+alias kismet='if [ ! -d ${HOME}/kismet ]; then mkdir ${HOME}/kismet; fi && cd ${HOME}/kismet && kismet -s --override wardrive'
 alias update='sudo apt update && sudo apt full-upgrade -y && sudo apt autoclean -y && sudo apt autoremove --purge -y && sudo apt clean && sudo fstrim -av'
-alias ao='cd $HOME/AO && sudo angryoxide -b2,5 --disablemouse'
+alias ao='if [ ! -d ${HOME}/AO ]; then mkdir ${HOME}/AO; fi && cd ${HOME}/AO && sudo angryoxide -b2,5 --disablemouse'
 alias dmesg='dmesg --color=always'
 alias less='less -r'
