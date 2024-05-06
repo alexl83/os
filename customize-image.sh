@@ -126,7 +126,7 @@ SetupGpsd()
 
 InstallAngryOxide()
  {
-	echo "Downloading and installing angrixide latest build from gh:Ragnt/AngryOxide"
+	echo "Downloading and installing latest AngryOxide build from gh:Ragnt/AngryOxide"
 	mkdir /tmpinst
 	cd /tmpinst
 	wget -q https://github.com/Ragnt/AngryOxide/releases/latest/download/angryoxide-linux-aarch64-musl.tar.gz
