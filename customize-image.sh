@@ -39,6 +39,7 @@ Main() {
 		if [ -f  "${SDCARD}/etc/apt/sources.list.d/kali.list" ]; then
 
 			DisableTTYs
+			AddFirmware
 			SetupStealthNetworking
 			CopyConfigFiles
 			SetupGpsd
@@ -75,6 +76,12 @@ SetupStealthNetworking()
         chmod +x /usr/local/sbin/createmon.sh
 	chmod +x /usr/local/sbin/changemac.sh
 
+}
+
+AddFirmware()
+{
+	echo "Installing additional firmware(s): e.g. MT7922"
+	cp  /tmp/overlay/firmware/* /lib/firmware
 }
 
 DisableTTYs()
@@ -155,8 +162,8 @@ UpdateArmbianEnvTxt()
 	sed -i 's/^verbosity.*/verbosity\=0/g' /boot/armbianEnv.txt
 	sed -i 's/^bootlogo.*/bootlogo\=false/g' /boot/armbianEnv.txt
 	sed -i 's/^console.*/console\=none/g' /boot/armbianEnv.txt
-	echo "Enabling IR and UART5 overlays by default"
 	if [ "${BOARD}" == "orangepizero3" ]; then
+	echo "Enabling IR and UART5 overlays by default"
 	echo "overlays=ir uart5-ph" >> /boot/armbianEnv.txt
 	fi
 	echo "Disabling Predictable net interface naming"
