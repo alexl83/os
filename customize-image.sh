@@ -107,7 +107,8 @@ EnableDisableServices()
 	if [ -f /etc/systemd/system/multi-user.target.wants/haveged.service ]; then
 	systemctl disable haveged
 	fi
-#	systemctl disable avahi-daemon
+	[[ -f /usr/share/doc/avahi-daemon/examples/sftp-ssh.service ]] && cp /usr/share/doc/avahi-daemon/examples/sftp-ssh.service /etc/avahi/services/
+	[[ -f /usr/share/doc/avahi-daemon/examples/ssh.service ]] && cp /usr/share/doc/avahi-daemon/examples/ssh.service /etc/avahi/services/
 	cp /tmp/overlay/common/rfcomm.service /etc/systemd/system
 	cp /tmp/overlay/common/rfcomm.default /etc/default/rfcomm
 	systemctl enable rfcomm.service
