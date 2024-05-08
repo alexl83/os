@@ -8,7 +8,7 @@ function extension_prepare_config__docker() {
 #working  extension_methos post commit #6358 "post_install_kernel_debs"
 
 function pre_customize_image__1_install_kali_packages(){
-	pkgs="net-tools moreutils byobu git dkms gpsd zsh-autosuggestions macchanger avahi-daemon vnstat xauth gpsd-tools libnss-mdns zerotier-one"
+	pkgs="net-tools moreutils byobu git dkms gpsd zsh-autosuggestions macchanger avahi-daemon vnstat xauth gpsd-tools libnss-mdns zerotier-one wireless-regdb"
 
 	display_alert "Adding gpg-key for Kali repository" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged curl --max-time 60 -4 -fsSL "https://archive.kali.org/archive-key.asc" "|" gpg --dearmor -o "${SDCARD}"/usr/share/keyrings/kali.gpg
