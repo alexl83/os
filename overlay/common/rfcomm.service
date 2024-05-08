@@ -6,8 +6,9 @@ Requires=bluetooth.service
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-ExecStart=/usr/bin/rfcomm bind 0 00:0B:0D:94:EF:5F 1
-ExecStop=/usr/bin/rfcomm release 0 
+EnvironmentFile=-/etc/default/gpsd
+ExecStart=/usr/bin/rfcomm bind $HCIDEV $MACADDR $CHAN
+ExecStop=/usr/bin/rfcomm release $HCIDEV
  
 [Install]
 WantedBy=network.target

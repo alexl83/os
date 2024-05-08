@@ -97,8 +97,12 @@ EnableDisableServices()
 	if [ -f /etc/systemd/system/multi-user.target.wants/unattended-upgrades.service ]; then
 	systemctl disable unattended-upgrades
 	fi
+	if [ -f /etc/systemd/system/multi-user.target.wants/haveged.service ]; then
+	systemctl disable haveged
+	fi
 #	systemctl disable avahi-daemon
 	cp /tmp/overlay/common/rfcomm.service /etc/systemd/system
+	cp /tmp/overlay/common/rfcomm.default /etc/default/rfcomm
 	systemctl enable rfcomm.service
 }
 
@@ -116,11 +120,17 @@ CopyConfigFiles()
 SetupGpsd()
 {
 	echo "Setting up GPSD"
-	if [ ${BOARD} == "orangepizero3" ]; then
+	case  ${BOARD} in
+
+	orangepizero3)
 	sed -i 's/DEVICES=.*/DEVICES="\/dev\/ttyS0"/g' /etc/default/gpsd
-	elif [ ${BOARD} == "orangepizero02w" ]; then
+	;;
+
+	orangepizero02w)
 	sed -i 's/DEVICES=.*/DEVICES="\/dev\/ttyS5"/g' /etc/default/gpsd
-	fi
+	;;
+
+	esac
 
 }
 
@@ -146,11 +156,12 @@ UpdateArmbianEnvTxt()
 	sed -i 's/^bootlogo.*/bootlogo\=false/g' /boot/armbianEnv.txt
 	sed -i 's/^console.*/console\=none/g' /boot/armbianEnv.txt
 	echo "Enabling IR and UART5 overlays by default"
+	if [ "${BOARD}" == "orangepizero3" ]; then
 	echo "overlays=ir uart5-ph" >> /boot/armbianEnv.txt
+	fi
 	echo "Disabling Predictable net interface naming"
 	echo "extraargs=net.ifnames=0" >> /boot/armbianEnv.txt
 	fi
 
 }
 Main "$@"
-
