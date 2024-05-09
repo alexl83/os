@@ -136,7 +136,7 @@ CopyConfigFiles()
 	if [ -f /tmp/overlay/common/armbian-leds-${BOARD}.conf ]; then
 	cp /tmp/overlay/common/armbian-leds-${BOARD}.conf /etc/armbian-leds.conf
 	cp /tmp/overlay/common/zshrc_skel /etc/skel/.zshrc
-
+	fi
 }
 
 SetupGpsd()
