@@ -99,8 +99,8 @@ DisableTTYs()
 	mkdir /etc/systemd/resolved.conf.d/
 	fi
 	cp /tmp/overlay/common/resolved*.conf /etc/systemd/resolved.conf.d/
-	touch /usr/local/etc/wifi-targets
-	touch /usr/local/etc/wifi-whitelist
+	systemctl mask gett@tty1
+	systemctl mask console-setup
 
 }
 
@@ -120,8 +120,9 @@ EnableDisableServices()
 	[[ -f /usr/share/doc/avahi-daemon/examples/ssh.service ]] && cp /usr/share/doc/avahi-daemon/examples/ssh.service /etc/avahi/services/
 	cp /tmp/overlay/common/rfcomm.service /etc/systemd/system
 	cp /tmp/overlay/common/rfcomm.default /etc/default/rfcomm
-	systemctl enable rfcomm.service
-	systemctl enable ssh.socket
+#	systemctl enable rfcomm.service
+#	systemctl enable ssh.service
+#	systemctl enable ssh.socket
 
 }
 
@@ -133,7 +134,7 @@ CopyConfigFiles()
 	echo "Blacklisting video and display output-related modules"
 	cp /tmp/overlay/common/blacklist-videoout.conf /etc/modprobe.d
 	if [ -f /etc/avahi/avahi-daemon.conf ]; then
-	sed -i 's/^\#allow-interfaces.*/allow-interfaces\=eth0,sta0,nzt7nnkpung/g' /etc/avahi/avahi-daemon.conf
+	sed -i 's/^\#allow-interfaces.*/allow-interfaces\=eth0,sta0,zt7nnkpung/g' /etc/avahi/avahi-daemon.conf
 	fi
 	if [ -f /tmp/overlay/common/armbian-leds-${BOARD}.conf ]; then
 	cp /tmp/overlay/common/armbian-leds-${BOARD}.conf /etc/armbian-leds.conf
@@ -141,7 +142,7 @@ CopyConfigFiles()
 	fi
 	sed -i 's/^dns\=.*/dns\=none/g' /etc/NetworkManager/NetworkManager.conf
 	sed -i 's/rc-manager\=.*/rc-manager\=unmanaged/g' /etc/NetworkManager/NetworkManager.conf
-	ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
+#	ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
 }
 
 SetupGpsd()
@@ -186,8 +187,8 @@ UpdateArmbianEnvTxt()
 	echo "Enabling IR and UART5 overlays by default"
 	echo "overlays=ir uart5-ph" >> /boot/armbianEnv.txt
 	fi
-	echo "Disabling Predictable net interface naming"
-	echo "extraargs=net.ifnames=0" >> /boot/armbianEnv.txt
+	echo "Disabling Predictable net interface naming and kernel/splash verbosity"
+	echo "extraargs=net.ifnames=0 quiet vt.global_cursor_default=0 nosplash" >> /boot/armbianEnv.txt
 	fi
 
 }
