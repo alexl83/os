@@ -81,7 +81,8 @@ SetupStealthNetworking()
 AddFirmware()
 {
 	echo "Installing additional firmware(s): e.g. MT7922"
-	cp -r  /tmp/overlay/firmware/ /lib/firmware/
+	cp -r  /tmp/overlay/firmware/* /lib/firmware/
+	cp -r  /tmp/overlay/firmware/* /usr/lib/firmware
 }
 
 DisableTTYs()
@@ -120,6 +121,7 @@ EnableDisableServices()
 	cp /tmp/overlay/common/rfcomm.service /etc/systemd/system
 	cp /tmp/overlay/common/rfcomm.default /etc/default/rfcomm
 	systemctl enable rfcomm.service
+	systemctl enable ssh.socket
 
 }
 
