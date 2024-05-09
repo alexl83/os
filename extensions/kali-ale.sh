@@ -41,6 +41,11 @@ function pre_customize_image__1_install_kali_packages(){
 
 }
 
+function pre_umount_final_image__set_systemd-resolved(){
+	display_alert "Setting systemd-resolved as /etc/resolv.conf manager" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+	run_host_command_logged ln -sf "${SDCARD}"/run/systemd/resolve/stub-resolv.conf "${SDCARD}"/etc/resolv.conf
+}
+
 #Do we need it?
 #function pre_customize_image__2_fix_broken_packages() {
 
