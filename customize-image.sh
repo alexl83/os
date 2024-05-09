@@ -93,7 +93,11 @@ DisableTTYs()
         systemctl mask serial-getty@ttyS5.service
 	echo "Disabling virtual consoles"
 	mkdir /etc/systemd/logind.conf.d/
-	cp /tmp/overlay/common/logind_00-disable-vtty.conf /etc/systemd/logind.conf.d/
+	cp /tmp/overlay/common/logind_00-disable-vtty.conf /etc/systemd/logind.conf.d/disable-vtty.conf
+	if [ ! -d /etc/systemd/resolved.conf.d/ ]; then
+	mkdir /etc/systemd/resolved.conf.d/
+	fi
+	cp /tmp/overlay/common/resolved*.conf /etc/systemd/resolved.conf.d/
 
 }
 
@@ -101,6 +105,8 @@ EnableDisableServices()
 {
 	echo "Enabling/disabling additional/custom services"
 	systemctl disable zerotier-one.service
+	systemctl disable wpa_supplicant
+	systemctl disable networking
 	if [ -f /etc/systemd/system/multi-user.target.wants/unattended-upgrades.service ]; then
 	systemctl disable unattended-upgrades
 	fi
@@ -112,15 +118,21 @@ EnableDisableServices()
 	cp /tmp/overlay/common/rfcomm.service /etc/systemd/system
 	cp /tmp/overlay/common/rfcomm.default /etc/default/rfcomm
 	systemctl enable rfcomm.service
+
 }
 
 CopyConfigFiles()
 {
+	echo "Creating whitelist and blacklist wifi target files"
+	touch /usr/local/etc/whitelist
+	touch /usr/local/etc/targets
 	echo "Blacklisting video and display output-related modules"
 	cp /tmp/overlay/common/blacklist-videoout.conf /etc/modprobe.d
 	if [ -f /etc/avahi/avahi-daemon.conf ]; then
 	sed -i 's/^\#allow-interfaces.*/allow-interfaces\=eth0,sta0,nzt7nnkpung/g' /etc/avahi/avahi-daemon.conf
 	fi
+	if [ -f /tmp/overlay/common/armbian-leds-${BOARD}.conf ]; then
+	cp /tmp/overlay/common/armbian-leds-${BOARD}.conf /etc/armbian-leds.conf
 	cp /tmp/overlay/common/zshrc_skel /etc/skel/.zshrc
 
 }
