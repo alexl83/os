@@ -126,8 +126,8 @@ EnableDisableServices()
 CopyConfigFiles()
 {
 	echo "Creating whitelist and blacklist wifi target files"
-	touch /usr/local/etc/whitelist
-	touch /usr/local/etc/targets
+	touch /usr/local/etc/wifi-whitelist
+	touch /usr/local/etc/wifi-targets
 	echo "Blacklisting video and display output-related modules"
 	cp /tmp/overlay/common/blacklist-videoout.conf /etc/modprobe.d
 	if [ -f /etc/avahi/avahi-daemon.conf ]; then
@@ -137,6 +137,9 @@ CopyConfigFiles()
 	cp /tmp/overlay/common/armbian-leds-${BOARD}.conf /etc/armbian-leds.conf
 	cp /tmp/overlay/common/zshrc_skel /etc/skel/.zshrc
 	fi
+	sed -i 's/^dns\=.*/dns\=none/g' /etc/NetworkManager/NetworkManager.conf
+	sed -i 's/rc-manager\=.*/rc-manager\=unmanaged/g' /etc/NetworkManager/NetworkManager.conf
+	ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
 }
 
 SetupGpsd()
