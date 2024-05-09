@@ -36,7 +36,7 @@ Main() {
 			;;
 
 		bookworm|trixie|sid|jammy)
-		if [ -f  "${SDCARD}/etc/apt/sources.list.d/kali.list" ]; then
+		if [ -f  "/etc/apt/sources.list.d/kali.list" ]; then
 
 			DisableTTYs
 			AddFirmware
@@ -81,7 +81,7 @@ SetupStealthNetworking()
 AddFirmware()
 {
 	echo "Installing additional firmware(s): e.g. MT7922"
-	cp  /tmp/overlay/firmware/* /lib/firmware
+	cp -r  /tmp/overlay/firmware/ /lib/firmware/
 }
 
 DisableTTYs()
@@ -104,7 +104,7 @@ EnableDisableServices()
 	if [ -f /etc/systemd/system/multi-user.target.wants/unattended-upgrades.service ]; then
 	systemctl disable unattended-upgrades
 	fi
-	if [ -f /etc/systemd/system/multi-user.target.wants/haveged.service ]; then
+	if [ -f /etc/systemd/system/sysinit.target.wants/haveged.service ]; then
 	systemctl disable haveged
 	fi
 	[[ -f /usr/share/doc/avahi-daemon/examples/sftp-ssh.service ]] && cp /usr/share/doc/avahi-daemon/examples/sftp-ssh.service /etc/avahi/services/
