@@ -98,6 +98,8 @@ DisableTTYs()
 	mkdir /etc/systemd/resolved.conf.d/
 	fi
 	cp /tmp/overlay/common/resolved*.conf /etc/systemd/resolved.conf.d/
+	touch /usr/local/etc/wifi-targets
+	touch /usr/local/etc/wifi-whitelist
 
 }
 
