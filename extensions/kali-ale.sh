@@ -44,6 +44,9 @@ function pre_customize_image__1_install_kali_packages(){
 function pre_umount_final_image__set_systemd-resolved(){
 	display_alert "Setting systemd-resolved as /etc/resolv.conf manager" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged ln -sf "${SDCARD}"/run/systemd/resolve/stub-resolv.conf "${SDCARD}"/etc/resolv.conf
+	display_alert "Fixing wireless regulatory domain" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+	run_host_command_logged update-alternatives --set regulatory.db /lib/firmware/regulatory.db-upstream
+
 }
 
 #Do we need it?
