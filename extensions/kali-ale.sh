@@ -41,21 +41,7 @@ function pre_customize_image__1_install_kali_packages(){
 
 }
 
-function pre_umount_final_image__set_systemd-resolved(){
-	display_alert "Setting systemd-resolved as /etc/resolv.conf manager" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-	run_host_command_logged ln -sf "${SDCARD}"/run/systemd/resolve/stub-resolv.conf "${SDCARD}"/etc/resolv.conf
-	display_alert "Fixing wireless regulatory domain" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-	run_host_command_logged update-alternatives --set regulatory.db /lib/firmware/regulatory.db-upstream
-
-}
-
-#Do we need it?
-#function pre_customize_image__2_fix_broken_packages() {
-
-#	display_alert "Fixing broken packages" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-#	do_with_retries 3 chroot_sdcard_apt_get -o Dpkg::Options::='--force-confnew' -yy --allow-downgrades full-upgrade
-#        do_with_retries 3 chroot_sdcard_apt_get --fix-missing update
-#	do_with_retries 3 chroot_sdcard_apt_get  -f install
-#	do_with_retries 3 chroot_sdcard_apt_get_update
+#function pre_umount_final_image__set_systemd-resolved(){
 
 #}
+

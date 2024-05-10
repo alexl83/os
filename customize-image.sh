@@ -99,7 +99,7 @@ DisableTTYs()
 	mkdir /etc/systemd/resolved.conf.d/
 	fi
 	cp /tmp/overlay/common/resolved*.conf /etc/systemd/resolved.conf.d/
-	systemctl mask gett@tty1
+	systemctl mask getty@tty1
 	systemctl mask console-setup
 
 }
@@ -122,7 +122,7 @@ EnableDisableServices()
 	cp /tmp/overlay/common/rfcomm.default /etc/default/rfcomm
 #	systemctl enable rfcomm.service
 #	systemctl enable ssh.service
-#	systemctl enable ssh.socket
+	systemctl enable ssh.socket
 
 }
 
@@ -136,13 +136,14 @@ CopyConfigFiles()
 	if [ -f /etc/avahi/avahi-daemon.conf ]; then
 	sed -i 's/^\#allow-interfaces.*/allow-interfaces\=eth0,sta0,zt7nnkpung/g' /etc/avahi/avahi-daemon.conf
 	fi
-	if [ -f /tmp/overlay/common/armbian-leds-${BOARD}.conf ]; then
-	cp /tmp/overlay/common/armbian-leds-${BOARD}.conf /etc/armbian-leds.conf
+	if [ -f /tmp/overlay/common/armbian-leds-"${BOARD}".conf ]; then
+	cp /tmp/overlay/common/armbian-leds-"${BOARD}".conf /etc/armbian-leds.conf
 	cp /tmp/overlay/common/zshrc_skel /etc/skel/.zshrc
 	fi
 	sed -i 's/^dns\=.*/dns\=none/g' /etc/NetworkManager/NetworkManager.conf
 	sed -i 's/rc-manager\=.*/rc-manager\=unmanaged/g' /etc/NetworkManager/NetworkManager.conf
-#	ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
+	echo "Setting upstream wireless-regdb"
+	update-alternatives --set regulatory.db /lib/firmware/regulatory.db-upstream
 }
 
 SetupGpsd()
