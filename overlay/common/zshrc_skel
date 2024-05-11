@@ -267,6 +267,8 @@ if [ -z "$_motd_listed" ]; then
   esac
 fi
 
+EXPORT PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
 alias wifite='sudo wifite -ab --showb --showm --no-wps --skip-crack'
 alias kismet='if [ ! -d ${HOME}/kismet ]; then mkdir ${HOME}/kismet; fi && cd ${HOME}/kismet && kismet -s --override wardrive'
 alias update='sudo apt update && sudo apt full-upgrade -y && sudo apt autoclean -y && sudo apt autoremove --purge -y && sudo apt clean && sudo fstrim -av'
