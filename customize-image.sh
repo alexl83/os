@@ -122,7 +122,7 @@ EnableDisableServices()
 	cp /tmp/overlay/common/rfcomm.default /etc/default/rfcomm
 #	systemctl enable rfcomm.service
 #	systemctl enable ssh.service
-	systemctl enable ssh.socket
+#	systemctl enable ssh.socket
 
 }
 
@@ -142,6 +142,7 @@ CopyConfigFiles()
 	fi
 	sed -i 's/^dns\=.*/dns\=none/g' /etc/NetworkManager/NetworkManager.conf
 	sed -i 's/rc-manager\=.*/rc-manager\=unmanaged/g' /etc/NetworkManager/NetworkManager.conf
+	sed -i 's/^DNS\=.*/#DNS\=/g' /etc/systemd/resolved.conf
 	echo "Setting upstream wireless-regdb"
 	update-alternatives --set regulatory.db /lib/firmware/regulatory.db-upstream
 }
