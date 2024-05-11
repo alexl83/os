@@ -121,8 +121,8 @@ EnableDisableServices()
 	cp /tmp/overlay/common/rfcomm.service /etc/systemd/system
 	cp /tmp/overlay/common/rfcomm.default /etc/default/rfcomm
 #	systemctl enable rfcomm.service
-#	systemctl enable ssh.service
-#	systemctl enable ssh.socket
+	systemctl disable ssh.service
+	systemctl enable ssh.socket
 
 }
 
@@ -145,6 +145,8 @@ CopyConfigFiles()
 	sed -i 's/^DNS\=.*/#DNS\=/g' /etc/systemd/resolved.conf
 	echo "Setting upstream wireless-regdb"
 	update-alternatives --set regulatory.db /lib/firmware/regulatory.db-upstream
+	echo "Enable passwordless reboot/shutdown via sudo"
+	cp /tmp/overlay/common/sudoers.d_* /etc/sudoers.d
 }
 
 SetupGpsd()
