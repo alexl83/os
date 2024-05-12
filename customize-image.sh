@@ -131,9 +131,9 @@ CopyConfigFiles()
 	echo "Creating whitelist and blacklist wifi target files"
 	touch /usr/local/etc/wifi-whitelist
 	touch /usr/local/etc/wifi-targets
-	echo "Blacklisting video and display output-related modules"
 	cp /tmp/overlay/common/blacklist-usbhid.conf /etc/modprobe.d
 	if [ -f /tmp/overlay/common/blacklist-videoout-"${BOARD}".conf ]; then
+	echo "Blacklisting video and display output-related modules"
 	cp /tmp/overlay/common/blacklist-videoout-"${BOARD}".conf /etc/modprobe.d
 	fi
 	if [ -f /etc/avahi/avahi-daemon.conf ]; then
@@ -154,14 +154,15 @@ CopyConfigFiles()
 
 SetupGpsd()
 {
-	echo "Setting up GPSD"
-	case  ${BOARD} in
+	case ${BOARD} in
 
 	orangepizero3)
+	echo "Setting up GPSD"
 	sed -i 's/DEVICES=.*/DEVICES="\/dev\/ttyS0"/g' /etc/default/gpsd
 	;;
 
 	orangepizero02w)
+	echo "Setting up GPSD"
 	sed -i 's/DEVICES=.*/DEVICES="\/dev\/ttyS5"/g' /etc/default/gpsd
 	;;
 
@@ -185,8 +186,8 @@ InstallAngryOxide()
 
 UpdateArmbianEnvTxt()
 {
-	echo "Disabling verbosity, bootlogo, and console output in u-boot"
 	if [ -f /boot/armbianEnv.txt ]; then
+	echo "Disabling verbosity, bootlogo, and console output in u-boot"
 	sed -i 's/^verbosity.*/verbosity\=0/g' /boot/armbianEnv.txt
 	sed -i 's/^bootlogo.*/bootlogo\=false/g' /boot/armbianEnv.txt
 	sed -i 's/^console.*/console\=none/g' /boot/armbianEnv.txt
