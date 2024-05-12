@@ -42,7 +42,7 @@ function pre_customize_image__1_install_kali_packages(){
 }
 
 #function pre_prepare_partitions__set_systemd-resolved(){
-#function post_debootstrap_tweaks__set_systemd-resolved(){
-#	display_alert "Cleaning deboostrapped resolv.conf" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-#	run_host_command_logged rm -vf "${SDCARD}"/etc/resolv.conf
-#}
+function post_debootstrap_tweaks__set_systemd-resolved(){
+	display_alert "Cleaning deboostrapped resolv.conf" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+	run_host_command_logged rm -vf "${SDCARD}"/etc/resolv.conf
+}
