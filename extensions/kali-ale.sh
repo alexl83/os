@@ -30,7 +30,7 @@ function pre_customize_image__1_install_kali_packages(){
 		run_host_command_logged echo "deb [arch=${ARCH} signed-by=/usr/share/keyrings/zerotier-debian-package-key.gpg] http://download.zerotier.com/debian/bookworm bookworm main" "|" tee "${SDCARD}"/etc/apt/sources.list.d/zerotier.list
 
 	else
-		exit_with_error "Unsupported distribution: ${DISTRIBUTION}"
+		exit_with_error "Unsupported distribution: ${DISTRIBUTION}" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	fi
 
 	display_alert "Updating package lists with Kali Linux & Zerotier repositories" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
@@ -38,11 +38,7 @@ function pre_customize_image__1_install_kali_packages(){
 
 	display_alert "Adding packages: ${pkgs}" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	do_with_retries 3 chroot_sdcard_apt_get_install ${pkgs}
+	do_with_retries 3 chroot_sdcard_apt_get autoremove --purge ifupdown
 
 }
 
-#function pre_prepare_partitions__set_systemd-resolved(){
-function post_debootstrap_tweaks__set_systemd-resolved(){
-	display_alert "Cleaning deboostrapped resolv.conf" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-	run_host_command_logged rm -vf "${SDCARD}"/etc/resolv.conf
-}
