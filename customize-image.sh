@@ -132,7 +132,8 @@ CopyConfigFiles()
 	touch /usr/local/etc/wifi-whitelist
 	touch /usr/local/etc/wifi-targets
 	echo "Blacklisting video and display output-related modules"
-	if [ - t /tmp/overlay/common/blacklist-videoout-"${BOARD}".conf ]; then
+	cp /tmp/overlay/common/blacklist-usbhid.conf /etc/modprobe.d
+	if [ -f /tmp/overlay/common/blacklist-videoout-"${BOARD}".conf ]; then
 	cp /tmp/overlay/common/blacklist-videoout-"${BOARD}".conf /etc/modprobe.d
 	fi
 	if [ -f /etc/avahi/avahi-daemon.conf ]; then
