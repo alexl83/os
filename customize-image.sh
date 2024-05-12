@@ -110,7 +110,7 @@ EnableDisableServices()
 	echo "Enabling/disabling additional/custom services"
 	systemctl disable zerotier-one.service
 	systemctl disable wpa_supplicant
-	systemctl disable networking
+#	systemctl disable networking
 	if [ -f /etc/systemd/system/multi-user.target.wants/unattended-upgrades.service ]; then
 	systemctl disable unattended-upgrades
 	fi
