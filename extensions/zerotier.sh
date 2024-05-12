@@ -6,7 +6,7 @@ function pre_customize_image__1_install_zerotier_packages(){
 	# Add sources.list
 	if [[ "${DISTRIBUTION}" == "Debian" ]]; then
 
-		display_alert "Adding sources.list for Zerotier." "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+		display_alert "Adding sources.list for Zerotier" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 		run_host_command_logged echo "deb [arch=${ARCH} signed-by=/usr/share/keyrings/zerotier-debian-package-key.gpg] http://download.zerotier.com/debian/bookworm bookworm main" "|" tee "${SDCARD}"/etc/apt/sources.list.d/zerotier.list
 
 	else
