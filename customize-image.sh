@@ -80,7 +80,7 @@ SetupStealthNetworking()
 
 AddFirmware()
 {
-	echo "Installing additional firmware(s): e.g. MT7922"
+	echo "Installing additional firmware(s): e.g. MT7922/RTL8852BU"
 	cp -r  /tmp/overlay/firmware/* /lib/firmware/
 	cp -r  /tmp/overlay/firmware/* /usr/lib/firmware
 }
