@@ -1,4 +1,4 @@
-function pre_prepare_partitions__set_systemd-resolved(){
+function post_post_debootstrap_tweaks__set_systemd-resolved(){
 	display_alert "Asking NetworkManager to not handle /etc/resolv.conf" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged sed -i 's/^dns\=.*/dns\=none/g' "${SDCARD}"/etc/NetworkManager/NetworkManager.conf
 	run_host_command_logged sed -i 's/rc-manager\=.*/rc-manager\=unmanaged/g' "${SDCARD}"/etc/NetworkManager/NetworkManager.conf
