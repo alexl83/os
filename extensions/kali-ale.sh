@@ -12,8 +12,6 @@ function pre_customize_image__1_install_kali_packages(){
 
 	display_alert "Adding gpg-key for Kali repository" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged curl --max-time 60 -4 -fsSL "https://archive.kali.org/archive-key.asc" "|" gpg --dearmor -o "${SDCARD}"/usr/share/keyrings/kali.gpg
-	display_alert "Adding gpg-key for Zerotier repository" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-	run_host_command_logged curl --max-time 60 -4 -fsSL "http://download.zerotier.com/contact%40zerotier.com.gpg" "|" gpg --dearmor -o "${SDCARD}"/usr/share/keyrings/zerotier-debian-package-key.gpg
 
 	# Add sources.list
 	if [[ "${DISTRIBUTION}" == "Debian" ]]; then
@@ -26,14 +24,11 @@ function pre_customize_image__1_install_kali_packages(){
 			Pin-Priority: 50
 		end
 
-		display_alert "Adding sources.list for Zerotier." "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-		run_host_command_logged echo "deb [arch=${ARCH} signed-by=/usr/share/keyrings/zerotier-debian-package-key.gpg] http://download.zerotier.com/debian/bookworm bookworm main" "|" tee "${SDCARD}"/etc/apt/sources.list.d/zerotier.list
-
 	else
 		exit_with_error "Unsupported distribution: ${DISTRIBUTION}" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	fi
 
-	display_alert "Updating package lists with Kali Linux & Zerotier repositories" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+	display_alert "Updating package lists with Kali Linux repository" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	do_with_retries 3 chroot_sdcard_apt_get_update
 
 	display_alert "Adding packages: ${pkgs}" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
