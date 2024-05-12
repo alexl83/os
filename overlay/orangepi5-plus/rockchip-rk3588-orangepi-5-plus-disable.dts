@@ -1,0 +1,50 @@
+/dts-v1/;
+/plugin/;
+
+/ {
+        compatible = "xunlong,orangepi-5-plus\0rockchip,rk3588";
+        fragment@0 {
+		target-path = "/gpu@fb000000";
+		__overlay__ {
+		status = "disabled";
+			};
+		};
+
+	fragment@1 {
+		target-path = "/vop@fdd90000";
+		__overlay__ {
+		status = "disabled";
+			};
+		};
+
+	fragment@2 {
+		target-path = "/hdmi@fde80000";
+		__overlay__ {
+		status = "disabled";
+			};
+		};
+
+	fragment@3 {
+		target-path = "/serial@feb50000";
+		__overlay__ {
+		status = "disabled";
+			};
+		};
+
+	fragment@4 {
+		target-path = "/serial@febc0000";
+		__overlay__ {
+		status = "disabled";
+			};
+		};
+
+	fragment@5 {
+		target-path ="/display-subsystem";
+		_overlay__ {
+		status = "disabled";
+			};
+		};
+
+	};
+
+
