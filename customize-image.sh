@@ -45,6 +45,7 @@ Main() {
 			SetupGpsd
 			EnableDisableServices
 			InstallAngryOxide
+			InstallDnsLeakTest
 			ArmbianUserOverlayInstall
 			UpdateArmbianEnvTxt
 		fi
@@ -149,7 +150,7 @@ CopyConfigFiles()
 	echo "Setting upstream wireless-regdb"
 	update-alternatives --set regulatory.db /lib/firmware/regulatory.db-upstream
 	echo "Enable passwordless reboot/shutdown via sudo"
-	cp /tmp/overlay/common/sudoers.d_* /etc/sudoers.d
+	cp /tmp/overlay/common/sudoers.d/* /etc/sudoers.d
 }
 
 SetupGpsd()
@@ -182,6 +183,14 @@ InstallAngryOxide()
 	cd /
 	rm -rf /tmpinst
 	echo "Done installing AngryOxide"
+}
+
+InstallDnsLeakTest()
+{
+	echo "Istalling dnsleaktest from gh:macvk/dnsleaktest"
+	curl https://raw.githubusercontent.com/macvk/dnsleaktest/master/dnsleaktest.sh -o /usr/local/bin/dnsleaktest
+	chmod +x /usr/local/bin/dnsleaktest
+
 }
 
 UpdateArmbianEnvTxt()
