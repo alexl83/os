@@ -188,7 +188,7 @@ InstallAngryOxide()
 InstallDnsLeakTest()
 {
 	echo "Istalling dnsleaktest from gh:macvk/dnsleaktest"
-	curl https://raw.githubusercontent.com/macvk/dnsleaktest/master/dnsleaktest.sh -o /usr/local/bin/dnsleaktest
+	curl -s https://raw.githubusercontent.com/macvk/dnsleaktest/master/dnsleaktest.sh -o /usr/local/bin/dnsleaktest
 	chmod +x /usr/local/bin/dnsleaktest
 
 }
