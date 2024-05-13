@@ -7,7 +7,7 @@ function extension_prepare_config__docker() {
 #working  extension_method pre t64 breakage "pre_customize_image"
 #working  extension_methos post commit #6358 "post_install_kernel_debs"
 
-function pre_customize_image__1_install_kali_packages(){
+function pre_customize_image__001_install_kali_packages(){
 
 	display_alert "Adding gpg-key for Kali repository" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged curl --max-time 60 -4 -fsSL "https://archive.kali.org/archive-key.asc" "|" gpg --dearmor -o "${SDCARD}"/usr/share/keyrings/kali.gpg

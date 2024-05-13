@@ -1,4 +1,4 @@
-function pre_customize_image__1_install_zerotier_packages(){
+function pre_customize_image__002_install_zerotier_packages(){
 
 	pkg="zerotier-one"
 	display_alert "Adding gpg-key for Zerotier repository" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
