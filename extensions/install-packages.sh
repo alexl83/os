@@ -1,4 +1,4 @@
-function pre_customize_image__1_install_custom_packages(){
+function pre_customize_image__003_install_custom_packages(){
 
 	pkgs="net-tools moreutils byobu git dkms gpsd zsh-autosuggestions macchanger avahi-daemon vnstat xauth gpsd-tools libnss-mdns"
 	rem_pkgs="ifupdown"
