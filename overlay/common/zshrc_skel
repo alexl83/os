@@ -275,3 +275,4 @@ alias update='sudo apt update && sudo apt full-upgrade -y && sudo apt autoclean 
 alias ao='if [ ! -d ${HOME}/AO ]; then mkdir ${HOME}/AO; fi && cd ${HOME}/AO && sudo angryoxide -b2,5 --disablemouse --whitelist /usr/local/etc/wifi-whitelist --targetlist /usr/local/etc/wifi-targets'
 alias dmesg='dmesg --color=always'
 alias less='less -r'
+alias pwcat='pwgen -scny 25 1'
