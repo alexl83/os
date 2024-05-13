@@ -269,7 +269,7 @@ fi
 
 export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
-alias wifite='sudo wifite -ab --showb --showm --no-wps --skip-crack'
+alias wifite='sudo wifite -ab --showb --showm --no-wps --skip-crack --pmkid-timeout 15'
 alias kismet='if [ ! -d ${HOME}/kismet ]; then mkdir ${HOME}/kismet; fi && cd ${HOME}/kismet && kismet -s --override wardrive'
 alias update='sudo apt update && sudo apt full-upgrade -y && sudo apt autoclean -y && sudo apt autoremove --purge -y && sudo apt clean && sudo fstrim -av'
 alias ao='if [ ! -d ${HOME}/AO ]; then mkdir ${HOME}/AO; fi && cd ${HOME}/AO && sudo angryoxide -b2,5 --disablemouse --whitelist /usr/local/etc/wifi-whitelist --targetlist /usr/local/etc/wifi-targets'
