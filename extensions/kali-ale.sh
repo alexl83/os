@@ -8,7 +8,6 @@ function extension_prepare_config__docker() {
 #working  extension_methos post commit #6358 "post_install_kernel_debs"
 
 function pre_customize_image__1_install_kali_packages(){
-	pkgs="net-tools moreutils byobu git dkms gpsd zsh-autosuggestions macchanger avahi-daemon vnstat xauth gpsd-tools libnss-mdns"
 
 	display_alert "Adding gpg-key for Kali repository" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged curl --max-time 60 -4 -fsSL "https://archive.kali.org/archive-key.asc" "|" gpg --dearmor -o "${SDCARD}"/usr/share/keyrings/kali.gpg
@@ -30,9 +29,5 @@ function pre_customize_image__1_install_kali_packages(){
 
 	display_alert "Updating package lists with Kali Linux repository" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	do_with_retries 3 chroot_sdcard_apt_get_update
-
-	display_alert "Adding packages: ${pkgs}" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-	do_with_retries 3 chroot_sdcard_apt_get_install ${pkgs}
-	do_with_retries 3 chroot_sdcard_apt_get autoremove --purge ifupdown
 
 }

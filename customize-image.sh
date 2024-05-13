@@ -141,8 +141,15 @@ CopyConfigFiles()
 	cp /tmp/overlay/common/armbian-leds-"${BOARD}".conf /etc/armbian-leds.conf
 	cp /tmp/overlay/common/zshrc_skel /etc/skel/.zshrc
 	fi
-#	sed -i 's/^dns\=.*/dns\=none/g' /etc/NetworkManager/NetworkManager.conf
-#	sed -i 's/rc-manager\=.*/rc-manager\=unmanaged/g' /etc/NetworkManager/NetworkManager.conf
+	if [ -f /etc/apt/apt.conf.d/02-armbian-periodic ]; then
+	mv /etc/apt/apt.conf.d/02-armbian-periodic{,.disabled}
+	fi
+	if [ -f /etc/apt/apt.conf.d/20auto-upgrades ]; then
+	mv /etc/apt/apt.conf.d/20auto-upgrades{,.disabled}
+	fi
+	if [ -f /etc/apt/apt.conf.d/50unattended-upgrades ]; then
+	mv /etc/apt/apt.conf.d/50unattended-upgrades{,.disabled}
+	fi
 	echo "Cleaning build-time DNS from /etc/systemd/resolved.conf"
 	sed -i 's/^DNS\=.*/#DNS\=/g' /etc/systemd/resolved.conf
 	echo "Setting upstream wireless-regdb"
