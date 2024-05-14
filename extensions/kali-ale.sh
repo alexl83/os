@@ -57,12 +57,14 @@ function pre_customize_image__002_manage_config_files() {
 	if [ -f "${EXTENSION_DIR}"/overlay/common/armbian-leds-"${BOARD}".conf ]; then
 	display_alert "Setting up board leds" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/armbian-leds-"${BOARD}".conf "${SDCARD}"/etc/armbian-leds.conf
-
-	for file in "${SDCARD}"/"${apt_confd[@]"}; do
-	if [ -f "${SDCARD}"/"${file}" ]; then
-	display_alert "Disabling apt auto-checks" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-	run_host_command_logged mv "${SDCARD}"/"${file}"{,.disabled}
 	fi
+
+	for file in "${SDCARD}"/"${apt_confd[@]}"; do
+		if [ -f "${SDCARD}"/"${file}" ]; then
+		display_alert "Disabling apt auto-checks" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+		run_host_command_logged mv "${SDCARD}"/"${file}"{,.disabled}
+		fi
+	done
 
 	display_alert "Cleaning build-time DNS from /etc/systemd/resolved.conf" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged sed -i 's/^DNS\=.*/#DNS\=/g' "${SDCARD}"/etc/systemd/resolved.conf
@@ -86,7 +88,7 @@ function pre_customize_image__003_enable_disable_services() {
 
 function pre_customize_image_004_update_armbian_env() {
 
-	if [ -f ${SDCARD}"/boot/armbianEnv.txt ]; then
+	if [ -f "${SDCARD}"/boot/armbianEnv.txt ]; then
 	display_alert "Disabling verbosity, bootlogo, and console output in u-boot" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
 	run_host_command_logged sed -i 's/^verbosity.*/verbosity\=0/g' "${SDCARD}"/boot/armbianEnv.txt
 	run_host_command_logged sed -i 's/^bootlogo.*/bootlogo\=false/g' "${SDCARD}"/boot/armbianEnv.txt
@@ -101,4 +103,4 @@ function pre_customize_image_004_update_armbian_env() {
 	run_host_command_logged echo "extraargs=net.ifnames=0 quiet vt.global_cursor_default=0 nosplash" >> "${SDCARD}"/boot/armbianEnv.txt
 	fi
 
-}	
+}
