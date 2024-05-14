@@ -152,8 +152,8 @@ CopyConfigFiles()
 	fi
 	echo "Cleaning build-time DNS from /etc/systemd/resolved.conf"
 	sed -i 's/^DNS\=.*/#DNS\=/g' /etc/systemd/resolved.conf
-	echo "Setting upstream wireless-regdb"
-	update-alternatives --set regulatory.db /lib/firmware/regulatory.db-upstream
+#	echo "Setting upstream wireless-regdb"
+#	update-alternatives --set regulatory.db /lib/firmware/regulatory.db-upstream
 	echo "Enable passwordless reboot/shutdown via sudo"
 	cp /tmp/overlay/common/sudoers.d/* /etc/sudoers.d
 }
