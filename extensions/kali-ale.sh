@@ -23,6 +23,10 @@ function pre_customize_image__001_install_kali_packages(){
 			Pin-Priority: 50
 		end
 
+		display_alert "Fixing wireless-regdb signature" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+		chroot_sdcard update-alternatives --set regulatory.db /lib/firmware/regulatory.db-upstream
+
+
 	else
 		exit_with_error "Unsupported distribution: ${DISTRIBUTION}" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	fi
