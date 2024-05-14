@@ -74,10 +74,10 @@ function pre_customize_image__002_manage_config_files() {
 
 }
 
-function pre_customize_image__003_enable_disable_services() {
+function pre_customize_image__004_enable_disable_services() {
 	services=(zerotier-one wpa_supplicant networking unattended-upgrades haveged)
 	for service in "${services[@]}"; do
-		if [ chroot_sdcard systemctl is-enabled "${service}" ]; then
+		if [ $(chroot_sdcard systemctl is-enabled "${service}") ]; then
 		display_alert "disabling "${service}"" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
 		chroot_sdcard systemctl disable "${service}"
 		fi
@@ -86,7 +86,7 @@ function pre_customize_image__003_enable_disable_services() {
 	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/rfcomm.default "${SDCARD}"/etc/default/rfcomm
 }
 
-function pre_customize_image_004_update_armbian_env() {
+function pre_customize_image_005_update_armbian_env() {
 
 	if [ -f "${SDCARD}"/boot/armbianEnv.txt ]; then
 	display_alert "Disabling verbosity, bootlogo, and console output in u-boot" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
