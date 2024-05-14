@@ -36,7 +36,7 @@ Main() {
 			;;
 
 		bookworm|trixie|sid|jammy)
-		if [ -f  "/etc/apt/sources.list.d/kali.list" ]; then
+		if [ -f  "/etc/apt/sources.list.d/kali.2list" ]; then
 
 			DisableTTYs
 			AddFirmware
