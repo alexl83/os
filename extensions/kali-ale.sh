@@ -122,14 +122,14 @@ function pre_customize_image__256_setup_stealth_networking()
 function pre_customize_image__257_install_angryoxide()
  {
 	display_alert "Downloading and installing latest AngryOxide build from gh:Ragnt/AngryOxide" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
-	chroot_sdcard mkdir "${SDCARD}"/tmpinst
-	chroot_sdcard cd "${SDCARD}"/tmpinst
+	mkdir "${SDCARD}"/tmpinst
+	chroot_sdcard cd /tmpinst
 	chroot_sdcard wget -q https://github.com/Ragnt/AngryOxide/releases/latest/download/angryoxide-linux-aarch64-musl.tar.gz
 	chroot_sdcard tar xfz angryoxide-linux-aarch64-musl.tar.gz
 	chroot_sdcard chmod +x ./install
 	chroot_sdcard ./install install
-	chroot_sdcard cd "${SDCARD}"/
-	chroot_sdcard rm -rf "${SDCARD}"/tmpinst
+	chroot_sdcard cd /
+	rm -rf "${SDCARD}"/tmpinst
 	display_alert "Done installing AngryOxide" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
 }
 
