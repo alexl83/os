@@ -136,8 +136,8 @@ function pre_customize_image__257_install_angryoxide()
 function pre_customize_image__258_install_dnsleaktest()
 {
 	display_alert "Istalling dnsleaktest from gh:macvk/dnsleaktest"
-	chroot_sdcard curl -s https://raw.githubusercontent.com/macvk/dnsleaktest/master/dnsleaktest.sh -o "${SDCARD}"/usr/local/bin/dnsleaktest
-	chroot_sdcard chmod +x "${SDCARD}"/usr/local/bin/dnsleaktest
+	chroot_sdcard curl -s https://raw.githubusercontent.com/macvk/dnsleaktest/master/dnsleaktest.sh -o /usr/local/bin/dnsleaktest
+	chroot_sdcard chmod +x /usr/local/bin/dnsleaktest
 
 }
 
