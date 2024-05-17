@@ -108,28 +108,28 @@ function pre_customize_image__255_update_armbian_env() {
 function pre_customize_image__256_setup_stealth_networking()
 {
 	display_alert "Setting up udev-based mac randomization and automatic monitor interfaces creations" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
-		cp "${EXTENSION_DIR}"/overlay/common/udev-v7/70-persistent-net.rules /etc/udev/rules.d
+		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/udev-v7/70-persistent-net.rules /etc/udev/rules.d
 		if [ ! -d "${SDCARD}"/usr/local/sbin ]; then
-		mkdir -p "${SDCARD}"/usr/local/sbin
+		run_host_command_logged mkdir -p "${SDCARD}"/usr/local/sbin
 		fi
-	cp "${EXTENSION_DIR}"/overlay/common/udev-v7/helpers/changemac.sh "${SDCARD}"/usr/local/sbin
-	cp "${EXTENSION_DIR}"/overlay/common/udev-v7/helpers/createmon.sh "${SDCARD}"/usr/local/sbin
-	chmod +x "${SDCARD}"/usr/local/sbin/createmon.sh
-	chmod +x "${SDCARD}"/usr/local/sbin/changemac.sh
+	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/udev-v7/helpers/changemac.sh "${SDCARD}"/usr/local/sbin
+	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/udev-v7/helpers/createmon.sh "${SDCARD}"/usr/local/sbin
+	run_host_command_logged chmod +x "${SDCARD}"/usr/local/sbin/createmon.sh
+	run_host_command_logged chmod +x "${SDCARD}"/usr/local/sbin/changemac.sh
 
 }
 
 function pre_customize_image__257_install_angryoxide()
  {
 	display_alert "Downloading and installing latest AngryOxide build from gh:Ragnt/AngryOxide" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
-	mkdir "${SDCARD}"/tmpinst
+	run_host_command_logged mkdir "${SDCARD}"/tmpinst
 	chroot_sdcard cd /tmpinst
 	chroot_sdcard wget -q https://github.com/Ragnt/AngryOxide/releases/latest/download/angryoxide-linux-aarch64-musl.tar.gz
 	chroot_sdcard tar xfz angryoxide-linux-aarch64-musl.tar.gz
 	chroot_sdcard chmod +x ./install
 	chroot_sdcard ./install install
 	chroot_sdcard cd /
-	rm -rf "${SDCARD}"/tmpinst
+	run_host_command_logged rm -rf "${SDCARD}"/tmpinst
 	display_alert "Done installing AngryOxide" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
 }
 
@@ -149,12 +149,12 @@ function pre_customize_image__259_disablettys()
 	chroot_sdcard systemctl mask serial-getty@ttyS2.service
 	chroot_sdcard systemctl mask serial-getty@ttyS5.service
 	display_alert "Disabling virtual consoles" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
-	chroot_sdcard mkdir "${SDCARD}"/etc/systemd/logind.conf.d/
-	chroot_sdcard cp "${EXTENSION_DIR}"/overlay/common/logind_00-disable-vtty.conf "${SDCARD}"/etc/systemd/logind.conf.d/disable-vtty.conf
+	run_host_command_logged mkdir "${SDCARD}"/etc/systemd/logind.conf.d/
+	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/logind_00-disable-vtty.conf "${SDCARD}"/etc/systemd/logind.conf.d/disable-vtty.conf
 	if [ ! -d "${SDCARD}"/etc/systemd/resolved.conf.d/ ]; then
-		chroot_sdcard mkdir "${SDCARD}"/etc/systemd/resolved.conf.d/
+		run_host_command_logged mkdir "${SDCARD}"/etc/systemd/resolved.conf.d/
 	fi
-	chroot_sdcard cp "${EXTENSION_DIR}"/overlay/common/resolved*.conf "${SDCARD}"/etc/systemd/resolved.conf.d/
+	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/resolved*.conf "${SDCARD}"/etc/systemd/resolved.conf.d/
 	chroot_sdcard systemctl mask getty@tty1
 	chroot_sdcard systemctl mask console-setup
 
@@ -163,8 +163,8 @@ function pre_customize_image__259_disablettys()
 function pre_customize_image__260_add_firmware()
 {
 	display_alert "Installing additional firmware(s): e.g. MT7922"
-	chroot_sdcard cp -r  "${EXTENSION_DIR}"/overlay/firmware/* "${SDCARD}"/lib/firmware/
-	chroot_sdcard cp -r  "${EXTENSION_DIR}"/overlay/firmware/* "${SDCARD}"/usr/lib/firmware
+	run_host_command_logged cp -r  "${EXTENSION_DIR}"/overlay/firmware/* "${SDCARD}"/lib/firmware/
+	run_host_command_logged cp -r  "${EXTENSION_DIR}"/overlay/firmware/* "${SDCARD}"/usr/lib/firmware
 }
 
 function pre_customize_image_261_install_user_overlays()
@@ -185,12 +185,12 @@ function pre_customize_image__262_setup_gpsd()
 
 	orangepizero3)
 	display_alert "Setting up GPSD" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
-	chroot_sdcard sed -i 's/DEVICES=.*/DEVICES="\/dev\/ttyS0"/g' ${SDCARD}"/etc/default/gpsd
+	chroot_sdcard sed -i 's/DEVICES=.*/DEVICES="\/dev\/ttyS0"/g' etc/default/gpsd
 	;;
 
 	orangepizero02w)
 	display_alert "Setting up GPSD" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
-	chroot_sdcard sed -i 's/DEVICES=.*/DEVICES="\/dev\/ttyS5"/g' ${SDCARD}"/etc/default/gpsd
+	chroot_sdcard sed -i 's/DEVICES=.*/DEVICES="\/dev\/ttyS5"/g' /etc/default/gpsd
 	;;
 
 	esac
