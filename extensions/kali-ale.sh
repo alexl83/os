@@ -77,7 +77,7 @@ function pre_customize_image__252_manage_config_files() {
 function pre_customize_image__254_enable_disable_services() {
 	services=(zerotier-one wpa_supplicant networking unattended-upgrades haveged)
 	for service in "${services[@]}"; do
-		if [[ $(chroot_sdcard systemctl list-unit-files --type service |  grep -F "${service}") ]] && [[ $(chroot_sdcard systemctl is-enabled "${service}") ]]; then
+		if [ $(chroot_sdcard systemctl list-unit-files --type service |  grep -F "${service}") ] && [ $(chroot_sdcard systemctl is-enabled "${service}") ]; then
 		display_alert "disabling "${service}"" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
 		chroot_sdcard systemctl disable "${service}"
 		fi
@@ -163,8 +163,8 @@ function pre_customize_image__259_disablettys()
 function pre_customize_image__260_add_firmware()
 {
 	display_alert "Installing additional firmware(s): e.g. MT7922"
-	run_host_command_logged cp -r  "${EXTENSION_DIR}"/overlay/firmware/* "${SDCARD}"/lib/firmware/
-	run_host_command_logged cp -r  "${EXTENSION_DIR}"/overlay/firmware/* "${SDCARD}"/usr/lib/firmware
+	run_host_command_logged cp -r "${EXTENSION_DIR}"/overlay/firmware/* "${SDCARD}"/lib/firmware/
+	run_host_command_logged cp -r "${EXTENSION_DIR}"/overlay/firmware/* "${SDCARD}"/usr/lib/firmware
 }
 
 function pre_customize_image_261_install_user_overlays()
