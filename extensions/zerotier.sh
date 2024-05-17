@@ -1,6 +1,5 @@
-function pre_customize_image__002_install_zerotier_packages(){
+function pre_customize_image__250_2_install_zerotier_packages(){
 
-	pkg="zerotier-one"
 	display_alert "Adding gpg-key for Zerotier repository" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged curl --max-time 60 -4 -fsSL "http://download.zerotier.com/contact%40zerotier.com.gpg" "|" gpg --dearmor -o "${SDCARD}"/usr/share/keyrings/zerotier-debian-package-key.gpg
 	# Add sources.list
@@ -16,7 +15,5 @@ function pre_customize_image__002_install_zerotier_packages(){
 	display_alert "Updating package lists with Zerotier repository" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	do_with_retries 3 chroot_sdcard_apt_get_update
 
-	display_alert "Adding package: ${pkg}" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-	do_with_retries 3 chroot_sdcard_apt_get_install "${pkg}"
 
 }

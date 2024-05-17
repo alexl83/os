@@ -7,7 +7,7 @@ function extension_prepare_config__docker() {
 #working  extension_method pre t64 breakage "pre_customize_image"
 #working  extension_method post commit #6358 "post_install_kernel_debs"
 
-function pre_customize_image__001_install_kali_repositories() {
+function pre_customize_image__250_1_install_kali_repositories() {
 
 	display_alert "Adding gpg-key for Kali repository" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged curl --max-time 60 -4 -fsSL "https://archive.kali.org/archive-key.asc" "|" gpg --dearmor -o "${SDCARD}"/usr/share/keyrings/kali.gpg
@@ -33,7 +33,7 @@ function pre_customize_image__001_install_kali_repositories() {
 
 }
 
-function pre_customize_image__002_manage_config_files() {
+function pre_customize_image__252_manage_config_files() {
 
 	apt_confd=(/etc/apt/apt.conf.d/02-armbian-periodic /etc/apt/apt.conf.d/20auto-upgrades /etc/apt/apt.conf.d/50unattended-upgrades)
 
@@ -74,7 +74,7 @@ function pre_customize_image__002_manage_config_files() {
 
 }
 
-function pre_customize_image__004_enable_disable_services() {
+function pre_customize_image__254_enable_disable_services() {
 	services=(zerotier-one wpa_supplicant networking unattended-upgrades haveged)
 	for service in "${services[@]}"; do
 		if [[ $(chroot_sdcard systemctl list-unit-files --type service |  grep -F "${service}") ]] && [[ $(chroot_sdcard systemctl is-enabled "${service}") ]]; then
@@ -86,7 +86,7 @@ function pre_customize_image__004_enable_disable_services() {
 	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/rfcomm.default "${SDCARD}"/etc/default/rfcomm
 }
 
-function pre_customize_image__005_update_armbian_env() {
+function pre_customize_image__255_update_armbian_env() {
 
 	if [ -f "${SDCARD}"/boot/armbianEnv.txt ]; then
 	display_alert "Disabling verbosity, bootlogo, and console output in u-boot" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
@@ -102,5 +102,97 @@ function pre_customize_image__005_update_armbian_env() {
 	display_alert "Disabling Predictable net interface naming and kernel/splash verbosity"
 	run_host_command_logged echo "extraargs=net.ifnames=0 quiet vt.global_cursor_default=0 nosplash" >> "${SDCARD}"/boot/armbianEnv.txt
 	fi
+
+}
+
+function pre_customize_image__256_setup_stealth_networking()
+{
+	display_alert "Setting up udev-based mac randomization and automatic monitor interfaces creations" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
+		cp "${EXTENSION_DIR}"/overlay/common/udev-v7/70-persistent-net.rules /etc/udev/rules.d
+		if [ ! -d "${SDCARD}"/usr/local/sbin ]; then
+		mkdir -p "${SDCARD}"/usr/local/sbin
+		fi
+	cp "${EXTENSION_DIR}"/overlay/common/udev-v7/helpers/changemac.sh "${SDCARD}"/usr/local/sbin
+	cp "${EXTENSION_DIR}"/overlay/common/udev-v7/helpers/createmon.sh "${SDCARD}"/usr/local/sbin
+	chmod +x "${SDCARD}"/usr/local/sbin/createmon.sh
+	chmod +x "${SDCARD}"/usr/local/sbin/changemac.sh
+
+}
+
+function pre_customize_image__257_install_angryoxide()
+ {
+	display_alert "Downloading and installing latest AngryOxide build from gh:Ragnt/AngryOxide" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
+	chroot_sdcard mkdir "${SDCARD}"/tmpinst
+	chroot_sdcard cd "${SDCARD}"/tmpinst
+	chroot_sdcard wget -q https://github.com/Ragnt/AngryOxide/releases/latest/download/angryoxide-linux-aarch64-musl.tar.gz
+	chroot_sdcard tar xfz angryoxide-linux-aarch64-musl.tar.gz
+	chroot_sdcard chmod +x ./install
+	chroot_sdcard ./install install
+	chroot_sdcard cd "${SDCARD}"/
+	chroot_sdcard rm -rf "${SDCARD}"/tmpinst
+	display_alert "Done installing AngryOxide" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
+}
+
+function pre_customize_image__258_install_dnsleaktest()
+{
+	display_alert "Istalling dnsleaktest from gh:macvk/dnsleaktest"
+	chroot_sdcard curl -s https://raw.githubusercontent.com/macvk/dnsleaktest/master/dnsleaktest.sh -o "${SDCARD}"/usr/local/bin/dnsleaktest
+	chroot_sdcard chmod +x "${SDCARD}"/usr/local/bin/dnsleaktest
+
+}
+
+function pre_customize_image__259_disablettys()
+{
+	display_alert "Disabling serial consoles" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
+	chroot_sdcard systemctl mask serial-getty@ttyS0.service
+	chroot_sdcard systemctl mask serial-getty@ttyS1.service
+	chroot_sdcard systemctl mask serial-getty@ttyS2.service
+	chroot_sdcard systemctl mask serial-getty@ttyS5.service
+	display_alert "Disabling virtual consoles" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
+	chroot_sdcard mkdir "${SDCARD}"/etc/systemd/logind.conf.d/
+	chroot_sdcard cp "${EXTENSION_DIR}"/overlay/common/logind_00-disable-vtty.conf "${SDCARD}"/etc/systemd/logind.conf.d/disable-vtty.conf
+	if [ ! -d "${SDCARD}"/etc/systemd/resolved.conf.d/ ]; then
+		chroot_sdcard mkdir "${SDCARD}"/etc/systemd/resolved.conf.d/
+	fi
+	chroot_sdcard cp "${EXTENSION_DIR}"/overlay/common/resolved*.conf "${SDCARD}"/etc/systemd/resolved.conf.d/
+	chroot_sdcard systemctl mask getty@tty1
+	chroot_sdcard systemctl mask console-setup
+
+}
+
+function pre_customize_image__260_add_firmware()
+{
+	display_alert "Installing additional firmware(s): e.g. MT7922"
+	chroot_sdcard cp -r  "${EXTENSION_DIR}"/overlay/firmware/* "${SDCARD}"/lib/firmware/
+	chroot_sdcard cp -r  "${EXTENSION_DIR}"/overlay/firmware/* "${SDCARD}"/usr/lib/firmware
+}
+
+function pre_customize_image_261_install_user_overlays()
+{
+	if [ -d "${EXTENSION_DIR}/overlay/${BOARD}" ]; then
+		display_alert "Installing user overlays" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
+		for file in "${EXTENSION_DIR}"/overlay/${BOARD}/*.dts; do
+			display_alert "installing $(basename ${file}) overlay" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
+			chroot_sdcard armbian-add-overlay ${file}
+		done
+	fi
+
+}
+
+function pre_customize_image__262_setup_gpsd()
+{
+	case ${BOARD} in
+
+	orangepizero3)
+	display_alert "Setting up GPSD" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
+	chroot_sdcard sed -i 's/DEVICES=.*/DEVICES="\/dev\/ttyS0"/g' ${SDCARD}"/etc/default/gpsd
+	;;
+
+	orangepizero02w)
+	display_alert "Setting up GPSD" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
+	chroot_sdcard sed -i 's/DEVICES=.*/DEVICES="\/dev\/ttyS5"/g' ${SDCARD}"/etc/default/gpsd
+	;;
+
+	esac
 
 }
