@@ -43,8 +43,8 @@ function pre_customize_image__252_manage_config_files() {
 		else
 		run_host_command_logged touch "${SDCARD}"/usr/local/etc/wifi-whitelist
 	fi
-	if [ -f "${EXTENSION_DIR}"/overlay/common/wifi-whitelist ]; then
-		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/wifi-whitelist "${SDCARD}"/usr/local/etc/wifi-targets
+	if [ -f "${EXTENSION_DIR}"/overlay/common/wifi-targets ]; then
+		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/wifi-targets "${SDCARD}"/usr/local/etc/wifi-targets
 		else 
 		run_host_command_logged touch "${SDCARD}"/usr/local/etc/wifi-targets
 	fi
