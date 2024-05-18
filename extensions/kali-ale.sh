@@ -167,7 +167,7 @@ function pre_customize_image__260_add_firmware()
 	run_host_command_logged cp -r "${EXTENSION_DIR}"/overlay/firmware/* "${SDCARD}"/usr/lib/firmware
 }
 
-function pre_customize_image_261_install_user_overlays()
+function pre_customize_image__261_install_user_overlays()
 {
 	if [ -d "${EXTENSION_DIR}/overlay/${BOARD}" ]; then
 		display_alert "Installing user overlays" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
