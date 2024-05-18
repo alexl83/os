@@ -169,7 +169,7 @@ function pre_customize_image__260_add_firmware()
 
 function pre_customize_image__261_install_user_overlays()
 {
-	if [ -d "${EXTENSION_DIR}"/overlay/"${BOARD}" ] && [ -f "${EXTENSION_DIR}"/overlay/"${BOARD}"/*.dts ]; then
+	if [[ -d "${EXTENSION_DIR}"/overlay/"${BOARD}" && -f "${EXTENSION_DIR}"/overlay/"${BOARD}"/*.dts ]]; then
 		display_alert "Installing user overlays" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
 		chroot_sdcard cd /tmpinst
 		for file in "${EXTENSION_DIR}"/overlay/"${BOARD}"/*.dts; do
