@@ -77,7 +77,7 @@ function pre_customize_image__252_manage_config_files() {
 function pre_customize_image__254_enable_disable_services() {
 	services=(zerotier-one wpa_supplicant networking unattended-upgrades haveged)
 	for service in "${services[@]}"; do
-		if [ $(chroot_sdcard systemctl list-unit-files --type service |  grep -F "${service}") ] && [ $(chroot_sdcard systemctl is-enabled "${service}") ]; then
+		if [[ $(chroot_sdcard systemctl list-unit-files --type service |  grep -F "${service}") ]] && [[ $(chroot_sdcard systemctl is-enabled "${service}") ]]; then
 		display_alert "disabling "${service}"" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
 		chroot_sdcard systemctl disable "${service}"
 		fi
