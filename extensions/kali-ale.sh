@@ -102,7 +102,7 @@ function pre_customize_image__254_enable_disable_services() {
 	done
 	display_alert "installing rfcomm custom service for bluetooth GPS" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
 	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/rfcomm.service "${SDCARD}"/etc/systemd/system
-	if [ -f "${EXTENSION_DIR}"/overlay/common/rfcomm.default.custom ]; then
+	if [ -f "${EXTENSION_DIR}"/overlay/common/rfcomm.default_custom ]; then
 		display_alert "Found custom rfcomm default file: enabling service" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
 		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/rfcomm.default_custom "${SDCARD}"/etc/default/rfcomm
 		chroot_sdcard systemctl --no-reload enable rfcomm.service
@@ -133,10 +133,10 @@ function pre_customize_image__255_update_armbian_env() {
 function pre_customize_image__256_setup_stealth_networking()
 {
 	display_alert "Setting up udev-based mac randomization and automatic monitor interfaces creations" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
-		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/udev-v7/70-persistent-net.rules "${SDCARD}"/etc/udev/rules.d
-		if [ ! -d "${SDCARD}"/usr/local/sbin ]; then
+	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/udev-v7/70-persistent-net.rules "${SDCARD}"/etc/udev/rules.d
+	if [ ! -d "${SDCARD}"/usr/local/sbin ]; then
 		run_host_command_logged mkdir -p "${SDCARD}"/usr/local/sbin
-		fi
+	fi
 	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/udev-v7/helpers/changemac.sh "${SDCARD}"/usr/local/sbin
 	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/udev-v7/helpers/createmon.sh "${SDCARD}"/usr/local/sbin
 	run_host_command_logged chmod +x "${SDCARD}"/usr/local/sbin/createmon.sh
