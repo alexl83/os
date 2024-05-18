@@ -86,6 +86,10 @@ function pre_customize_image__252_manage_config_files() {
 	display_alert "Applying sudo tweaks" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/sudoers.d/* "${SDCARD}"/etc/sudoers.d
 
+	display_alert "Setting upstream wireless-regdb" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+	chroot_sdcard update-alternatives --set regulatory.db /lib/firmware/regulatory.db-upstream
+
+
 }
 
 function pre_customize_image__254_enable_disable_services() {
