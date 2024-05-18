@@ -108,7 +108,7 @@ function pre_customize_image__255_update_armbian_env() {
 function pre_customize_image__256_setup_stealth_networking()
 {
 	display_alert "Setting up udev-based mac randomization and automatic monitor interfaces creations" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
-		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/udev-v7/70-persistent-net.rules /etc/udev/rules.d
+		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/udev-v7/70-persistent-net.rules "${SDCARD}"/etc/udev/rules.d
 		if [ ! -d "${SDCARD}"/usr/local/sbin ]; then
 		run_host_command_logged mkdir -p "${SDCARD}"/usr/local/sbin
 		fi
@@ -185,7 +185,7 @@ function pre_customize_image__262_setup_gpsd()
 
 	orangepizero3)
 	display_alert "Setting up GPSD" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
-	chroot_sdcard sed -i 's/DEVICES=.*/DEVICES="\/dev\/ttyS0"/g' etc/default/gpsd
+	chroot_sdcard sed -i 's/DEVICES=.*/DEVICES="\/dev\/ttyS0"/g' /etc/default/gpsd
 	;;
 
 	orangepizero02w)
