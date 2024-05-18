@@ -171,9 +171,15 @@ function pre_customize_image_261_install_user_overlays()
 {
 	if [ -d "${EXTENSION_DIR}/overlay/${BOARD}" ]; then
 		display_alert "Installing user overlays" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
-		for file in "${EXTENSION_DIR}"/overlay/${BOARD}/*.dts; do
-			display_alert "installing $(basename ${file}) overlay" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
-			chroot_sdcard armbian-add-overlay ${file}
+		for file in "${EXTENSION_DIR}"/overlay/"${BOARD}"/*.dts; do
+			tgtfile = $(basename "${file}")
+			display_alert "installing ${tgtfile} overlay" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
+			run_host_command_logged mkdir "${SDCARD}"/tmpinst
+			chroot_sdcard cd /tmpinst
+			run_host_command_logged cp "${file}" "${SDCARD}"/tmpinst
+			chroot_sdcard armbian-add-overlay /tmpinst/"${tgtfile}"
+			chroot_sdcard cd /
+			run_host_command_logged rm -rf "${SDCARD}"/tmpinst
 		done
 	fi
 
