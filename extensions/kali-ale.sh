@@ -100,8 +100,15 @@ function pre_customize_image__254_enable_disable_services() {
 		chroot_sdcard systemctl disable "${service}"
 		fi
 	done
+	display_alert "installing rfcomm custom service for bluetooth GPS" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
 	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/rfcomm.service "${SDCARD}"/etc/systemd/system
-	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/rfcomm.default "${SDCARD}"/etc/default/rfcomm
+	if [ -f "${EXTENSION_DIR}"/overlay/common/rfcomm.default.custom ]; then
+		display_alert "Found custom rfcomm default file: enabling service" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
+		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/rfcomm.default_custom "${SDCARD}"/etc/default/rfcomm
+		chroot_sdcard systemctl --no-reload enable rfcomm.service
+		else 
+		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/rfcomm.default "${SDCARD}"/etc/default/rfcomm
+	fi
 }
 
 function pre_customize_image__255_update_armbian_env() {
@@ -113,11 +120,11 @@ function pre_customize_image__255_update_armbian_env() {
 	run_host_command_logged sed -i 's/^console.*/console\=none/g' "${SDCARD}"/boot/armbianEnv.txt
 
 		if [ "${BOARD}" == "orangepizero3" ]; then
-		display_alert "Enabling IR and UART5 overlays by default"
+		display_alert "Enabling IR and UART5 overlays by default" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 		run_host_command_logged echo "overlays=ir uart5-ph" >> "${SDCARD}"/boot/armbianEnv.txt
 		fi
 
-	display_alert "Disabling Predictable net interface naming and kernel/splash verbosity"
+	display_alert "Disabling Predictable net interface naming and kernel/splash verbosity" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged echo "extraargs=net.ifnames=0 quiet vt.global_cursor_default=0 nosplash" >> "${SDCARD}"/boot/armbianEnv.txt
 	fi
 
@@ -153,7 +160,7 @@ function pre_customize_image__257_install_angryoxide()
 
 function pre_customize_image__258_install_dnsleaktest()
 {
-	display_alert "Istalling dnsleaktest from gh:macvk/dnsleaktest"
+	display_alert "Istalling dnsleaktest from gh:macvk/dnsleaktest" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	chroot_sdcard curl -s https://raw.githubusercontent.com/macvk/dnsleaktest/master/dnsleaktest.sh -o /usr/local/bin/dnsleaktest
 	chroot_sdcard chmod +x /usr/local/bin/dnsleaktest
 
@@ -180,7 +187,7 @@ function pre_customize_image__259_disablettys()
 
 function pre_customize_image__260_add_firmware()
 {
-	display_alert "Installing additional firmware(s): e.g. MT7922"
+	display_alert "Installing additional firmware(s): e.g. MT7922" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged cp -r "${EXTENSION_DIR}"/overlay/firmware/* "${SDCARD}"/lib/firmware/
 	run_host_command_logged cp -r "${EXTENSION_DIR}"/overlay/firmware/* "${SDCARD}"/usr/lib/firmware
 }
