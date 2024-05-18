@@ -171,11 +171,10 @@ function pre_customize_image__261_install_user_overlays()
 {
 	if [ -d "${EXTENSION_DIR}"/overlay/"${BOARD}" ]; then
 		display_alert "Installing user overlays" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
-		chroot_sdcard cd /tmpinst
+		run_host_command_logged mkdir "${SDCARD}"/tmpinst
 		for file in "${EXTENSION_DIR}"/overlay/"${BOARD}"/*.dts; do
 			tgtfile=$(basename "${file}")
 			display_alert "installing ${tgtfile} overlay" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
-			run_host_command_logged mkdir "${SDCARD}"/tmpinst
 			run_host_command_logged cp "${file}" "${SDCARD}"/tmpinst
 			chroot_sdcard armbian-add-overlay /tmpinst/"${tgtfile}"
 		done
