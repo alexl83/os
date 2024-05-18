@@ -77,7 +77,7 @@ function pre_customize_image__252_manage_config_files() {
 		fi
 	done
 
-	display_alert "Installing .zshrc skel"
+	display_alert "Installing .zshrc skel" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
 	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/zshrc_skel "${SDCARD}"/etc/skel/.zshrc
 
 	display_alert "Cleaning build-time DNS from /etc/systemd/resolved.conf" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
@@ -96,7 +96,7 @@ function pre_customize_image__254_enable_disable_services() {
 	services=(zerotier-one wpa_supplicant networking unattended-upgrades haveged)
 	for service in "${services[@]}"; do
 		if [[ $(chroot_sdcard systemctl list-unit-files --type service |  grep -F "${service}") ]] && [[ $(chroot_sdcard systemctl is-enabled "${service}") ]]; then
-		display_alert "disabling "${service}"" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
+		display_alert "disabling ${service}" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
 		chroot_sdcard systemctl disable "${service}"
 		fi
 	done
@@ -179,6 +179,7 @@ function pre_customize_image__259_disablettys()
 	if [ ! -d "${SDCARD}"/etc/systemd/resolved.conf.d/ ]; then
 		run_host_command_logged mkdir "${SDCARD}"/etc/systemd/resolved.conf.d/
 	fi
+	display_alert "Setting system-wide DNS over TLS and systemd-resolved tweaks" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
 	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/resolved*.conf "${SDCARD}"/etc/systemd/resolved.conf.d/
 	chroot_sdcard systemctl mask getty@tty1
 	chroot_sdcard systemctl mask console-setup
