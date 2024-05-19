@@ -94,6 +94,7 @@ function pre_customize_image__252_manage_config_files() {
 
 	display_alert "Installing 88x2bu and 8821au update script" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
 	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/update_rtl_improved.sh "${SDCARD}"/usr/local/bin
+	run_host_command_logged chmod +x "${SDCARD}"/usr/local/bin/update_rtl_improved.sh
 
 
 }
