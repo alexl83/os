@@ -1,6 +1,6 @@
 <h1> orangepi-related configs/patches for Armbian </h1>
 
-<p>This is an attempt at creating an SBC-oriented "stealth" armian-based kali headless machine</p>
+<p>This is an attempt at creating an SBC-oriented "stealth" armbian-based kali headless machine</p>
 
 - Config build files for OragenPI Zero3 and Zero2w and 5 Plus --> userpatches/config-{opi02w,opi03,opi5plus}.conf
 - Kali injection patches from official [GitLab](https://gitlab.com/kalilinux/packages/linux/-/blob/kali/master/debian/patches/series?ref_type=heads) (reworked to apply to kernel 6.7/6.8) --> userpatches/kernel/archive/sunxi-6.{6,7} && userpatches/kernel/rockchip-rk3588-edge
