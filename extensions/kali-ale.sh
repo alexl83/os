@@ -39,11 +39,13 @@ function pre_customize_image__252_manage_config_files() {
 
 	display_alert "Creating Wi-Fi white/blacklist files" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	if [ -f "${EXTENSION_DIR}"/overlay/common/wifi-whitelist ]; then
+		display_alert "Found custom Wi-Fi whitelist - installing"
 		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/wifi-whitelist "${SDCARD}"/usr/local/etc/wifi-whitelist
 		else
 		run_host_command_logged touch "${SDCARD}"/usr/local/etc/wifi-whitelist
 	fi
 	if [ -f "${EXTENSION_DIR}"/overlay/common/wifi-targets ]; then
+		display_alert "Found custom Wi-Fi target list - installing"
 		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/wifi-targets "${SDCARD}"/usr/local/etc/wifi-targets
 		else 
 		run_host_command_logged touch "${SDCARD}"/usr/local/etc/wifi-targets
