@@ -59,6 +59,11 @@ function pre_customize_image__252_manage_config_files() {
 	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/blacklist-videoout-"${BOARD}".conf "${SDCARD}"/etc/modprobe.d
 	fi
 
+	if [ -f "${EXTENSION_DIR}"/overlay/common/blacklist-misc-"${BOARD}".conf ]; then
+		display_alert "Disabling misc ${BOARD} debug features"
+		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/blacklist-videoout-"${BOARD}".conf "${SDCARD}"/etc/modprobe.d
+	fi
+
 	if [ -f "${SDCARD}"/etc/avahi/avahi-daemon.conf ]; then
 	display_alert "Allowing Avahi mDNS on designated interfaces only" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged sed -i 's/^\#allow-interfaces.*/allow-interfaces\=eth0,sta0,zt7nnkpung/g' "${SDCARD}"/etc/avahi/avahi-daemon.conf
