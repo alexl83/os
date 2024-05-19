@@ -39,7 +39,7 @@ function pre_customize_image__252_manage_config_files() {
 
 	display_alert "Creating Wi-Fi white/blacklist files" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	if [ -f "${EXTENSION_DIR}"/overlay/common/wifi-whitelist ]; then
-		display_alert "Found custom Wi-Fi whitelist - installing"
+		display_alert "Found custom Wi-Fi whitelist - installing" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/wifi-whitelist "${SDCARD}"/usr/local/etc/wifi-whitelist
 		else
 		run_host_command_logged touch "${SDCARD}"/usr/local/etc/wifi-whitelist
@@ -81,7 +81,7 @@ function pre_customize_image__252_manage_config_files() {
 
 	display_alert "Installing .zshrc skel" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
 	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/zshrc_skel "${SDCARD}"/etc/skel/.zshrc
-	run_host_command_logged rm -v "${SDCARD}"/root/.zshrc
+	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/zshrc_skel "${SDCARD}"/root/.zshrc
 
 	display_alert "Cleaning build-time DNS from /etc/systemd/resolved.conf" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged sed -i 's/^DNS\=.*/#DNS\=/g' "${SDCARD}"/etc/systemd/resolved.conf
@@ -172,7 +172,6 @@ function pre_customize_image__258_install_dnsleaktest()
 	chroot_sdcard chmod +x /usr/local/bin/dnsleaktest
 
 }
-
 
 
 function pre_customize_image__259_disablettys()
