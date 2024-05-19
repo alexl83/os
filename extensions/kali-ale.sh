@@ -79,7 +79,7 @@ function pre_customize_image__252_manage_config_files() {
 		fi
 	done
 
-	display_alert "Installing .zshrc skel" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
+	display_alert "Installing .zshrc skel" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/zshrc_skel "${SDCARD}"/etc/skel/.zshrc
 	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/zshrc_skel "${SDCARD}"/root/.zshrc
 
@@ -92,7 +92,7 @@ function pre_customize_image__252_manage_config_files() {
 	display_alert "Setting upstream wireless-regdb" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	chroot_sdcard update-alternatives --set regulatory.db /lib/firmware/regulatory.db-upstream
 
-	display_alert "Installing 88x2bu and 8821au update script" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
+	display_alert "Installing 88x2bu and 8821au update script" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/update_rtl_improved.sh "${SDCARD}"/usr/local/bin
 	run_host_command_logged chmod +x "${SDCARD}"/usr/local/bin/update_rtl_improved.sh
 
@@ -103,14 +103,14 @@ function pre_customize_image__254_enable_disable_services() {
 	services=(zerotier-one wpa_supplicant networking unattended-upgrades haveged)
 	for service in "${services[@]}"; do
 		if [[ $(chroot_sdcard systemctl list-unit-files --type service | grep -F "${service}") ]] && [[ $(chroot_sdcard systemctl is-enabled "${service}") ]]; then
-		display_alert "disabling ${service}" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
+		display_alert "disabling ${service}" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 		chroot_sdcard systemctl disable "${service}"
 		fi
 	done
-	display_alert "installing rfcomm custom service for bluetooth GPS" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
+	display_alert "installing rfcomm custom service for bluetooth GPS" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/rfcomm.service "${SDCARD}"/etc/systemd/system
 	if [ -f "${EXTENSION_DIR}"/overlay/common/rfcomm.default_custom ]; then
-		display_alert "Found custom rfcomm default file: enabling service" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
+		display_alert "Found custom rfcomm default file: enabling service" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/rfcomm.default_custom "${SDCARD}"/etc/default/rfcomm
 		chroot_sdcard systemctl --no-reload enable rfcomm.service
 		else 
@@ -121,7 +121,7 @@ function pre_customize_image__254_enable_disable_services() {
 function pre_customize_image__255_update_armbian_env() {
 
 	if [ -f "${SDCARD}"/boot/armbianEnv.txt ]; then
-	display_alert "Disabling verbosity, bootlogo, and console output in u-boot" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
+	display_alert "Disabling verbosity, bootlogo, and console output in u-boot" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged sed -i 's/^verbosity.*/verbosity\=0/g' "${SDCARD}"/boot/armbianEnv.txt
 	run_host_command_logged sed -i 's/^bootlogo.*/bootlogo\=false/g' "${SDCARD}"/boot/armbianEnv.txt
 	run_host_command_logged sed -i 's/^console.*/console\=none/g' "${SDCARD}"/boot/armbianEnv.txt
@@ -153,7 +153,7 @@ function pre_customize_image__256_setup_stealth_networking()
 
 function pre_customize_image__257_install_angryoxide()
  {
-	display_alert "Downloading and installing latest AngryOxide build from gh:Ragnt/AngryOxide" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
+	display_alert "Downloading and installing latest AngryOxide build from gh:Ragnt/AngryOxide" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged mkdir "${SDCARD}"/tmpinst
 	chroot_sdcard cd /tmpinst
 	chroot_sdcard wget -q https://github.com/Ragnt/AngryOxide/releases/latest/download/angryoxide-linux-aarch64-musl.tar.gz
@@ -162,7 +162,7 @@ function pre_customize_image__257_install_angryoxide()
 	chroot_sdcard ./install install
 	chroot_sdcard cd /
 	run_host_command_logged rm -rf "${SDCARD}"/tmpinst
-	display_alert "Done installing AngryOxide" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
+	display_alert "Done installing AngryOxide" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 }
 
 function pre_customize_image__258_install_dnsleaktest()
@@ -176,18 +176,18 @@ function pre_customize_image__258_install_dnsleaktest()
 
 function pre_customize_image__259_disablettys()
 {
-	display_alert "Disabling serial consoles" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
+	display_alert "Disabling serial consoles" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	chroot_sdcard systemctl mask serial-getty@ttyS0.service
 	chroot_sdcard systemctl mask serial-getty@ttyS1.service
 	chroot_sdcard systemctl mask serial-getty@ttyS2.service
 	chroot_sdcard systemctl mask serial-getty@ttyS5.service
-	display_alert "Disabling virtual consoles" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
+	display_alert "Disabling virtual consoles" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged mkdir "${SDCARD}"/etc/systemd/logind.conf.d/
 	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/logind_00-disable-vtty.conf "${SDCARD}"/etc/systemd/logind.conf.d/disable-vtty.conf
 	if [ ! -d "${SDCARD}"/etc/systemd/resolved.conf.d/ ]; then
 		run_host_command_logged mkdir "${SDCARD}"/etc/systemd/resolved.conf.d/
 	fi
-	display_alert "Setting system-wide DNS over TLS and systemd-resolved tweaks" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
+	display_alert "Setting system-wide DNS over TLS and systemd-resolved tweaks" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/resolved*.conf "${SDCARD}"/etc/systemd/resolved.conf.d/
 	chroot_sdcard systemctl mask getty@tty1
 	chroot_sdcard systemctl mask console-setup
@@ -204,11 +204,11 @@ function pre_customize_image__260_add_firmware()
 function pre_customize_image__261_install_user_overlays()
 {
 	if [ -d "${EXTENSION_DIR}"/overlay/"${BOARD}" ]; then
-		display_alert "Installing user overlays" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
+		display_alert "Installing user overlays" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 		run_host_command_logged mkdir "${SDCARD}"/tmpinst
 		for file in "${EXTENSION_DIR}"/overlay/"${BOARD}"/*.dts; do
 			tgtfile=$(basename "${file}")
-			display_alert "installing ${tgtfile} overlay" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
+			display_alert "installing ${tgtfile} overlay" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 			run_host_command_logged cp "${file}" "${SDCARD}"/tmpinst
 			chroot_sdcard armbian-add-overlay /tmpinst/"${tgtfile}"
 		done
@@ -222,12 +222,12 @@ function pre_customize_image__262_setup_gpsd()
 	case ${BOARD} in
 
 	orangepizero3)
-	display_alert "Setting up GPSD" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
+	display_alert "Setting up GPSD" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged sed -i 's/DEVICES=.*/DEVICES="\/dev\/ttyS0"/g' "${SDCARD}"/etc/default/gpsd
 	;;
 
 	orangepizero02w)
-	display_alert "Setting up GPSD" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
+	display_alert "Setting up GPSD" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged sed -i 's/DEVICES=.*/DEVICES="\/dev\/ttyS5"/g' "${SDCARD}"/etc/default/gpsd
 	;;
 
