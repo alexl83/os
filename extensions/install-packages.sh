@@ -1,6 +1,6 @@
 function pre_customize_image__251_install_custom_packages(){
 
-	pkgs="net-tools moreutils byobu git dkms gpsd zsh-autosuggestions macchanger avahi-daemon vnstat xauth gpsd-tools libnss-mdns pwgen zerotier-one rfkill bluetooth bluez bluez-tools"
+	pkgs="net-tools moreutils byobu git dkms gpsd zsh-autosuggestions macchanger avahi-daemon vnstat xauth gpsd-tools libnss-mdns pwgen zerotier-one rfkill bluetooth bluez bluez-tools lirc"
 	rem_pkgs="ifupdown"
 
 	display_alert "Updating package list" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
