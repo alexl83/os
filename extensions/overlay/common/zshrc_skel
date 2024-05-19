@@ -271,10 +271,11 @@ export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
 wifiwh="/usr/local/etc/wifi-whitelist"
 
-alias wifite="sudo wifite -ab --showb --showm --no-wps --skip-crack --pmkid-timeout 15 $(while read -r line ; do echo -n "-E \"$line\" " ; done < "${wifiwh}")"
+alias wifite="sudo wifite -ab --showb --showm --no-wps --skip-crack --pmkid-timeout 25 --wpadt 5 $(while read -r line ; do echo -n "-E \"$line\" " ; done < "${wifiwh}")"
 alias kismet='if [ ! -d ${HOME}/kismet ]; then mkdir ${HOME}/kismet; fi && cd ${HOME}/kismet && kismet -s --override wardrive'
 alias update='sudo apt update && sudo apt full-upgrade -y && sudo apt autoclean -y && sudo apt autoremove --purge -y && sudo apt clean && sudo fstrim -av'
 alias ao='if [ ! -d ${HOME}/AO ]; then mkdir ${HOME}/AO; fi && cd ${HOME}/AO && sudo angryoxide -b2,5 --disablemouse --whitelist /usr/local/etc/wifi-whitelist --targetlist /usr/local/etc/wifi-targets'
 alias dmesg='dmesg --color=always'
 alias less='less -r'
 alias pwcat='pwgen -scny 25 1'
+alias morrownr='git clone https://github.com/morrownr/8821au-20210708.git ; cd 8821au-20210708 ; git reset --hard HEAD~5 ; cd .. ; git clone https://github.com/morrownr/88x2bu-20210702.git ; cd 88x2bu-20210702 ; git reset --hard HEAD~5 ; cd .. ; /usr/local/bin/update_rtl_improved.sh'

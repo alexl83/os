@@ -79,6 +79,7 @@ function pre_customize_image__252_manage_config_files() {
 
 	display_alert "Installing .zshrc skel" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
 	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/zshrc_skel "${SDCARD}"/etc/skel/.zshrc
+	run_host_command_logged rm -v "${SDCARD}"/root/.zshrc
 
 	display_alert "Cleaning build-time DNS from /etc/systemd/resolved.conf" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged sed -i 's/^DNS\=.*/#DNS\=/g' "${SDCARD}"/etc/systemd/resolved.conf
@@ -88,6 +89,9 @@ function pre_customize_image__252_manage_config_files() {
 
 	display_alert "Setting upstream wireless-regdb" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	chroot_sdcard update-alternatives --set regulatory.db /lib/firmware/regulatory.db-upstream
+
+	display_alert "Installing 88x2bu and 8821au update script" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
+	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/update_rtl_improved.sh "${SDCARD}"/usr/local/bin
 
 
 }
@@ -166,6 +170,8 @@ function pre_customize_image__258_install_dnsleaktest()
 
 }
 
+
+
 function pre_customize_image__259_disablettys()
 {
 	display_alert "Disabling serial consoles" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
@@ -215,12 +221,12 @@ function pre_customize_image__262_setup_gpsd()
 
 	orangepizero3)
 	display_alert "Setting up GPSD" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
-	chroot_sdcard sed -i 's/DEVICES=.*/DEVICES="\/dev\/ttyS0"/g' /etc/default/gpsd
+	run_host_command_logged sed -i 's/DEVICES=.*/DEVICES="\/dev\/ttyS0"/g' "${SDCARD}"/etc/default/gpsd
 	;;
 
 	orangepizero02w)
 	display_alert "Setting up GPSD" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}"
-	chroot_sdcard sed -i 's/DEVICES=.*/DEVICES="\/dev\/ttyS5"/g' /etc/default/gpsd
+	run_host_command_logged sed -i 's/DEVICES=.*/DEVICES="\/dev\/ttyS5"/g' "${SDCARD}"/etc/default/gpsd
 	;;
 
 	esac
