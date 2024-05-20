@@ -110,7 +110,7 @@ function pre_customize_image__254_enable_disable_services() {
 		if [[ $(chroot_sdcard systemctl list-unit-files --type service | grep -F "${service}") ]] && [[ $(chroot_sdcard systemctl is-enabled "${service}") ]]; then
 			display_alert "disabling ${service}" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 			chroot_sdcard systemctl --no-reload disable "${service}"
-		else display_alert "${service} not found" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+		else display_alert "${service} service not found" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 		fi
 	done
 	display_alert "installing rfcomm custom service for bluetooth GPS" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
@@ -182,8 +182,9 @@ function pre_customize_image__258_1_install_dnsleaktest()
 function pre_customize_image__258_2_install_wiringPI()
 {	display_alert "Installing WiringOP from vendor branch" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged mkdir "${SDCARD}"/tmpinst
-	chroot_sdcard git clone https://github.com/orangepi-xunlong/wiringOP.git -b next /tmpinst/wiringOP
-	chroot_sdcard cd /tmpinst/wiringOP
+	chroot_sdcard cd /tmpinst
+	chroot_sdcard git clone https://github.com/orangepi-xunlong/wiringOP.git -b next
+	chroot_sdcard cd wiringOP
 	chroot_sdcard chmod +x ./build
 	chroot_sdcard ./build clean
 	chroot_sdcard ./build
