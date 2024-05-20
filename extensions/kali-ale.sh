@@ -52,16 +52,16 @@ function pre_customize_image__252_manage_config_files() {
 	fi
 
 	display_alert "Disabling local keyboard/mouse input" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-#	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/blacklist-usbhid.conf "${SDCARD}"/etc/modprobe.d
+	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/blacklist-usbhid.conf "${SDCARD}"/etc/modprobe.d
 
 	if [ -f "${EXTENSION_DIR}"/overlay/common/blacklist-videoout-"${BOARD}".conf ]; then
 	display_alert "Disabling video/display output" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-#	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/blacklist-videoout-"${BOARD}".conf "${SDCARD}"/etc/modprobe.d
+	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/blacklist-videoout-"${BOARD}".conf "${SDCARD}"/etc/modprobe.d
 	fi
 
 	if [ -f "${EXTENSION_DIR}"/overlay/common/blacklist-misc-"${BOARD}".conf ]; then
 		display_alert "Disabling misc ${BOARD} debug features" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-#		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/blacklist-misc-"${BOARD}".conf "${SDCARD}"/etc/modprobe.d
+		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/blacklist-misc-"${BOARD}".conf "${SDCARD}"/etc/modprobe.d
 	fi
 
 	if [ -f "${SDCARD}"/etc/avahi/avahi-daemon.conf ]; then
