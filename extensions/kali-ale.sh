@@ -183,7 +183,7 @@ function pre_customize_image__258_2_install_wiringPI()
 {	display_alert "Installing WiringOP from vendor branch" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged mkdir "${SDCARD}"/tmpinst
 	chroot_sdcard cd /tmpinst
-	chroot_sdcard git clone https://github.com/orangepi-xunlong/wiringOP.git -b next
+	run_host_command_logged git clone https://github.com/orangepi-xunlong/wiringOP.git -b next "${SDCARD}"/tmpinst/wiringOP
 	chroot_sdcard cd wiringOP
 	chroot_sdcard chmod +x ./build
 	chroot_sdcard ./build clean
