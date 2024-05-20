@@ -107,9 +107,9 @@ function pre_customize_image__252_manage_config_files() {
 function pre_customize_image__254_enable_disable_services() {
 	services=(zerotier-one wpa_supplicant networking unattended-upgrades haveged console-setup)
 	for service in "${services[@]}"; do
-		if [[ $(chroot_sdcard systemctl list-unit-files --type service | grep -F "${service}") ]] && [[ $(chroot_sdcard systemctl is-enabled "${service}") ]]; then
+		if [[ $(chroot_sdcard "systemctl list-unit-files --type service | grep -F ${service}") ]] && [[ $(chroot_sdcard systemctl is-enabled "${service}") ]]; then
 		display_alert "disabling ${service}" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-		chroot_sdcard systemctl disable "${service}"
+		chroot_sdcard systemctl --no-reload disable "${service}"
 		fi
 	done
 	display_alert "installing rfcomm custom service for bluetooth GPS" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
@@ -170,22 +170,34 @@ function pre_customize_image__257_install_angryoxide()
 	display_alert "Done installing AngryOxide" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 }
 
-function pre_customize_image__258_install_dnsleaktest()
+function pre_customize_image__258_1_install_dnsleaktest()
 {
-	display_alert "Istalling dnsleaktest from gh:macvk/dnsleaktest" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+	display_alert "Installing dnsleaktest from gh:macvk/dnsleaktest" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	chroot_sdcard curl -s https://raw.githubusercontent.com/macvk/dnsleaktest/master/dnsleaktest.sh -o /usr/local/bin/dnsleaktest
 	chroot_sdcard chmod +x /usr/local/bin/dnsleaktest
 
 }
 
+function pre_customize_image__258_2_install_wiringPI()
+{	display_alert "Installing WiringOP from vendor branch" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+	run_host_command_logged mkdir "${SDCARD}"/tmpinst
+	chroot_sdcard git clone https://github.com/orangepi-xunlong/wiringOP.git -b next /tmpinst/wiringOP
+	chroot_sdcard cd /tmpinst/wiringOP
+	chroot_sdcard ./build clean
+	chroot_sdcard ./build
+	run_host_command_logged rm -rf "${SDCARD}"/tmpinst
+
+}
 
 function pre_customize_image__259_disablettys()
 {
 	display_alert "Disabling serial consoles" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-	chroot_sdcard systemctl mask serial-getty@ttyS0.service
-	chroot_sdcard systemctl mask serial-getty@ttyS1.service
-	chroot_sdcard systemctl mask serial-getty@ttyS2.service
-	chroot_sdcard systemctl mask serial-getty@ttyS5.service
+	for ((c=1; c<=9; c++)); do
+		chroot_sdcard systemctl mask serial-getty@ttyS"$c".service
+#		chroot_sdcard systemctl mask serial-getty@ttyS1.service
+#		chroot_sdcard systemctl mask serial-getty@ttyS2.service
+#		chroot_sdcard systemctl mask serial-getty@ttyS5.service
+	done
 	display_alert "Disabling virtual consoles" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged mkdir "${SDCARD}"/etc/systemd/logind.conf.d/
 	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/logind_00-disable-vtty.conf "${SDCARD}"/etc/systemd/logind.conf.d/disable-vtty.conf
