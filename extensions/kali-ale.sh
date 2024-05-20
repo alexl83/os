@@ -110,7 +110,7 @@ function pre_customize_image__254_enable_disable_services() {
 		if [[ $(chroot_sdcard systemctl list-unit-files --type service | grep -F "${service}") ]] && [[ $(chroot_sdcard systemctl is-enabled "${service}") ]]; then
 			display_alert "disabling ${service}" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 			chroot_sdcard systemctl --no-reload disable "${service}"
-		else display_alert "{service} not found" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+		else display_alert "${service} not found" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 		fi
 	done
 	display_alert "installing rfcomm custom service for bluetooth GPS" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
