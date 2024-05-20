@@ -179,7 +179,7 @@ function pre_customize_image__258_1_install_dnsleaktest()
 
 }
 
-#function pre_customize_image__258_2_install_wiringPI()
+#function pre_customize_image__258_2_install_wiringOP()
 #{	display_alert "Installing WiringOP from vendor branch" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 #	run_host_command_logged mkdir "${SDCARD}"/tmpinst
 #	chroot_sdcard cd /tmpinst
@@ -198,23 +198,23 @@ function pre_customize_image__259_disablettys()
 	display_alert "Disabling serial consoles" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	for ((c=1; c<=9; c++)); do
 		chroot_sdcard systemctl mask serial-getty@ttyS"$c".service
-#		chroot_sdcard systemctl mask serial-getty@ttyS1.service
-#		chroot_sdcard systemctl mask serial-getty@ttyS2.service
-#		chroot_sdcard systemctl mask serial-getty@ttyS5.service
 	done
 	if [ "${BRANCH}" == "vendor" ]; then
 		chroot_sdcard systemctl mask serial-getty@ttyFIQ0.service
 	fi
 	display_alert "Disabling virtual consoles" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-	run_host_command_logged mkdir "${SDCARD}"/etc/systemd/logind.conf.d/
+	chroot_sdcard systemctl mask getty@tty1
+	chroot_sdcard systemctl mask console-setup
+	if [ ! -d "${SDCARD}"/etc/systemd/logind.conf.d/ ]; then
+		run_host_command_logged mkdir "${SDCARD}"/etc/systemd/logind.conf.d/
+	fi
 	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/logind_00-disable-vtty.conf "${SDCARD}"/etc/systemd/logind.conf.d/disable-vtty.conf
 	if [ ! -d "${SDCARD}"/etc/systemd/resolved.conf.d/ ]; then
 		run_host_command_logged mkdir "${SDCARD}"/etc/systemd/resolved.conf.d/
 	fi
 	display_alert "Setting system-wide DNS over TLS and systemd-resolved tweaks" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/resolved*.conf "${SDCARD}"/etc/systemd/resolved.conf.d/
-	chroot_sdcard systemctl mask getty@tty1
-	chroot_sdcard systemctl mask console-setup
+
 
 }
 
@@ -230,6 +230,7 @@ function pre_customize_image__261_install_user_overlays()
 	if [ -d "${EXTENSION_DIR}"/overlay/"${BOARD}" ]; then
 		for file in "${EXTENSION_DIR}"/overlay/"${BOARD}"/*.dts; do
 		if [ -f "${file}" ]; then
+			run_host_command_logged mkdir "${SDCARD}"/tmpinst
 			display_alert "Installing user overlays" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 			tgtfile=$(basename "${file}")
 			display_alert "installing ${tgtfile} overlay" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
