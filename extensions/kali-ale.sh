@@ -107,9 +107,10 @@ function pre_customize_image__252_manage_config_files() {
 function pre_customize_image__254_enable_disable_services() {
 	services=(zerotier-one wpa_supplicant networking unattended-upgrades haveged console-setup)
 	for service in "${services[@]}"; do
-		if [[ $(chroot_sdcard "systemctl list-unit-files --type service | grep -F ${service}") ]] && [[ $(chroot_sdcard systemctl is-enabled "${service}") ]]; then
-		display_alert "disabling ${service}" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-		chroot_sdcard systemctl --no-reload disable "${service}"
+		if [[ $(chroot_sdcard systemctl list-unit-files --type service | grep -F "${service}") ]] && [[ $(chroot_sdcard systemctl is-enabled "${service}") ]]; then
+			display_alert "disabling ${service}" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+			chroot_sdcard systemctl --no-reload disable "${service}"
+		else display_alert "{service} not found" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 		fi
 	done
 	display_alert "installing rfcomm custom service for bluetooth GPS" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
