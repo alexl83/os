@@ -184,8 +184,10 @@ function pre_customize_image__258_2_install_wiringPI()
 	run_host_command_logged mkdir "${SDCARD}"/tmpinst
 	chroot_sdcard git clone https://github.com/orangepi-xunlong/wiringOP.git -b next /tmpinst/wiringOP
 	chroot_sdcard cd /tmpinst/wiringOP
+	chroot_sdcard chmod +x ./build
 	chroot_sdcard ./build clean
 	chroot_sdcard ./build
+	chroot_sdcard cd /
 	run_host_command_logged rm -rf "${SDCARD}"/tmpinst
 
 }
@@ -199,6 +201,9 @@ function pre_customize_image__259_disablettys()
 #		chroot_sdcard systemctl mask serial-getty@ttyS2.service
 #		chroot_sdcard systemctl mask serial-getty@ttyS5.service
 	done
+	if [ "${BRANCH}" == "VENDOR" ]; then
+		chroot_sdcard systemctl mask serial-getty@ttyFIQ0.service
+	fi
 	display_alert "Disabling virtual consoles" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged mkdir "${SDCARD}"/etc/systemd/logind.conf.d/
 	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/logind_00-disable-vtty.conf "${SDCARD}"/etc/systemd/logind.conf.d/disable-vtty.conf
