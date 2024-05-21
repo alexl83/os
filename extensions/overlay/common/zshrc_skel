@@ -267,7 +267,7 @@ if [ -z "$_motd_listed" ]; then
   esac
 fi
 
-export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+export PATH="${PATH}:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
 wifiwh="/usr/local/etc/wifi-whitelist"
 
