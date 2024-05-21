@@ -109,7 +109,7 @@ function pre_customize_image__254_enable_disable_services() {
 	for service in "${services[@]}"; do
 		if [[ $(chroot_sdcard systemctl list-unit-files --type service | grep -F "${service}") ]] && [[ $(chroot_sdcard systemctl is-enabled "${service}") ]]; then
 			display_alert "disabling ${service}" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-			chroot_sdcard systemctl --no-reload disable "${service}"
+			disable_systemd_service_sdcard "${service}"
 		else display_alert "${service} service not found" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 		fi
 	done
