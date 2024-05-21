@@ -199,7 +199,7 @@ function pre_customize_image__259_disablettys()
 	for ((c=1; c<=9; c++)); do
 		chroot_sdcard systemctl mask serial-getty@ttyS"$c".service
 	done
-	if [ "${BRANCH}" == "vendor" ] || [ "${BRANCH} == legacy}"]; then
+	if [ "${BRANCH}" == "vendor" ] || [ "${BRANCH} == legacy}" ]; then
 		chroot_sdcard systemctl mask serial-getty@ttyFIQ0.service
 	fi
 	display_alert "Disabling virtual consoles" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
