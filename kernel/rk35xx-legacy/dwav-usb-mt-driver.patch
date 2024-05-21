@@ -14,9 +14,11 @@ Change-Id: Ia1c8c29d3f69c6ba5d630279c4cc98119b68ab71
  5 files changed, 575 insertions(+)
  create mode 100644 drivers/input/touchscreen/dwav-usb-mt.c
 
+diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
+index 8f1893e68112b4..3d8fbd1d384627 100644
 --- a/drivers/hid/hid-ids.h
 +++ b/drivers/hid/hid-ids.h
-@@ -1461,4 +1461,10 @@
+@@ -1350,4 +1350,10 @@
  #define USB_VENDOR_ID_SIGNOTEC			0x2133
  #define USB_DEVICE_ID_SIGNOTEC_VIEWSONIC_PD1011	0x0018
  
@@ -27,9 +29,11 @@ Change-Id: Ia1c8c29d3f69c6ba5d630279c4cc98119b68ab71
 +#define USB_DEVICE_ID_VU7PLUS	0x0705
 +
  #endif
+diff --git a/drivers/hid/hid-quirks.c b/drivers/hid/hid-quirks.c
+index 51b39bda9a9d2d..99ffb7f86419b4 100644
 --- a/drivers/hid/hid-quirks.c
 +++ b/drivers/hid/hid-quirks.c
-@@ -891,6 +891,10 @@ static const struct hid_device_id hid_ig
+@@ -863,6 +863,10 @@ static const struct hid_device_id hid_ignore_list[] = {
  	{ HID_USB_DEVICE(USB_VENDOR_ID_SYNAPTICS, USB_DEVICE_ID_SYNAPTICS_DPAD) },
  #endif
  	{ HID_USB_DEVICE(USB_VENDOR_ID_YEALINK, USB_DEVICE_ID_YEALINK_P1K_P4K_B2K) },
@@ -40,11 +44,13 @@ Change-Id: Ia1c8c29d3f69c6ba5d630279c4cc98119b68ab71
  	{ }
  };
  
+diff --git a/drivers/input/touchscreen/Kconfig b/drivers/input/touchscreen/Kconfig
+index ad454cd2855a0e..b424f67299a0b4 100644
 --- a/drivers/input/touchscreen/Kconfig
 +++ b/drivers/input/touchscreen/Kconfig
-@@ -1399,4 +1399,14 @@ config TOUCHSCREEN_HIMAX_HX83112B
+@@ -1366,4 +1366,14 @@ config TOUCHSCREEN_ZINITIX
  	  To compile this driver as a module, choose M here: the
- 	  module will be called himax_hx83112b.
+ 	  module will be called zinitix.
  
 +config TOUCHSCREEN_DWAV_USB_MT
 +	tristate "D-WAV Scientific USB MultiTouch"
@@ -57,13 +63,18 @@ Change-Id: Ia1c8c29d3f69c6ba5d630279c4cc98119b68ab71
 +	  module will be called dwav-usb-mt.
 +
  endif
+diff --git a/drivers/input/touchscreen/Makefile b/drivers/input/touchscreen/Makefile
+index 7d34100f7f223f..5a47f4e8c66aea 100644
 --- a/drivers/input/touchscreen/Makefile
 +++ b/drivers/input/touchscreen/Makefile
-@@ -118,3 +118,4 @@ obj-$(CONFIG_TOUCHSCREEN_IQS5XX)	+= iqs5
- obj-$(CONFIG_TOUCHSCREEN_IQS7211)	+= iqs7211.o
+@@ -114,3 +114,4 @@ obj-$(CONFIG_TOUCHSCREEN_ROHM_BU21023)	+= rohm_bu21023.o
+ obj-$(CONFIG_TOUCHSCREEN_RASPBERRYPI_FW)	+= raspberrypi-ts.o
+ obj-$(CONFIG_TOUCHSCREEN_IQS5XX)	+= iqs5xx.o
  obj-$(CONFIG_TOUCHSCREEN_ZINITIX)	+= zinitix.o
- obj-$(CONFIG_TOUCHSCREEN_HIMAX_HX83112B)	+= himax_hx83112b.o
-+obj-$(CONFIG_TOUCHSCREEN_DWAV_USB_MT)  += dwav-usb-mt.o
++obj-$(CONFIG_TOUCHSCREEN_DWAV_USB_MT)	+= dwav-usb-mt.o
+diff --git a/drivers/input/touchscreen/dwav-usb-mt.c b/drivers/input/touchscreen/dwav-usb-mt.c
+new file mode 100644
+index 00000000000000..7ec8b6dd15fdc1
 --- /dev/null
 +++ b/drivers/input/touchscreen/dwav-usb-mt.c
 @@ -0,0 +1,554 @@
