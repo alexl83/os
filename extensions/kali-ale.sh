@@ -236,6 +236,7 @@ function pre_customize_image__261_install_user_overlays()
 			display_alert "installing ${tgtfile} overlay" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 			run_host_command_logged cp "${file}" "${SDCARD}"/tmpinst
 			chroot_sdcard armbian-add-overlay /tmpinst/"${tgtfile}"
+			run_host_command_logged rm -rf "${SDCARD}"/tmpinst
 		fi
 		done
 	fi
