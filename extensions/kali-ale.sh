@@ -249,12 +249,12 @@ function pre_customize_image__262_setup_gpsd()
 
 	orangepizero3)
 	display_alert "Setting up GPSD" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-	run_host_command_logged sed -i 's/DEVICES=.*/DEVICES=\"\/dev\/ttyS0\"/g' "${SDCARD}"/etc/default/gpsd
+	run_host_command_logged sed -i 's/DEVICES=.*/DEVICES="\/dev\/ttyS0\"/g' "${SDCARD}"/etc/default/gpsd
 	;;
 
 	orangepizero02w)
 	display_alert "Setting up GPSD" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-	run_host_command_logged sed -i 's/DEVICES=.*/DEVICES=\"\/dev\/ttyS5\"/g' "${SDCARD}"/etc/default/gpsd
+	run_host_command_logged sed -i 's/DEVICES=.*/DEVICES="\/dev\/ttyS5\"/g' "${SDCARD}"/etc/default/gpsd
 	;;
 
 	esac
