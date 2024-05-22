@@ -197,7 +197,7 @@ function pre_customize_image__259_disablettys()
 {
 	display_alert "Disabling serial consoles" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	for ((c=1; c<=9; c++)); do
-		chroot_sdcard systemctl mask serial-getty@ttyS"$c".service
+		chroot_sdcard systemctl mask serial-getty@ttyS"${c}".service
 	done
 	if [ "${BRANCH}" == "vendor" ] || [ "${BRANCH}" == "legacy" ]; then
 		chroot_sdcard systemctl mask serial-getty@ttyFIQ0.service
@@ -249,12 +249,12 @@ function pre_customize_image__262_setup_gpsd()
 
 	orangepizero3)
 	display_alert "Setting up GPSD" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-	run_host_command_logged sed -i 's/DEVICES=.*/DEVICES="\/dev\/ttyS0"/g' "${SDCARD}"/etc/default/gpsd
+	run_host_command_logged sed -i 's/DEVICES=.*/DEVICES=\"\/dev\/ttyS0\"/g' "${SDCARD}"/etc/default/gpsd
 	;;
 
 	orangepizero02w)
 	display_alert "Setting up GPSD" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-	run_host_command_logged sed -i 's/DEVICES=.*/DEVICES="\/dev\/ttyS5"/g' "${SDCARD}"/etc/default/gpsd
+	run_host_command_logged sed -i 's/DEVICES=.*/DEVICES=\"\/dev\/ttyS5\"/g' "${SDCARD}"/etc/default/gpsd
 	;;
 
 	esac
