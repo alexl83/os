@@ -278,4 +278,4 @@ alias ao='if [ ! -d ${HOME}/AO ]; then mkdir ${HOME}/AO; fi && cd ${HOME}/AO && 
 alias dmesg='dmesg --color=always'
 alias less='less -r'
 alias pwcat='pwgen -scny 25 1'
-alias morrownr="git clone https://github.com/morrownr/8821au-20210708.git && cd 8821au-20210708 && git reset --hard HEAD~5 && cd .. && git clone https://github.com/morrownr/88x2bu-20210702.git && cd 88x2bu-20210702 && git reset --hard HEAD~5 && cd .. && /usr/local/bin/update_rtl_improved.sh && echo "install 88XXau /bin/true" | sudo tee /etc/modprobe.d/blacklist-88XXau.conf && sed -i 's/^alias\ morrownr/#alias\ morrownr/g' ~/.zshrc"
+alias morrownr="git clone https://github.com/morrownr/8821au-20210708.git && cd 8821au-20210708 && git reset --hard HEAD~5 && cd .. && git clone https://github.com/morrownr/88x2bu-20210702.git && cd 88x2bu-20210702 && git reset --hard HEAD~5 && cd .. && /usr/local/bin/update_rtl_improved.sh && echo \"install 88XXau /bin/true\" | sudo tee /etc/modprobe.d/blacklist-88XXau.conf && sed -i 's/^alias\ morrownr/#alias\ morrownr/g' ${HOME}/.zshrc"
