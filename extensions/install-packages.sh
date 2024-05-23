@@ -11,6 +11,6 @@ function pre_customize_image__251_install_custom_packages(){
 	display_alert "Adding packages: ${pkgs}" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	do_with_retries 3 chroot_sdcard_apt_get_install "${pkgs}"
 	display_alert "Purging packages: ${rem_pkgs}" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-	do_with_retries 3 chroot_sdcard_apt_get autoremove --purge "${rem_pkgs}"
+	do_with_retries 3 chroot_sdcard_apt_get_remove --auto-remove "${rem_pkgs}"
 
 }
