@@ -1,0 +1,12 @@
+/dts-v1/;
+/plugin/;
+
+/ {
+	compatible = "allwinner,sun50i-h6-display-engine";
+        fragment@1 {
+		target-path = "/display-engine";
+			__overlay__ {
+			status = "disabled";
+					};
+			};
+	};
