@@ -79,6 +79,9 @@ function pre_customize_image__252_manage_config_files() {
 
 	if [ -f "${EXTENSION_DIR}"/overlay/common/armbian-leds-"${BOARD}".conf ]; then
 		display_alert "Setting up board leds" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+				if [ "${BOARD}" == orangepizero2w ]; then
+			run_host_command_logged echo "ledtrig-netdev" >> "${SDCARD}"/etc/modules
+		fi
 		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/armbian-leds-"${BOARD}".conf "${SDCARD}"/etc/armbian-leds.conf
 	fi
 
@@ -110,7 +113,7 @@ function pre_customize_image__252_manage_config_files() {
 }
 
 function pre_customize_image__254_enable_disable_services() {
-	services=(zerotier-one wpa_supplicant networking unattended-upgrades haveged console-setup)
+	services=(zerotier-one wpa_supplicant unattended-upgrades haveged console-setup networking)
 	for service in "${services[@]}"; do
 		if [[ $(chroot_sdcard systemctl list-unit-files --type service "|" grep -F "${service}") ]] && [[ $(chroot_sdcard systemctl is-enabled "${service}") ]]; then
 			display_alert "disabling ${service}" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
