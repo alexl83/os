@@ -80,8 +80,8 @@ function pre_customize_image__252_manage_config_files() {
 	if [ -a "${EXTENSION_DIR}"/overlay/common/armbian-leds-"${BOARD}"-"${BRANCH}".conf ]; then
 		display_alert "Setting up board leds" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 				if [ "${BOARD}" == orangepizero2w ]; then
-			run_host_command_logged echo "ledtrig-netdev" >> "${SDCARD}"/etc/modules
-		fi
+					run_host_command_logged echo "ledtrig-netdev" >> "${SDCARD}"/etc/modules
+				fi
 		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/armbian-leds-"${BOARD}"-"${BRANCH}".conf "${SDCARD}"/etc/armbian-leds.conf
 	fi
 
