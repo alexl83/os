@@ -268,6 +268,7 @@ function pre_customize_image__262_setup_gpsd()
 	orangepi5-plus)
 	display_alert "Setting up GPSD" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged sed -i 's/^DEVICES\=.*/DEVICES\="\/dev\/rfcomm0"/g' "${SDCARD}"/etc/default/gpsd
+	run_host_command_logged sed -i 's/^GPSD_OPTIONS\=\"\"/GPSD_OPTIONS\=\"-b\"/g' "${SDCARD}"/etc/default/gpsd
 	;;
 
 	esac
