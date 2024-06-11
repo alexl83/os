@@ -66,7 +66,7 @@ function pre_customize_image__252_manage_config_files() {
 
 	if [ -f "${EXTENSION_DIR}"/overlay/common/rc.local-"${BOARD}" ]; then
 		display_alert "Customizing rc.local for ${BOARD}" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/rc.local-"${BOARD}" "${SDCARD}"/etc
+		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/rc.local-"${BOARD}" "${SDCARD}"/etc/rc.local
 	fi
 
 	if [ -f "${SDCARD}"/etc/avahi/avahi-daemon.conf ]; then
