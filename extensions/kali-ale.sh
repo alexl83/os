@@ -109,6 +109,9 @@ function pre_customize_image__252_manage_config_files() {
 	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/update_rtl_improved.sh "${SDCARD}"/usr/local/bin
 	run_host_command_logged chmod +x "${SDCARD}"/usr/local/bin/update_rtl_improved.sh
 
+	display_alert "Disabling pam_systemd" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+	chroot_sdcard pam-auth-update --disable systemd
+
 
 }
 
