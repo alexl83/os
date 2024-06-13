@@ -176,7 +176,6 @@ function pre_customize_image__256_setup_stealth_networking()
 	run_host_command_logged chmod +x "${SDCARD}"/usr/local/sbin/createmon.sh
 	run_host_command_logged chmod +x "${SDCARD}"/usr/local/sbin/changemac.sh
 
-	fi
 }
 
 function pre_customize_image__257_install_angryoxide()
