@@ -7,11 +7,12 @@ function extension_prepare_config__docker() {
 #working  extension_method pre t64 breakage "pre_customize_image"
 #working  extension_method post commit #6358 "post_install_kernel_debs"
 
-if [ "${BOARD}" == "nanopi-r5c" ]; then
-	function post_family_tweaks__250_1_nanopir5c_udev_network_interfaces() {
-		unset -f post_family_tweaks__nanopir5c_udev_network_interfaces
+
+function post_family_tweaks__250_1_nanopir5c_udev_network_interfaces() {
+		if [ "${BOARD}" == "nanopi-r5c" ]; then
+			unset -f post_family_tweaks__nanopir5c_udev_network_interface
+		fi
 	}
-fi
 
 function pre_customize_image__250_1_install_kali_repositories() {
 
