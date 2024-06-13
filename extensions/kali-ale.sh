@@ -52,7 +52,7 @@ function pre_customize_image__252_manage_config_files() {
 		run_host_command_logged touch "${SDCARD}"/usr/local/etc/wifi-targets
 	fi
 
-	display_alert "Disabling local keyboard/mouse input" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+	display_alert "Disabling HID input" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/blacklist-usbhid.conf "${SDCARD}"/etc/modprobe.d
 
 	if [ -f "${EXTENSION_DIR}"/overlay/common/blacklist-videoout-"${BOARD}".conf ]; then
