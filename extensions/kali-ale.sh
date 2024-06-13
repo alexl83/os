@@ -77,8 +77,12 @@ function pre_customize_image__252_manage_config_files() {
 	fi
 
 	if [ -f "${SDCARD}"/etc/avahi/avahi-daemon.conf ]; then
+		ethif=eth0
+		if [ "${BOARD}" == "nanopi-r5c" ]; then
+			ethif=wan
+		fi
 		display_alert "Allowing Avahi mDNS on designated interfaces only" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-		run_host_command_logged sed -i 's/^\#allow-interfaces.*/allow-interfaces\=eth0,sta0,zt7nnkpung/g' "${SDCARD}"/etc/avahi/avahi-daemon.conf
+		run_host_command_logged sed -i "s/^\#allow-interfaces.*/allow-interfaces\="${ethif}",sta0,zt7nnkpung/g" "${SDCARD}"/etc/avahi/avahi-daemon.conf
 		[[ -f "${SDCARD}"/usr/share/doc/avahi-daemon/examples/sftp-ssh.service ]] && run_host_command_logged cp "${SDCARD}"/usr/share/doc/avahi-daemon/examples/sftp-ssh.service "${SDCARD}"/etc/avahi/services/
 		[[ -f "${SDCARD}"/usr/share/doc/avahi-daemon/examples/ssh.service ]] && run_host_command_logged cp "${SDCARD}"/usr/share/doc/avahi-daemon/examples/ssh.service "${SDCARD}"/etc/avahi/services/
 
@@ -173,7 +177,7 @@ function pre_customize_image__256_setup_stealth_networking()
 	run_host_command_logged chmod +x "${SDCARD}"/usr/local/sbin/createmon.sh
 	run_host_command_logged chmod +x "${SDCARD}"/usr/local/sbin/changemac.sh
 	if [ "${BOARD}" == "nanopi-r5c" ]; then
-		display_alert "${BOARD}: Renaming interfaces WAN LAN" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+		display_alert "${BOARD}" "Renaming interfaces WAN LAN" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 		cat <<- EOF >> "${SDCARD}/etc/udev/rules.d/70-persistent-net.rules"
 			SUBSYSTEM=="net", ACTION=="add", KERNELS=="0001:01:00.0", NAME:="lan"
 			SUBSYSTEM=="net", ACTION=="add", KERNELS=="0002:01:00.0", NAME:="wan"
