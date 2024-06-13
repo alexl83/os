@@ -5,7 +5,7 @@
 / {
 	compatible = "friendlyarm,nanopi-r5c\0rockchip,rk3568";
 	fragment@0 {
-		target = <&serial0>;
+		target = <&uart0>;
 
 		__overlay__ {
 			status = "disabled";
@@ -13,7 +13,7 @@
 			};
 
 	fragment@1 {
-		target = <&serial1>;
+		target = <&uart1>;
 
 		__overlay__ {
 			status = "disabled";
@@ -21,7 +21,7 @@
 			};
 		
 	fragment@2 {
-		target = <&serial2>;
+		target = <&uart2>;
 
 		__overlay__ {
 			status = "disabled";
@@ -29,7 +29,7 @@
 			};
 
 	fragment@3 {
-		target = <&serial3>;
+		target = <&uart3>;
 
 		__overlay__ {
 			status = "disabled";
@@ -37,7 +37,7 @@
 			};
 
 	fragment@4 {
-		target = <&serial4>;
+		target = <&uart4>;
 
 		__overlay__ {
 			status = "disabled";
@@ -45,7 +45,7 @@
 			};
 
 	fragment@5 {
-		target = <&serial5>;
+		target = <&uart5>;
 
 		__overlay__ {
 			status = "disabled";
@@ -53,7 +53,7 @@
 			};
 
 	fragment@6 {
-		target = <&serial6>;
+		target = <&uart6>;
 
 		__overlay__ {
 			status = "disabled";
@@ -61,7 +61,7 @@
 			};
 
 	fragment@7 {
-		target = <&serial7>;
+		target = <&uart7>;
 
 		__overlay__ {
 			status = "disabled";
@@ -69,7 +69,7 @@
 			};
 
 	fragment@8 {
-		target = <&serial8>;
+		target = <&uart8>;
 
 		__overlay__ {
 			status = "disabled";
@@ -77,7 +77,7 @@
 			};
 
 	fragment@9 {
-		target = <&serial9>;
+		target = <&uart9>;
 
 		__overlay__ {
 			status = "disabled";
