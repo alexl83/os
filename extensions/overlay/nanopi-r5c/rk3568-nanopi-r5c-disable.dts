@@ -108,4 +108,11 @@
 				};
 			};
 
+	fragment@13 {
+		target = <&hdmi_sound>;
+
+		__overlay__ {
+			status = "disabled";
+				};
+			};
 	};
