@@ -8,12 +8,6 @@ function extension_prepare_config__docker() {
 #working  extension_method post commit #6358 "post_install_kernel_debs"
 
 
-function post_family_tweaks__250_1_nanopir5c_udev_network_interfaces() {
-		if [ "${BOARD}" == "nanopi-r5c" ]; then
-			unset -f post_family_tweaks__nanopir5c_udev_network_interface
-		fi
-	}
-
 function pre_customize_image__250_1_install_kali_repositories() {
 
 	display_alert "Adding gpg-key for Kali repository" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
@@ -168,7 +162,12 @@ function pre_customize_image__255_update_armbian_env() {
 function pre_customize_image__256_setup_stealth_networking()
 {
 	display_alert "Setting up udev-based mac randomization and automatic monitor interfaces creations" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/udev-v7/70-persistent-net.rules "${SDCARD}"/etc/udev/rules.d
+	if [ "${BOARD}" != "nanopi-r5c" ]; then
+		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/udev-v7/70-persistent-net.rules "${SDCARD}"/etc/udev/rules.d
+	else
+		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/udev-v7/70-persistent-net.rules "${SDCARD}"/etc/udev/rules.d/71-persistent-net.rules
+	fi
+
 	if [ ! -d "${SDCARD}"/usr/local/sbin ]; then
 		run_host_command_logged mkdir -p "${SDCARD}"/usr/local/sbin
 	fi
@@ -176,12 +175,7 @@ function pre_customize_image__256_setup_stealth_networking()
 	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/udev-v7/helpers/createmon.sh "${SDCARD}"/usr/local/sbin
 	run_host_command_logged chmod +x "${SDCARD}"/usr/local/sbin/createmon.sh
 	run_host_command_logged chmod +x "${SDCARD}"/usr/local/sbin/changemac.sh
-	if [ "${BOARD}" == "nanopi-r5c" ]; then
-		display_alert "${BOARD}" "Renaming interfaces WAN LAN" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-		cat <<- EOF >> "${SDCARD}/etc/udev/rules.d/70-persistent-net.rules"
-			SUBSYSTEM=="net", ACTION=="add", KERNELS=="0001:01:00.0", NAME:="lan"
-			SUBSYSTEM=="net", ACTION=="add", KERNELS=="0002:01:00.0", NAME:="wan"
-		EOF
+
 	fi
 }
 
