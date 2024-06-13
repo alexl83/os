@@ -7,6 +7,12 @@ function extension_prepare_config__docker() {
 #working  extension_method pre t64 breakage "pre_customize_image"
 #working  extension_method post commit #6358 "post_install_kernel_debs"
 
+if [ "${BOARD}" == "nanopi-r5c" ]; then
+	function post_family_tweaks__250_1_nanopir5c_udev_network_interfaces() {
+		unset -f post_family_tweaks__nanopir5c_udev_network_interfaces
+	}
+fi
+
 function pre_customize_image__250_1_install_kali_repositories() {
 
 	display_alert "Adding gpg-key for Kali repository" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
@@ -165,7 +171,13 @@ function pre_customize_image__256_setup_stealth_networking()
 	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/udev-v7/helpers/createmon.sh "${SDCARD}"/usr/local/sbin
 	run_host_command_logged chmod +x "${SDCARD}"/usr/local/sbin/createmon.sh
 	run_host_command_logged chmod +x "${SDCARD}"/usr/local/sbin/changemac.sh
-
+	if [ "${BOARD}" == "nanopi-r5c" ]; then
+		display_alert "${BOARD}: Renaming interfaces WAN LAN" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+		cat <<- EOF >> "${SDCARD}/etc/udev/rules.d/70-persistent-net.rules"
+			SUBSYSTEM=="net", ACTION=="add", KERNELS=="0001:01:00.0", NAME:="lan"
+			SUBSYSTEM=="net", ACTION=="add", KERNELS=="0002:01:00.0", NAME:="wan"
+		EOF
+	fi
 }
 
 function pre_customize_image__257_install_angryoxide()
