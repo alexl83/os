@@ -129,7 +129,7 @@ function pre_customize_image__254_enable_disable_services() {
 		else display_alert "${service} service not found" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 		fi
 	done
-	display_alert "installing rfcomm  service for bluetooth GPS" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+	display_alert "installing rfcomm service for bluetooth GPS" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/rfcomm.service "${SDCARD}"/etc/systemd/system
 	if [ -f "${EXTENSION_DIR}"/overlay/common/rfcomm.default_custom ]; then
 		display_alert "Found custom rfcomm settings file: enabling service" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
