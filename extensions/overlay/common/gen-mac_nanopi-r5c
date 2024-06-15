@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+#credits: https://www.outagesio.com/fix-constantly-changing-mac-addresses-using-emmc/
+
+# Function to increment the MAC address
+increment_mac() {
+	local mac=$1
+	IFS=':' read -r -a octets <<< "$mac" # Split MAC address into octets
+	local last_octet_decimal=$((16#${octets[-1]})) # Convert last octet from hex to decimal
+	last_octet_decimal=$((last_octet_decimal + 1)) # Increment the last octet
+
+	# Check if last octet is 256, then wrap around and increment the next octet
+	if [ $last_octet_decimal -eq 256 ]; then
+		last_octet_decimal=0
+		# Increment the second last octet (this is a simple case and might not cover every scenario)
+		local second_last_octet_decimal=$((16#${octets[-2]} + 1))
+		octets[-2]=$(printf "%02X" $second_last_octet_decimal)
+	fi
+
+	octets[-1]=$(printf "%02X" $last_octet_decimal) # Convert back to hex and pad with zero if necessary
+	IFS=':'; echo "${octets[*]}" # Return the incremented MAC address, correctly formatted
+}
+
+# Prompt user to enter eMMC block device name
+echo "Please enter your eMMC block device name (e.g., mmcblk0)."
+echo "This is usually found under /sys/class/block/ and has a ‘cid’ file in its directory."
+echo "If you do not know your device name or wish to attempt automatic detection, just press Enter."
+
+# Attempt automatic detection if the device name is not provided
+read -rp "Enter device name or press Enter to attempt automatic detection: " mmc_dev_input
+
+if [ -z "$mmc_dev_input" ]; then
+	# Attempt automatic detection
+	mmc_dev=$(find /sys/class/block/ -name cid -exec dirname {} \; | sed 's#.*/##' | head -n 1)
+	if [ -z "$mmc_dev" ] || [ ! -e "/sys/class/block/$mmc_dev/device/cid" ]; then
+		echo "Automatic detection failed or device not found. Please enter the device name manually."
+		read -rp "Enter device name: " mmc_dev
+		if [ -z "$mmc_dev" ] || [ ! -e "/sys/class/block/$mmc_dev/device/cid" ]; then
+			echo "Invalid device name or device does not have a CID. Exiting."
+			exit 1
+		fi
+	fi
+	else
+		mmc_dev=$mmc_dev_input
+		if [ ! -e "/sys/class/block/$mmc_dev/device/cid" ]; then
+			echo "Invalid device name or device does not have a CID. Exiting."
+			exit 1
+		fi
+fi
+
+echo "Using eMMC device: $mmc_dev"
+
+# Prompt user to enter the number of Ethernet ports
+read -rp "Enter the number of Ethernet ports: " port_count
+
+# Generate MAC addresses
+cid_hash=$(sha256sum "/sys/class/block/$mmc_dev/device/cid" | cut -d ' ' -f 1)
+base_mac=$(echo "${cid_hash:0:12}" | sed 's/\(..\)/\1:/g;s/:$//')
+
+# Display generated MAC addresses for each Ethernet port
+for ((i = 0; i < port_count; i++)); do
+	if [ $i -gt 0 ]; then
+		base_mac=$(increment_mac "$base_mac") # Increment MAC address for subsequent ports
+	fi
+echo "Generated MAC Address for Ethernet $i: $base_mac"
+done
