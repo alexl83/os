@@ -12,7 +12,8 @@
 - Auto installation of latest release of AngryOxide [gh:Ragnt/AngryOxide.git](https://github.com/Ragnt/AngryOxide)
 - Auto installation of dnsleaktest from [gh:macvk/dnsleaktest.git](https://github.com/macvk/dnsleaktest)
 
-<h3>Assumptions:</h3>
+<h3>Assumptions: </h3>
+
 - Serial GPS support preconfigured (oPIZero02w/oPIZero3) | Bluetooth GPS supported OOB
 - Bluetooth GPS support preconfigured (oPI5-Plus/nanopi-r5c)
 - oPIZero02w/oPIZero3: onboard wifi configured as sta0 - station mode only | Ethernet mac randomization by default
@@ -21,5 +22,5 @@
 - Infrared support enabled by default on supported boards
 - All: morrownr/88x2bu-20210702, morrownr/8821au-20210708 installable via shell alias 'morrownr', update via 'update_rtl_improved.sh (to be improved)
 
-<p> Original ideas and code from: Armbian https://github.com/armbian/os especially @igorpecovnik https://github.com/igorpecovnik </p>
+<p> Original ideas and code from: Armbian https://github.com/armbian/os especially @igorpecovnik https://github.com/igorpecovnik</p>
 <p>More info on Armbian's forum thread https://forum.armbian.com/topic/37503-kali-linux-as-supported-distro/</p>
