@@ -3,11 +3,6 @@ function extension_prepare_config__docker() {
 	display_alert "Target image will have Kali repository preinstalled" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 }
 
-#original extension_method "pre_install_kernel_deb"
-#working  extension_method pre t64 breakage "pre_customize_image"
-#working  extension_method post commit #6358 "post_install_kernel_debs"
-
-
 function pre_customize_image__250_1_install_kali_repositories() {
 
 	display_alert "Adding gpg-key for Kali repository" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
@@ -199,20 +194,6 @@ function pre_customize_image__258_1_install_dnsleaktest()
 	chroot_sdcard chmod +x /usr/local/bin/dnsleaktest
 
 }
-
-#function pre_customize_image__258_2_install_wiringOP()
-#{	display_alert "Installing WiringOP from vendor branch" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-#	run_host_command_logged mkdir "${SDCARD}"/tmpinst
-#	chroot_sdcard cd /tmpinst
-#	run_host_command_logged git clone https://github.com/orangepi-xunlong/wiringOP.git -b next "${SDCARD}"/tmpinst/wiringOP
-#	chroot_sdcard cd wiringOP
-#	chroot_sdcard chmod +x ./build
-#	chroot_sdcard ./build clean
-#	chroot_sdcard ./build
-#	chroot_sdcard cd /
-#	run_host_command_logged rm -rf "${SDCARD}"/tmpinst
-#
-#}
 
 function pre_customize_image__259_disablettys()
 {
