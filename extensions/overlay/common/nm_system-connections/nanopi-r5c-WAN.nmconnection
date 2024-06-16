@@ -10,7 +10,7 @@ interface-name=wan
 method=auto
 
 [ipv6]
-addr-gen-mode=default
+addr-gen-mode=stable-privacy
 method=auto
 
 [proxy]

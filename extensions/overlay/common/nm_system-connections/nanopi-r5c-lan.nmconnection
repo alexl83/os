@@ -7,10 +7,10 @@ interface-name=lan
 [ethernet]
 
 [ipv4]
-method=auto
+method=shared
 
 [ipv6]
-addr-gen-mode=default
+addr-gen-mode=stable-privacy
 method=auto
 
 [proxy]
