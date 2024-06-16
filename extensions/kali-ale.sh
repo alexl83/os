@@ -112,6 +112,7 @@ function pre_customize_image__252_manage_config_files() {
 			fi
 
 		done
+	fi
 
 #		if [ -f "${EXTENSION_DIR}"/overlay/common/nm_system-connections/BT-NAP.nmconnection ]; then
 #			display_alert "Installing Network-Manager connection profile: BT-NAP" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
