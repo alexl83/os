@@ -3,6 +3,7 @@ id=WAN
 uuid=d5e32deb-9a28-3cd9-9fea-5085b4755e06
 type=ethernet
 interface-name=wan
+autoconnect.priority=0
 
 [ethernet]
 
