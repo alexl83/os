@@ -1,6 +1,6 @@
 <h1>Kali-Armbian userpatches </h1>
 
-<h3>This is an attempt at creating an SBC-oriented "stealth" armbian-based kali headless machine</h3>
+<h4>This is an attempt at creating an SBC-oriented "stealth" armbian-based kali headless machine</h4>
 
 - Support for OragenPIZero3, OrangePIZero2w (AllWinner BRANCH=current,edge)
 - Support for OrangePI5-Plus (rk3588 BRANCH=vendor,legacy,current)
@@ -12,7 +12,7 @@
 - Auto installation of latest release of AngryOxide [gh:Ragnt/AngryOxide.git](https://github.com/Ragnt/AngryOxide)
 - Auto installation of dnsleaktest from [gh:macvk/dnsleaktest.git](https://github.com/macvk/dnsleaktest)
 
-<h3>Assumptions: </h3>
+<h4>Assumptions: </h4>
 
 - Serial GPS support preconfigured (oPIZero2w/oPIZero3) | Bluetooth GPS supported OOB
 - Bluetooth GPS support preconfigured (oPI5-Plus/nanopi-r5c)
@@ -20,7 +20,7 @@
 - oPI5-Plus: PCIE-Realtek 8852be + Bluetooth - rtw88 monitor mode virtual interface and mac randomization by default | Ethernet mac randomization by default
 - nanopi5plus: PCIE MT7922 + Bluetooth - mainline monitor mode virtual interface and mac randomization by default | Ethernet mac randomization by default
 - Infrared support enabled by default on supported boards
-- All: [morrownr/88x2bu-20210702](https://github.com/morrownr/88x2bu-20210702), [morrownr/8821au-20210708](https://github.com/morrownr/8821au-20210708) installable via shell alias 'morrownr', update via 'update_rtl_improved.sh (to be improved)
+- All: [morrownr/88x2bu-20210702](https://github.com/morrownr/88x2bu-20210702), [morrownr/8821au-20210708](https://github.com/morrownr/8821au-20210708) installable via shell alias 'morrownr', update via 'update_rtl_improved.sh' (to be improved)
 - RTC battery plugged in supporting boards (nanopi-r5c, OrangePI5-Plus)
 
 <p> Original ideas and code from: Armbian https://github.com/armbian/os especially @igorpecovnik https://github.com/igorpecovnik</p>
