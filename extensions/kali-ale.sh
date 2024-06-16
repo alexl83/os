@@ -105,20 +105,13 @@ function pre_customize_image__252_manage_config_files() {
 			if [ -f "${file}" ]; then
 				sourcefile=$(basename "${file}")
 				finalfile=$(basename "${file}" | sed "s/custom-//g")
-				display_alert "Installing Network-Manager connection profile: $(basename "${finalfile}" .nmconnection)" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+				display_alert "Installing Network-Manager CUSTOM connection profile: $(basename "${finalfile}" .nmconnection)" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 				run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/nm_system-connections/"${sourcefile}" "${SDCARD}"/etc/NetworkManager/system-connections/"${finalfile}"
 				run_host_command_logged chmod 600 "${SDCARD}"/etc/NetworkManager/system-connections/"${finalfile}"
 			fi
 		done
 			
 	fi
-
-#		if [ -f "${EXTENSION_DIR}"/overlay/common/nm_system-connections/BT-NAP.nmconnection ]; then
-#			display_alert "Installing Network-Manager connection profile: BT-NAP" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-#			run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/nm_system-connections/BT-NAP.nmconnection "${SDCARD}"/etc/NetworkManager/system-connections
-#			run_host_command_logged chmod 600 "${SDCARD}"/etc/NetworkManager/system-connections/BT-NAP.nmconnection
-#		fi
-#	fi
 
 	display_alert "Installing .zshrc skel" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/zshrc_skel "${SDCARD}"/etc/skel/.zshrc
