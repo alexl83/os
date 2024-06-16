@@ -18,7 +18,7 @@
 - Bluetooth GPS support preconfigured (oPI5-Plus/nanopi-r5c)
 - oPiZero2w/oPiZero3: onboard wifi configured as sta0 - station mode only | Ethernet mac randomization by default
 - oPi5-Plus: PCIE-Realtek 8852be + Bluetooth - rtw88 monitor mode virtual interface and mac randomization by default | Ethernet mac randomization by default
-- nanopi5plus: PCIE MT7922 + Bluetooth - mainline monitor mode virtual interface and mac randomization by default | Ethernet mac randomization by default
+- nanopi-r5c: PCIE MT7922 + Bluetooth - mainline monitor mode virtual interface and mac randomization by default | Ethernet mac randomization by default
 - Infrared support enabled by default on supported boards
 - All: [morrownr/88x2bu-20210702](https://github.com/morrownr/88x2bu-20210702), [morrownr/8821au-20210708](https://github.com/morrownr/8821au-20210708) installable via shell alias 'morrownr', update via 'update_rtl_improved.sh' (to be improved)
 - RTC battery plugged in supporting boards (nanopi-r5c, OrangePi5-Plus)
