@@ -2,8 +2,8 @@
 
 <h4>This is an attempt at creating an SBC-oriented "stealth" armbian-based kali headless machine</h4>
 
-- Support for OragenPIZero3, OrangePIZero2w (AllWinner BRANCH=current,edge)
-- Support for OrangePI5-Plus (rk3588 BRANCH=vendor,legacy,current)
+- Support for OragePiZero3, OrangePiZero2w (AllWinner BRANCH=current,edge)
+- Support for OrangePi5-Plus (rk3588 BRANCH=vendor,legacy,current)
 - Support for nanopi-r5c (rockchip64 BRANCH=current only at the moment)
 - Kali injection patches from official [GitLab](https://gitlab.com/kalilinux/packages/linux/-/blob/kali/master/debian/patches/series?ref_type=heads) (reworked to apply to kernel 6.6/6.7/6.8)
 - HID input disabled
@@ -12,16 +12,16 @@
 - Auto installation of latest release of AngryOxide [gh:Ragnt/AngryOxide.git](https://github.com/Ragnt/AngryOxide)
 - Auto installation of dnsleaktest from [gh:macvk/dnsleaktest.git](https://github.com/macvk/dnsleaktest)
 
-<h4>Assumptions: </h4>
+<h4>Assumptions:</h4>
 
 - Serial GPS support preconfigured (oPIZero2w/oPIZero3) | Bluetooth GPS supported OOB
 - Bluetooth GPS support preconfigured (oPI5-Plus/nanopi-r5c)
-- oPIZero2w/oPIZero3: onboard wifi configured as sta0 - station mode only | Ethernet mac randomization by default
-- oPI5-Plus: PCIE-Realtek 8852be + Bluetooth - rtw88 monitor mode virtual interface and mac randomization by default | Ethernet mac randomization by default
+- oPiZero2w/oPiZero3: onboard wifi configured as sta0 - station mode only | Ethernet mac randomization by default
+- oPi5-Plus: PCIE-Realtek 8852be + Bluetooth - rtw88 monitor mode virtual interface and mac randomization by default | Ethernet mac randomization by default
 - nanopi5plus: PCIE MT7922 + Bluetooth - mainline monitor mode virtual interface and mac randomization by default | Ethernet mac randomization by default
 - Infrared support enabled by default on supported boards
 - All: [morrownr/88x2bu-20210702](https://github.com/morrownr/88x2bu-20210702), [morrownr/8821au-20210708](https://github.com/morrownr/8821au-20210708) installable via shell alias 'morrownr', update via 'update_rtl_improved.sh' (to be improved)
-- RTC battery plugged in supporting boards (nanopi-r5c, OrangePI5-Plus)
+- RTC battery plugged in supporting boards (nanopi-r5c, OrangePi5-Plus)
 
 <p> Original ideas and code from: Armbian https://github.com/armbian/os especially @igorpecovnik https://github.com/igorpecovnik</p>
 
