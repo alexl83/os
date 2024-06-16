@@ -74,7 +74,6 @@ function pre_customize_image__252_manage_config_files() {
 		run_host_command_logged sed -i "s/^\#allow-interfaces.*/allow-interfaces\="${ethif}",sta0,zt7nnkpung/g" "${SDCARD}"/etc/avahi/avahi-daemon.conf
 		[[ -f "${SDCARD}"/usr/share/doc/avahi-daemon/examples/sftp-ssh.service ]] && run_host_command_logged cp "${SDCARD}"/usr/share/doc/avahi-daemon/examples/sftp-ssh.service "${SDCARD}"/etc/avahi/services/
 		[[ -f "${SDCARD}"/usr/share/doc/avahi-daemon/examples/ssh.service ]] && run_host_command_logged cp "${SDCARD}"/usr/share/doc/avahi-daemon/examples/ssh.service "${SDCARD}"/etc/avahi/services/
-
 	fi
 
 	if [ -e "${EXTENSION_DIR}"/overlay/common/armbian-leds-"${BOARD}"-"${BRANCH}".conf ]; then
@@ -91,6 +90,22 @@ function pre_customize_image__252_manage_config_files() {
 			run_host_command_logged mv "${SDCARD}"/"${file}"{,.disabled}
 		fi
 	done
+
+	if [ -d "${EXTENSION_DIR}"/overlay/common/nm_system-connections ]; then
+		for file in "${EXTENSION_DIR}"/overlay/common/nm_system-connections/"${BOARD}"-*.nmconnection; do
+			if [ -f "${file}" ]; then
+				sourcefile=$(basename "${file}")
+				finalfile=$(basename "${file}" | sed "s/"${BOARD}"-//g")
+				display_alert "Installing Network-Manager connection profile: $(basename "${finalfile}" .nmconnection)" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+				run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/nm_system-connections/"${sourcefile}" "${SDCARD}"/etc/NetworkManager/system-connections
+			fi
+		done
+
+		if [ -f "${EXTENSION_DIR}"/overlay/common/nm_system-connections/BT-NAP.nmconnection ]; then
+			display_alert "Installing Network-Manager connection profile: BT-NAP" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+			run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/nm_system-connections/BT-NAP.nmconnection "${SDCARD}"/etc/NetworkManager/system-connections
+		fi
+	fi
 
 	display_alert "Installing .zshrc skel" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/zshrc_skel "${SDCARD}"/etc/skel/.zshrc
@@ -111,8 +126,6 @@ function pre_customize_image__252_manage_config_files() {
 
 	display_alert "Disabling pam_systemd" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	chroot_sdcard pam-auth-update --disable systemd
-
-
 }
 
 function pre_customize_image__254_enable_disable_services() {
