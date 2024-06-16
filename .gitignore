@@ -27,5 +27,5 @@ Temporary Items
 
 # Custom user-provided files
 wifi-whitelist
-rfcomm-default_custom
+rfcomm.default_custom
 custom-*.nmconnection
