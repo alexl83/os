@@ -21,6 +21,7 @@
 - nanopi5plus: PCIE MT7922 + Bluetooth - mainline monitor mode virtual interface and mac randomization by default | Ethernet mac randomization by default
 - Infrared support enabled by default on supported boards
 - All: morrownr/88x2bu-20210702, morrownr/8821au-20210708 installable via shell alias 'morrownr', update via 'update_rtl_improved.sh (to be improved)
+- RTC battery plugged in supporting boards (nanopi-r5c, OrangePI5-Plus)
 
 <p> Original ideas and code from: Armbian https://github.com/armbian/os especially @igorpecovnik https://github.com/igorpecovnik</p>
 <p>More info on Armbian's forum thread https://forum.armbian.com/topic/37503-kali-linux-as-supported-distro/</p>
