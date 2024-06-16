@@ -100,18 +100,17 @@ function pre_customize_image__252_manage_config_files() {
 				run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/nm_system-connections/"${sourcefile}" "${SDCARD}"/etc/NetworkManager/system-connections/"${finalfile}"
 				run_host_command_logged chmod 600 "${SDCARD}"/etc/NetworkManager/system-connections/"${finalfile}"
 			fi
-				for file in "${EXTENSION_DIR}"/overlay/common/nm_system-connections/custom-*.nmconnection; do
-					if [ -f "${file}" ]; then
-						sourcefile=$(basename "${file}")
-						finalfile=$(basename "${file}" | sed "s/custom-//g")
-						display_alert "Installing Network-Manager connection profile: $(basename "${finalfile}" .nmconnection)" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-						run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/nm_system-connections/"${sourcefile}" "${SDCARD}"/etc/NetworkManager/system-connections/"${finalfile}"
-						run_host_command_logged chmod 600 "${SDCARD}"/etc/NetworkManager/system-connections/"${finalfile}"
-					fi
-				done
-			fi
-
 		done
+		for file in "${EXTENSION_DIR}"/overlay/common/nm_system-connections/custom-*.nmconnection; do
+			if [ -f "${file}" ]; then
+				sourcefile=$(basename "${file}")
+				finalfile=$(basename "${file}" | sed "s/custom-//g")
+				display_alert "Installing Network-Manager connection profile: $(basename "${finalfile}" .nmconnection)" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+				run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/nm_system-connections/"${sourcefile}" "${SDCARD}"/etc/NetworkManager/system-connections/"${finalfile}"
+				run_host_command_logged chmod 600 "${SDCARD}"/etc/NetworkManager/system-connections/"${finalfile}"
+			fi
+		done
+			
 	fi
 
 #		if [ -f "${EXTENSION_DIR}"/overlay/common/nm_system-connections/BT-NAP.nmconnection ]; then
