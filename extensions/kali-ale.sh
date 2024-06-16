@@ -93,11 +93,13 @@ function pre_customize_image__252_manage_config_files() {
 	done
 
 	if [[ -d "${EXTENSION_DIR}"/overlay/common/nm_system-connections ]] && [[ -e "${EXTENSION_DIR}"/overlay/common/nm_system-connections/"${BOARD}"-*.nmconnection ]]; then
-		for file in "${EXTENSION_DIR}"/overlay/common/nm_system-connections/"${BOARD}-*.nmconnection"; do
-			finalifile=$(basename "${file}" | sed "s/"${BOARD}"-//g")
-			display_alert "Installing Network-Manager connection profile: "${finalfile}"" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-			run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/nm_system-connections/"${finalfile}" "${SDCARD}"/etc/NetworkManager/system-connections
-		done
+			for file in "${EXTENSION_DIR}"/overlay/common/nm_system-connections/"${BOARD}-*.nmconnection"; do
+				if [ -f "${file}" ]; then
+					finalfile=$(basename "${file}" | sed "s/"${BOARD}"-//g")
+					display_alert "Installing Network-Manager connection profile: "${finalfile}"" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+					run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/nm_system-connections/"${finalfile}" "${SDCARD}"/etc/NetworkManager/system-connections
+				fi
+			done
 	fi		
 
 	if [[ -d "${EXTENSION_DIR}"/overlay/common/nm_system-connections ]] && [[ -f "${EXTENSION_DIR}"/overlay/common/nm_system-connections/BT-NAP.nmconnection ]]; then
