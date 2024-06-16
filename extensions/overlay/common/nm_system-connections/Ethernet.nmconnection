@@ -1,0 +1,16 @@
+[connection]
+id=Ethernet
+uuid=d5e32deb-9a28-3cd9-9fea-5085b4755e06
+type=ethernet
+interface-name=eth0
+
+[ethernet]
+
+[ipv4]
+method=auto
+
+[ipv6]
+addr-gen-mode=stable-privacy
+method=auto
+
+[proxy]
