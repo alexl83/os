@@ -12,7 +12,7 @@
 - Auto installation of latest release of AngryOxide [gh:Ragnt/AngryOxide.git](https://github.com/Ragnt/AngryOxide)
 - Auto installation of dnsleaktest from [gh:macvk/dnsleaktest.git](https://github.com/macvk/dnsleaktest)
 
-<h1>Assumptions:</h1>
+<h1>Assumptions</h1>
 
 - Serial GPS support preconfigured (oPiZero2w/oPiZero3) | Bluetooth GPS supported OOB
 - Bluetooth GPS support preconfigured (oPI5-Plus/nanopi-r5c)
