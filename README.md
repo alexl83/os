@@ -12,9 +12,9 @@
 - Auto installation of latest release of AngryOxide [gh:Ragnt/AngryOxide.git](https://github.com/Ragnt/AngryOxide)
 - Auto installation of dnsleaktest from [gh:macvk/dnsleaktest.git](https://github.com/macvk/dnsleaktest)
 
-<h4>Assumptions:</h4>
+<h1>Assumptions:</h1>
 
-- Serial GPS support preconfigured (oPIZero2w/oPIZero3) | Bluetooth GPS supported OOB
+- Serial GPS support preconfigured (oPiZero2w/oPiZero3) | Bluetooth GPS supported OOB
 - Bluetooth GPS support preconfigured (oPI5-Plus/nanopi-r5c)
 - oPiZero2w/oPiZero3: onboard wifi configured as sta0 - station mode only | Ethernet mac randomization by default
 - oPi5-Plus: PCIE-Realtek 8852be + Bluetooth - rtw88 monitor mode virtual interface and mac randomization by default | Ethernet mac randomization by default
@@ -22,6 +22,15 @@
 - Infrared support enabled by default on supported boards
 - All: [morrownr/88x2bu-20210702](https://github.com/morrownr/88x2bu-20210702), [morrownr/8821au-20210708](https://github.com/morrownr/8821au-20210708) installable via shell alias 'morrownr', update via 'update_rtl_improved.sh' (to be improved)
 - RTC battery plugged in supporting boards (nanopi-r5c, OrangePi5-Plus)
+
+<h1>Installation</h1>
+
+```bash
+git clone https://github.com/armbian/build.git
+cd build
+git submodule add -f -b main https://github.com/alexl83/os.git userpatches
+```
+
 
 <p> Original ideas and code from: Armbian https://github.com/armbian/os especially @igorpecovnik https://github.com/igorpecovnik</p>
 
