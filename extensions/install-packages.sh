@@ -2,8 +2,8 @@ function pre_customize_image__251_install_custom_packages(){
 
 	pkgs=(net-tools moreutils byobu git dkms gpsd zsh-autosuggestions macchanger avahi-daemon vnstat xauth gpsd-tools libnss-mdns pwgen zerotier-one rfkill bluetooth bluez bluez-tools libpam-google-authenticator mtd-utils syncthing)
 	rem_pkgs=(ifupdown keyboard-configuration exim4-daemon-light)
-	rtc_board=(orangepi5-plus nanopi-r5c)
-	ir_board=(orangepi5-plus orangepizero3 orangepizero2w)
+	rtc_board=(orangepi5-plus-kali nanopi-r5c)
+	ir_board=(orangepi5-plus-kali orangepizero3 orangepizero2w)
 	for rtc_match in "${rtc_board[@]}"; do
 		if [ "${BOARD}" == "${rtc_match}" ]; then
 			rem_pkgs+=(fake-hwclock)
