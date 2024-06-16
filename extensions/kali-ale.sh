@@ -247,7 +247,7 @@ function pre_customize_image__261_install_user_overlays()
 
 function pre_customize_image__262_setup_gpsd()
 {
-	case ${BOARD} in
+	case "${BOARD}" in
 
 	orangepizero3)
 	display_alert "Setting up GPSD" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
