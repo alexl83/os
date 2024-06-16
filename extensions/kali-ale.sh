@@ -94,9 +94,10 @@ function pre_customize_image__252_manage_config_files() {
 	if [ -d "${EXTENSION_DIR}"/overlay/common/nm_system-connections ]; then
 		for file in "${EXTENSION_DIR}"/overlay/common/nm_system-connections/"${BOARD}"-*.nmconnection; do
 			if [ -f "${file}" ]; then
+				sourcefile=$(basename "${file}")
 				finalfile=$(basename "${file}" | sed "s/"${BOARD}"-//g")
-				display_alert "Installing Network-Manager connection profile: $(basename "${finalfile}")" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-				run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/nm_system-connections/"${file}" "${SDCARD}"/etc/NetworkManager/system-connections
+				display_alert "Installing Network-Manager connection profile: "${finalfile}"" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+				run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/nm_system-connections/"${sourcefile}" "${SDCARD}"/etc/NetworkManager/system-connections
 			fi
 		done
 
