@@ -114,7 +114,7 @@ function pre_customize_image__252_manage_config_files() {
 			if [ -e "${file}"] ]; then
 				sourcefile=$(basename "${file}")
 				finalfile=$(basename "${file}" | sed "s/dispatcher-//g")
-				display_alert "Installing Network-Manager dispatcher script: $(basename "${finalfile})" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+				display_alert "Installing Network-Manager dispatcher script: $(basename "${finalfile}")" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 				run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/network_manager/"${sourcefile}" "${SDCARD}"/etc/NetworkManager/dispatcher.d/"${finalfile}"
 				run_host_command_logged chmod 0744 "${SDCARD}"/etc/NetworkManager/dispatcher.d/"${finalfile}"
 				run_host_command_logged chown root:root "${SDCARD}"/etc/NetworkManager/dispatcher.d/"${finalfile}"
