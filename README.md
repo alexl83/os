@@ -32,6 +32,6 @@ git submodule add -f -b main https://github.com/alexl83/os.git userpatches
 ```
 
 
-Original ideas and code from: Armbian https://github.com/armbian/os especially [igorpecovnik](https://github.com/igorpecovnik)
+Original ideas and code from: [Armbian](https://github.com/armbian/os) especially [igorpecovnik](https://github.com/igorpecovnik)
 
 More info on Armbian's forum [thread](https://forum.armbian.com/topic/37503-kali-linux-as-supported-distro/)
