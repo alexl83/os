@@ -45,7 +45,7 @@ function post_family_config_branch_vendor__orangepi5plus_use_vendor_uboot() {
 }
 
 # Mainline U-Boot for edge kernel
-function post_family_config_branch_edge__nanopct6_use_mainline_uboot() {
+function post_family_config_branch_edge__orangepi5plus_use_mainline_uboot() {
 	display_alert "$BOARD" "Mainline U-Boot overrides for $BOARD - $BRANCH" "info"
 
 	declare -g BOOTCONFIG="orangepi-5-plus-rk3588_defconfig"      # override the default for the board/family
@@ -69,7 +69,7 @@ function post_family_config_branch_edge__nanopct6_use_mainline_uboot() {
 
 
 # Mainline U-Boot for current kernel
-function post_family_config_branch_current__nanopct6_use_mainline_uboot() {
+function post_family_config_branch_current__orangepi5plus_use_mainline_uboot() {
         display_alert "$BOARD" "Mainline U-Boot overrides for $BOARD - $BRANCH" "info"
 
         declare -g BOOTCONFIG="orangepi-5-plus-rk3588_defconfig"      # override the default for the board/family
