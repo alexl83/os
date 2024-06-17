@@ -50,17 +50,17 @@ function pre_customize_image__252_manage_config_files() {
 	display_alert "Disabling HID input" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/blacklist-usbhid.conf "${SDCARD}"/etc/modprobe.d
 
-	if [ -f "${EXTENSION_DIR}"/overlay/common/blacklist-videoout-"${BOARD}".conf ]; then
+	if [ -e "${EXTENSION_DIR}"/overlay/common/blacklist-videoout-"${BOARD}".conf ]; then
 		display_alert "Disabling video/display output" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/blacklist-videoout-"${BOARD}".conf "${SDCARD}"/etc/modprobe.d
 	fi
 
-	if [ -f "${EXTENSION_DIR}"/overlay/common/blacklist-misc-"${BOARD}".conf ]; then
+	if [ -e "${EXTENSION_DIR}"/overlay/common/blacklist-misc-"${BOARD}".conf ]; then
 		display_alert "Disabling misc ${BOARD} debug features" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/blacklist-misc-"${BOARD}".conf "${SDCARD}"/etc/modprobe.d
 	fi
 
-	if [ -f "${EXTENSION_DIR}"/overlay/common/rc.local-"${BOARD}" ]; then
+	if [ -e "${EXTENSION_DIR}"/overlay/common/rc.local-"${BOARD}" ]; then
 		display_alert "Customizing rc.local for ${BOARD}" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/rc.local-"${BOARD}" "${SDCARD}"/etc/rc.local
 	fi
@@ -110,7 +110,7 @@ function pre_customize_image__252_manage_config_files() {
 				run_host_command_logged chmod 600 "${SDCARD}"/etc/NetworkManager/system-connections/"${finalfile}"
 			fi
 		done
-			
+
 	fi
 
 	display_alert "Installing .zshrc skel" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
@@ -149,7 +149,7 @@ function pre_customize_image__254_enable_disable_services() {
 		display_alert "Found custom rfcomm settings file: enabling service" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/rfcomm.default_custom "${SDCARD}"/etc/default/rfcomm
 		chroot_sdcard systemctl --no-reload enable rfcomm.service
-		else 
+		else
 		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/rfcomm.default "${SDCARD}"/etc/default/rfcomm
 	fi
 }
@@ -282,6 +282,9 @@ function pre_customize_image__262_setup_gpsd()
 	display_alert "Setting up GPSD" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged sed -i 's/^DEVICES\=.*/DEVICES\="\/dev\/rfcomm0"/g' "${SDCARD}"/etc/default/gpsd
 	run_host_command_logged sed -i 's/^GPSD_OPTIONS\=\"\"/GPSD_OPTIONS\=\"-b\"/g' "${SDCARD}"/etc/default/gpsd
+	;;
+
+	*)
 	;;
 
 	esac
