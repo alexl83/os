@@ -76,6 +76,16 @@ function pre_customize_image__252_manage_config_files() {
 		[[ -f "${SDCARD}"/usr/share/doc/avahi-daemon/examples/ssh.service ]] && run_host_command_logged cp "${SDCARD}"/usr/share/doc/avahi-daemon/examples/ssh.service "${SDCARD}"/etc/avahi/services/
 	fi
 
+	if [ -d "${EXTENSION_DIR}"/overlay/common/modules-load.d ]; then
+		for file in [ -e "${EXTENSION_DIR}"/overlay/common/modules-load.d/"${BOARD}"-*.conf ]; do
+			sourcefile=$(basename "${file}")
+			destfile=$(echo "${sourcefile}" | sed "s/"${BOARD}-"//g") 
+			display_alert "Setting up ${BOARD}-specific modules autoload: ${destfile}" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+			run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/modules-load.d/"${sourcefile}" "${SDCARD}"/etc/modules-load.d/"${destfile}"
+		done
+	fi
+
+
 	if [ -e "${EXTENSION_DIR}"/overlay/common/armbian-leds-"${BOARD}"-"${BRANCH}".conf ]; then
 		display_alert "Setting up board leds" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 				if [ "${BOARD}" == "orangepizero2w" ]; then
@@ -95,29 +105,29 @@ function pre_customize_image__252_manage_config_files() {
 		for file in "${EXTENSION_DIR}"/overlay/common/network_manager/"${BOARD}"-*.nmconnection; do
 			if [ -e "${file}" ]; then
 				sourcefile=$(basename "${file}")
-				finalfile=$(basename "${file}" | sed "s/"${BOARD}"-//g")
-				display_alert "Installing Network-Manager connection profile: $(basename "${finalfile}" .nmconnection)" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-				run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/network_manager/"${sourcefile}" "${SDCARD}"/etc/NetworkManager/system-connections/"${finalfile}"
-				run_host_command_logged chmod 600 "${SDCARD}"/etc/NetworkManager/system-connections/"${finalfile}"
+				destfile=$(basename "${file}" | sed "s/"${BOARD}"-//g")
+				display_alert "Installing Network-Manager connection profile: $(basename "${destfile}" .nmconnection)" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+				run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/network_manager/"${sourcefile}" "${SDCARD}"/etc/NetworkManager/system-connections/"${destfile}"
+				run_host_command_logged chmod 600 "${SDCARD}"/etc/NetworkManager/system-connections/"${destfile}"
 			fi
 		done
 		for file in "${EXTENSION_DIR}"/overlay/common/network_manager/custom-*.nmconnection; do
 			if [ -e "${file}" ]; then
 				sourcefile=$(basename "${file}")
-				finalfile=$(basename "${file}" | sed "s/custom-//g")
-				display_alert "Installing Network-Manager CUSTOM connection profile: $(basename "${finalfile}" .nmconnection)" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-				run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/network_manager/"${sourcefile}" "${SDCARD}"/etc/NetworkManager/system-connections/"${finalfile}"
-				run_host_command_logged chmod 600 "${SDCARD}"/etc/NetworkManager/system-connections/"${finalfile}"
+				destfile=$(basename "${file}" | sed "s/custom-//g")
+				display_alert "Installing Network-Manager CUSTOM connection profile: $(basename "${destfile}" .nmconnection)" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+				run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/network_manager/"${sourcefile}" "${SDCARD}"/etc/NetworkManager/system-connections/"${destfile}"
+				run_host_command_logged chmod 600 "${SDCARD}"/etc/NetworkManager/system-connections/"${destfile}"
 			fi
 		done
 		for file in "${EXTENSION_DIR}"/overlay/common/network_manager/dispatcher-*; do
 			if [ -e "${file}" ] ; then
 				sourcefile=$(basename "${file}")
-				finalfile=$(basename "${file}" | sed "s/dispatcher-//g")
-				display_alert "Installing Network-Manager dispatcher script: ${finalfile}" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-				run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/network_manager/"${sourcefile}" "${SDCARD}"/etc/NetworkManager/dispatcher.d/"${finalfile}"
-				run_host_command_logged chmod 0744 "${SDCARD}"/etc/NetworkManager/dispatcher.d/"${finalfile}"
-				run_host_command_logged chown root:root "${SDCARD}"/etc/NetworkManager/dispatcher.d/"${finalfile}"
+				destfile=$(basename "${file}" | sed "s/dispatcher-//g")
+				display_alert "Installing Network-Manager dispatcher script: ${destfile}" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+				run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/network_manager/"${sourcefile}" "${SDCARD}"/etc/NetworkManager/dispatcher.d/"${destfile}"
+				run_host_command_logged chmod 0744 "${SDCARD}"/etc/NetworkManager/dispatcher.d/"${destfile}"
+				run_host_command_logged chown root:root "${SDCARD}"/etc/NetworkManager/dispatcher.d/"${destfile}"
 			fi
 		done
 	fi
