@@ -77,11 +77,13 @@ function pre_customize_image__252_manage_config_files() {
 	fi
 
 	if [ -d "${EXTENSION_DIR}"/overlay/common/modules-load.d ]; then
-		for file in [ -e "${EXTENSION_DIR}"/overlay/common/modules-load.d/"${BOARD}"-*.conf ]; do
-			sourcefile=$(basename "${file}")
-			destfile=$(echo "${sourcefile}" | sed "s/"${BOARD}-"//g") 
-			display_alert "Setting up ${BOARD}-specific modules autoload: ${destfile}" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-			run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/modules-load.d/"${sourcefile}" "${SDCARD}"/etc/modules-load.d/"${destfile}"
+		for file in "${EXTENSION_DIR}"/overlay/common/modules-load.d/"${BOARD}"-*.conf; do
+			if [ -e "${file}" ]; then
+				sourcefile=$(basename "${file}")
+				destfile=$(echo "${sourcefile}" | sed "s/"${BOARD}-"//g") 
+				display_alert "Setting up ${BOARD}-specific modules autoload: ${destfile}" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+				run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/modules-load.d/"${sourcefile}" "${SDCARD}"/etc/modules-load.d/"${destfile}"
+			fi
 		done
 	fi
 
