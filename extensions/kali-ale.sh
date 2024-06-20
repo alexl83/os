@@ -67,7 +67,7 @@ function pre_customize_image__252_manage_config_files() {
 	fi
 
 	if [ -e "${EXTENSION_DIR}"/overlay/common/rc.local-"${BOARD}" ]; then
-		file="${EXTENSION_DIR}"/overlay/common/rc.local-"${BOARD}".conf
+		file="${EXTENSION_DIR}"/overlay/common/rc.local-"${BOARD}"
 		sourcefile=$(basename "${file}")
 		destfile=$(basename "${file}" | sed "s/"${BOARD}"-//g")
 		display_alert "Customizing rc.local for ${BOARD}" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
