@@ -87,6 +87,12 @@ function pre_customize_image__252_manage_config_files() {
 		done
 	fi
 
+	if [ -d "${EXTENSION_DIR}"/overlay/common/sysctl.d ]; then
+		if [ -f "${EXTENSION_DIR}"/overlay/common/sysctl.d/99-custom.conf ]; then
+			display_alert "Enabling IPv4/IPv6 non-local address binding" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+			run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/sysctl.d/99-custom.conf "${SDCARD}"/etc/sysctl.d
+		fi
+	fi
 
 	if [ -e "${EXTENSION_DIR}"/overlay/common/armbian-leds-"${BOARD}"-"${BRANCH}".conf ]; then
 		display_alert "Setting up board leds" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
