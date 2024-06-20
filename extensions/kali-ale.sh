@@ -51,6 +51,7 @@ function pre_customize_image__252_manage_config_files() {
 	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/blacklist-usbhid.conf "${SDCARD}"/etc/modprobe.d
 
 	if [ -e "${EXTENSION_DIR}"/overlay/common/blacklist-videoout-"${BOARD}".conf ]; then
+		file="${EXTENSION_DIR}"/overlay/common/blacklist-videoout-"${BOARD}".conf
 		sourcefile=$(basename "${file}")
 		destfile=$(basename "${file}" | sed "s/"${BOARD}"-//g")
 		display_alert "Disabling video/display output" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
@@ -58,6 +59,7 @@ function pre_customize_image__252_manage_config_files() {
 	fi
 
 	if [ -e "${EXTENSION_DIR}"/overlay/common/blacklist-misc-"${BOARD}".conf ]; then
+		file="${EXTENSION_DIR}"/overlay/common/blacklist-misc-"${BOARD}".conf
 		sourcefile=$(basename "${file}")
 		destfile=$(basename "${file}" | sed "s/"${BOARD}"-//g")
 		display_alert "Disabling misc ${BOARD} debug features" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
@@ -65,6 +67,7 @@ function pre_customize_image__252_manage_config_files() {
 	fi
 
 	if [ -e "${EXTENSION_DIR}"/overlay/common/rc.local-"${BOARD}" ]; then
+		file="${EXTENSION_DIR}"/overlay/common/rc.local-"${BOARD}".conf
 		sourcefile=$(basename "${file}")
 		destfile=$(basename "${file}" | sed "s/"${BOARD}"-//g")
 		display_alert "Customizing rc.local for ${BOARD}" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
