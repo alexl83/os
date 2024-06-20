@@ -8,8 +8,8 @@ NAP_CONNECTION_ID="NAP"
 
 check_connections() {
     # Check if any Ethernet or Wi-Fi connections are active
-    ETHERNET_CONNECTED=$(nmcli -t -f TYPE,STATE connection show --active | grep "ethernet:connected")
-    WIFI_CONNECTED=$(nmcli -t -f TYPE,STATE connection show --active | grep "wifi:connected")
+    ETHERNET_CONNECTED=$(nmcli -t -f TYPE,STATE connection show --active | grep "802-3-ethernet:activated")
+    WIFI_CONNECTED=$(nmcli -t -f TYPE,STATE connection show --active | grep "802-11-wireless:activated")
     if [ -z "$ETHERNET_CONNECTED" ] && [ -z "$WIFI_CONNECTED" ]; then
         return 1
     else
@@ -64,6 +64,19 @@ case "$STATUS" in
             bring_down_bluetooth_nap
         fi
         ;;
+
+    connectivity-change)
+	BT_CONNECTED=$(nmcli -t -f TYPE,STATE connection show --active | grep "bluetooth:activated")
+	if is_bluetooth_interface; then
+		exit 0
+	fi
+
+	if [ ! "${CONNECTIVITY_STATE}" == "FULL" ] && [ -z "${BT_CONNECTED}" ]; then
+		bring_up_bluetooth_nap
+#	else
+#		bring_down_bluetooth_nap
+	fi
+	;;
     *)
         ;;
 esac
