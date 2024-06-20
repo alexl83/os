@@ -54,7 +54,7 @@ function pre_customize_image__252_manage_config_files() {
 		sourcefile=$(basename "${file}")
 		destfile=$(basename "${file}" | sed "s/"${BOARD}"-//g")
 		display_alert "Disabling video/display output" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/"${sourcefile}".conf "${SDCARD}"/etc/modprobe.d/"${destfile}"
+		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/"${sourcefile}" "${SDCARD}"/etc/modprobe.d/"${destfile}"
 	fi
 
 	if [ -e "${EXTENSION_DIR}"/overlay/common/blacklist-misc-"${BOARD}".conf ]; then
