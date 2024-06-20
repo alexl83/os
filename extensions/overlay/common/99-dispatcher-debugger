@@ -1,0 +1,17 @@
+#!/bin/bash
+
+INTERFACE="${1}"
+STATUS="${2}"
+
+if [ ! -z "${INTERFACE}" ]; then
+	case "${STATUS}" in
+
+	up|down)
+		echo "interface: ${INTERFACE} - status: ${STATUS} - DEVICE_IFACE: ${DEVICE_IFACE} - DEVICE_IP_IFACE: ${DEVICE_IP_IFACE}"
+		echo "TYPE=$(nmcli -e no -t -f DEVICE,TYPE connection show --active | grep "$DEVICE_IFACE" | awk -F "${DEVICE_IFACE}:" '{print $(NF)}')"
+		;;
+	*)
+		;;
+	esac
+fi
+

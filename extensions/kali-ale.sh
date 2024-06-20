@@ -51,18 +51,24 @@ function pre_customize_image__252_manage_config_files() {
 	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/blacklist-usbhid.conf "${SDCARD}"/etc/modprobe.d
 
 	if [ -e "${EXTENSION_DIR}"/overlay/common/blacklist-videoout-"${BOARD}".conf ]; then
+		sourcefile=$(basename "${file}")
+		destfile=$(basename "${file}" | sed "s/"${BOARD}"-//g")
 		display_alert "Disabling video/display output" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/blacklist-videoout-"${BOARD}".conf "${SDCARD}"/etc/modprobe.d
+		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/"${sourcefile}".conf "${SDCARD}"/etc/modprobe.d/"${destfile}"
 	fi
 
 	if [ -e "${EXTENSION_DIR}"/overlay/common/blacklist-misc-"${BOARD}".conf ]; then
+		sourcefile=$(basename "${file}")
+		destfile=$(basename "${file}" | sed "s/"${BOARD}"-//g")
 		display_alert "Disabling misc ${BOARD} debug features" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/blacklist-misc-"${BOARD}".conf "${SDCARD}"/etc/modprobe.d
+		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/"${sourcefile}" "${SDCARD}"/etc/modprobe.d/"${destfile}"
 	fi
 
 	if [ -e "${EXTENSION_DIR}"/overlay/common/rc.local-"${BOARD}" ]; then
+		sourcefile=$(basename "${file}")
+		destfile=$(basename "${file}" | sed "s/"${BOARD}"-//g")
 		display_alert "Customizing rc.local for ${BOARD}" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/rc.local-"${BOARD}" "${SDCARD}"/etc/rc.local
+		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/"${sourcefile}" "${SDCARD}"/etc/rc.local/"${destfile}"
 	fi
 
 	if [ -f "${SDCARD}"/etc/avahi/avahi-daemon.conf ]; then
@@ -275,7 +281,7 @@ function pre_customize_image__260_add_firmware()
 
 function pre_customize_image__261_install_user_overlays()
 {
-	if [ -d "${EXTENSION_DIR}"/overlay/"${BOARD}" ]; then
+	if [ -e "${EXTENSION_DIR}"/overlay/"${BOARD}" ]; then
 		for file in "${EXTENSION_DIR}"/overlay/"${BOARD}"/*.dts; do
 		if [ -f "${file}" ]; then
 			run_host_command_logged mkdir "${SDCARD}"/tmpinst
@@ -305,7 +311,7 @@ function pre_customize_image__262_setup_gpsd()
 	run_host_command_logged sed -i 's/^DEVICES\=.*/DEVICES\="\/dev\/ttyS5"/g' "${SDCARD}"/etc/default/gpsd
 	;;
 
-	orangepi5-plus|nanopi-r5c)
+	orangepi5-plus-kali|nanopi-r5c)
 	display_alert "Setting up GPSD" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged sed -i 's/^DEVICES\=.*/DEVICES\="\/dev\/rfcomm0"/g' "${SDCARD}"/etc/default/gpsd
 	run_host_command_logged sed -i 's/^GPSD_OPTIONS\=\"\"/GPSD_OPTIONS\=\"-b\"/g' "${SDCARD}"/etc/default/gpsd
