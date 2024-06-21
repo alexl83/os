@@ -1,0 +1,16 @@
+[connection]
+id=lan
+uuid=fab4bde7-ff37-3b8d-a0cf-d63f8dd42776
+type=ethernet
+interface-name=lan
+
+[ethernet]
+
+[ipv4]
+method=shared
+
+[ipv6]
+addr-gen-mode=stable-privacy
+method=auto
+
+[proxy]
