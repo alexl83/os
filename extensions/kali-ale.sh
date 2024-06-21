@@ -212,7 +212,7 @@ function pre_customize_image__255_update_armbian_env() {
 function pre_customize_image__256_setup_stealth_networking()
 {
 	display_alert "Setting up udev-based mac randomization and automatic monitor interfaces creations" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-	if [ "${BOARD}" != "nanopi-r5c" ]; then
+	if [ "${BOARD}" != "nanopi-r5c" ] && [ "${BOARD}" != "orangepi5-plus-kali"  ]; then
 		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/udev-v7/70-persistent-net.rules "${SDCARD}"/etc/udev/rules.d
 	else
 		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/udev-v7/70-persistent-net.rules "${SDCARD}"/etc/udev/rules.d/71-persistent-net.rules

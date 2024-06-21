@@ -90,3 +90,14 @@ function post_family_config_branch_current__orangepi5plus_use_mainline_uboot() {
                 flashcp -v -p "$1/u-boot-rockchip-spi.bin" /dev/mtd0
         }
 }
+
+function post_family_tweaks__orangepi5-plus-kali_udev_network_interfaces() {
+        display_alert "$BOARD" "Renaming interfaces WAN LAN" "info"
+
+        mkdir -p $SDCARD/etc/udev/rules.d/
+        cat <<- EOF > "${SDCARD}/etc/udev/rules.d/70-persistent-net.rules"
+                SUBSYSTEM=="net", ACTION=="add", KERNELS=="0004:41:00.0", NAME:="lan"
+                SUBSYSTEM=="net", ACTION=="add", KERNELS=="0003:31:00.0", NAME:="wan"
+        EOF
+}
+
