@@ -11,7 +11,7 @@
 #
 # By default this script does nothing.
 
-ethtool -s eth0 wol g
-ethtool -s eth1 wol g
+ethtool -s wan wol g
+ethtool -s lan wol g
 
 exit 0
