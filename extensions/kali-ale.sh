@@ -343,5 +343,6 @@ function pre_customize_image__263_freeze_bsp() {
 		chroot_sdcard armbian-config --main=System --selection=Freeze
 	else
 		display_alert "Cannot freeze bsp packages: please check your configuration" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+	fi
 
 }
