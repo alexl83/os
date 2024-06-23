@@ -340,7 +340,7 @@ function pre_customize_image__262_setup_gpsd()
 function pre_customize_image__263_freeze_bsp() {
 	if [[ "${BSPFREEZE:-"no"}" != "yes" && -x "${SDCARD}"/usr/sbin/armbian-config ]]; then
 		display_alert "Freezing bsp packages" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-		chroot_sdcard /usr/sbin/armbian-config main=System selection=Freeze ">" /dev/null 2>&1
+		chroot_sdcard /usr/sbin/armbian-config main=System selection=Freeze ">" /dev/null 2">"&1
 	else
 		display_alert "Cannot freeze bsp packages: please check your configuration" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	fi
