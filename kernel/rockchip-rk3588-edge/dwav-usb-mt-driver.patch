@@ -528,7 +528,7 @@ Change-Id: Ia1c8c29d3f69c6ba5d630279c4cc98119b68ab71
 +	dwav_usb_mt->interface  = intf;
 +
 +	if (udev->manufacturer)
-+		strlcpy(dwav_usb_mt->name,
++		strscpy(dwav_usb_mt->name,
 +				udev->manufacturer, sizeof(dwav_usb_mt->name));
 +
 +	if (udev->product) {
