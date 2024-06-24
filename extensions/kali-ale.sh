@@ -179,6 +179,10 @@ function pre_customize_image__252_manage_config_files() {
 
 	display_alert "Disabling pam_systemd" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	chroot_sdcard pam-auth-update --disable systemd
+
+	display_alert "Setting ZSH as default shell" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+	run_host_command_logged sed -i 's/^#DSHELL\=.*/DSHELL\=\/usr\/bin\/zsh/g' /etc/adduser.conf
+	
 }
 
 function pre_customize_image__254_enable_disable_services() {
@@ -319,7 +323,7 @@ function pre_customize_image__262_setup_gpsd() {
 	run_host_command_logged sed -i 's/^DEVICES\=.*/DEVICES\="\/dev\/ttyS0"/g' "${SDCARD}"/etc/default/gpsd
 	;;
 
-	orangepizero02w)
+	orangepizero2w)
 	display_alert "Setting up GPSD" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged sed -i 's/^DEVICES\=.*/DEVICES\="\/dev\/ttyS5"/g' "${SDCARD}"/etc/default/gpsd
 	;;
