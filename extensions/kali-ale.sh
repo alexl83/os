@@ -311,8 +311,7 @@ function pre_customize_image__261_install_user_overlays()
 
 }
 
-function pre_customize_image__262_setup_gpsd()
-{
+function pre_customize_image__262_setup_gpsd() {
 	case "${BOARD}" in
 
 	orangepizero3)
