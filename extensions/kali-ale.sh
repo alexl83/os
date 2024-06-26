@@ -181,7 +181,7 @@ function pre_customize_image__252_manage_config_files() {
 	chroot_sdcard pam-auth-update --disable systemd
 
 	display_alert "Setting ZSH as default shell" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-	run_host_command_logged sed -i 's/^#DSHELL\=.*/DSHELL\=\/usr\/bin\/zsh/g' "${SDCARD}/etc/adduser.conf
+	run_host_command_logged sed -i 's/^#DSHELL\=.*/DSHELL\=\/usr\/bin\/zsh/g' "${SDCARD}"/etc/adduser.conf
 	
 }
 
