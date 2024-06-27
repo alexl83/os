@@ -38,6 +38,7 @@ is_bluetooth_interface() {
 
 # Main script logic
 case "$STATUS" in
+
     up)
         # Ignore Bluetooth interfaces
         if is_bluetooth_interface; then
@@ -50,6 +51,7 @@ case "$STATUS" in
             bring_down_bluetooth_nap
         fi
         ;;
+
     down)
         # Ignore Bluetooth interfaces
         if is_bluetooth_interface; then
@@ -73,10 +75,9 @@ case "$STATUS" in
 
 	if [ ! "${CONNECTIVITY_STATE}" == "FULL" ] && [ -z "${BT_CONNECTED}" ]; then
 		bring_up_bluetooth_nap
-#	else
-#		bring_down_bluetooth_nap
 	fi
 	;;
+
     *)
         ;;
 esac
