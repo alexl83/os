@@ -91,7 +91,7 @@ function pre_customize_image__252_manage_config_files() {
 			ethif=wan
 		fi
 		display_alert "Allowing Avahi mDNS on designated interfaces only" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-		run_host_command_logged sed -i "s/^\#allow-interfaces.*/allow-interfaces\="${ethif}",sta0,zt7nnkpung/g" "${SDCARD}"/etc/avahi/avahi-daemon.conf
+		run_host_command_logged sed -i "s/^\#allow-interfaces.*/allow-interfaces\="${ethif}",sta0,zt7nnkpung,bnep0/g" "${SDCARD}"/etc/avahi/avahi-daemon.conf
 		[[ -f "${SDCARD}"/usr/share/doc/avahi-daemon/examples/sftp-ssh.service ]] && run_host_command_logged cp "${SDCARD}"/usr/share/doc/avahi-daemon/examples/sftp-ssh.service "${SDCARD}"/etc/avahi/services/
 		[[ -f "${SDCARD}"/usr/share/doc/avahi-daemon/examples/ssh.service ]] && run_host_command_logged cp "${SDCARD}"/usr/share/doc/avahi-daemon/examples/ssh.service "${SDCARD}"/etc/avahi/services/
 	fi
