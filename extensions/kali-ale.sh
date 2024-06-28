@@ -108,7 +108,7 @@ function pre_customize_image__252_manage_config_files() {
 	fi
 
 	if [ -d "${EXTENSION_DIR}"/overlay/common/sysctl.d ]; then
-		for file in "${EXTENSION_DIR}"/overlay/common/sysctl.d/*.conf;
+		for file in "${EXTENSION_DIR}"/overlay/common/sysctl.d/*.conf; do
 			if [ -f "${file}" ]; then
 				sourcefile=$(basename "${file}")
 				display_alert "Installing sysctl options file ${sourcefile}" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
