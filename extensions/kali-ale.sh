@@ -4,7 +4,7 @@ function extension_prepare_config__docker() {
 }
 
 function post_family_tweaks__orangepi5-plus_udev_network_interfaces() {
-	if [ "${BOARD}" == "orangepi5-plus"* ]; then
+	if [[ "${BOARD}" == "orangepi5-plus"* ]]; then
 		display_alert "${BOARD}" "Renaming interfaces WAN LAN" "info"
 		mkdir -p $SDCARD/etc/udev/rules.d/
 		cat <<- EOF > "${SDCARD}/etc/udev/rules.d/70-persistent-net.rules"
@@ -219,8 +219,8 @@ function pre_customize_image__255_update_armbian_env() {
 		if [ "${BOARD}" == "orangepizero3" ]; then
 			display_alert "Enabling IR and UART5 overlays by default" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 			run_host_command_logged echo "overlays=ir uart5-ph" >> "${SDCARD}"/boot/armbianEnv.txt
-		elif [ "${BOARD}" == "orangepi5-plus"* ]; then
-			display_alert "Enabling and UART3-M1 (ttyS3) overlay by default" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+		elif [[ "${BOARD}" == "orangepi5-plus"* ]]; then
+			display_alert "Enabling UART3-M1 (ttyS3) overlay by default" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 			run_host_command_logged echo "overlays=uart3-m1" >> "${SDCARD}"/boot/armbianEnv.txt
 		fi
 
