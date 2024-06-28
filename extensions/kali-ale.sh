@@ -108,10 +108,13 @@ function pre_customize_image__252_manage_config_files() {
 	fi
 
 	if [ -d "${EXTENSION_DIR}"/overlay/common/sysctl.d ]; then
-		if [ -f "${EXTENSION_DIR}"/overlay/common/sysctl.d/99-custom.conf ]; then
-			display_alert "Enabling IPv4/IPv6 non-local address binding" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-			run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/sysctl.d/99-custom.conf "${SDCARD}"/etc/sysctl.d
-		fi
+		for file in "${EXTENSION_DIR}"/overlay/common/sysctl.d/*.conf;
+			if [ -f "${file}" ]; then
+				sourcefile=$(basename "${file}")
+				display_alert "Installing sysctl options file ${sourcefile}" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+				run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/sysctl.d/"${sourcefile}" "${SDCARD}"/etc/sysctl.d
+			fi
+		done
 	fi
 
 	if [ -e "${EXTENSION_DIR}"/overlay/common/armbian-leds-"${BOARD}"-"${BRANCH}".conf ]; then
@@ -186,7 +189,7 @@ function pre_customize_image__252_manage_config_files() {
 }
 
 function pre_customize_image__254_enable_disable_services() {
-	services=(zerotier-one wpa_supplicant unattended-upgrades haveged console-setup networking)
+	services=(zerotier-one wpa_supplicant console-setup)
 	for service in "${services[@]}"; do
 		if [[ $(chroot_sdcard systemctl list-unit-files --type service "|" grep -F "${service}") ]] && [[ $(chroot_sdcard systemctl is-enabled "${service}") ]]; then
 			display_alert "disabling ${service}" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
