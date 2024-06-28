@@ -216,7 +216,7 @@ function pre_customize_image__255_update_armbian_env() {
 		if [ "${BOARD}" == "orangepizero3" ]; then
 			display_alert "Enabling IR and UART5 overlays by default" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 			run_host_command_logged echo "overlays=ir uart5-ph" >> "${SDCARD}"/boot/armbianEnv.txt
-		elif [ "${BOARD}" == "orangepi5plus"* ]; then
+		elif [ "${BOARD}" == "orangepi5-plus"* ]; then
 			display_alert "Enabling and UART3-M1 (ttyS3) overlay by default" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 			run_host_command_logged echo "overlays=uart3-m1" >> "${SDCARD}"/boot/armbianEnv.txt
 		fi
