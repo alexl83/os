@@ -218,14 +218,14 @@ function pre_customize_image__255_update_armbian_env() {
 
 		if [ "${BOARD}" == "orangepizero3" ]; then
 			display_alert "Enabling IR and UART5 overlays by default" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-			run_host_command_logged echo "overlays=ir uart5-ph" >> "${SDCARD}"/boot/armbianEnv.txt
+			run_host_command_logged echo "overlays=ir uart5-ph" ">>" "${SDCARD}"/boot/armbianEnv.txt
 		elif [[ "${BOARD}" == "orangepi5-plus"* ]]; then
 			display_alert "Enabling UART3-M1 (ttyS3) overlay by default" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-			run_host_command_logged echo "overlays=uart3-m1" >> "${SDCARD}"/boot/armbianEnv.txt
+			run_host_command_logged echo "overlays=uart3-m1" ">>" "${SDCARD}"/boot/armbianEnv.txt
 		fi
 
 		display_alert "Disabling Predictable net interface naming and kernel/splash verbosity" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-		run_host_command_logged echo "extraargs=net.ifnames=0 quiet vt.global_cursor_default=0 nosplash" >> "${SDCARD}"/boot/armbianEnv.txt
+		run_host_command_logged echo "extraargs=net.ifnames=0 quiet vt.global_cursor_default=0 nosplash" ">>" "${SDCARD}"/boot/armbianEnv.txt
 	fi
 
 }
