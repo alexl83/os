@@ -87,7 +87,7 @@ function pre_customize_image__252_manage_config_files() {
 
 	if [ -f "${SDCARD}"/etc/avahi/avahi-daemon.conf ]; then
 		ethif=eth0
-		if [ "${BOARD}" == "nanopi-r5c" ] || [ "${BOARD}" == "orangepi5-plus"* ]; then
+		if [ "${BOARD}" == "nanopi-r5c" ] || [[ "${BOARD}" == "orangepi5-plus"* ]]; then
 			ethif=wan
 		fi
 		display_alert "Allowing Avahi mDNS on designated interfaces only" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
