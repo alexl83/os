@@ -1,0 +1,44 @@
+/dts-v1/;
+/plugin/;
+
+/ {
+
+	model = "OrangePi Zero 2W";
+	compatible = "xunlong,orangepi-zero2w\0allwinner,sun50i-h618";
+
+	fragment@0 {
+		target = <&uart0>;
+		__overlay__ {
+			status = "disabled";
+		};
+	};
+
+	fragment@1 {
+				target-path = "/soc/tcon-top@6510000";
+				__overlay__ {
+				status = "disabled";
+						};
+				};
+
+	fragment@2 {
+		target-path ="/soc/lcd-controller@6515000";
+		__overlay__ {
+		status = "disabled";
+				};
+		};
+
+	fragment@3 {
+		target-path = "/soc/hdmi@6000000";
+		__overlay__ {
+				status = "disabled";
+				};
+			};
+
+	fragment@4 {
+		target-path = "/display-engine";
+			__overlay__ {
+			status = "disabled";
+				};
+			};
+
+};
