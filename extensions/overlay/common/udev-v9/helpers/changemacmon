@@ -1,0 +1,91 @@
+#!/usr/bin/env bash
+
+# Enable strict mode:
+set -euo pipefail
+
+# Function to randomize MAC address using macchanger
+randomize_mac() {
+  local interface=$1
+  ip link set dev "$interface" down
+  macchanger -r "$interface"
+}
+
+# Function to check the driver and handle the interface accordingly
+handle_interface() {
+  local interface=$1
+  local driver
+  driver=$(udevadm info --query=property --path=/sys/class/net/"$interface" | awk -F'=' '/DRIVER/ {print $2}')
+
+  # Check if the interface is wireless
+  if [[ $(iw dev "$interface" info &>/dev/null; echo $?) -eq 0 ]]; then
+    # Check if the driver is not one of the Realtek drivers
+    if ! [[ $driver =~ rtl88[[:alnum:]]*au|rtl88[[:alnum:]]*bu|rtl88XXbu ]]; then
+      handle_wifi "$interface"
+    else
+      rename_monitor "$interface"
+    fi
+  else
+    # If it's not wireless, randomize the MAC address
+    randomize_mac "$interface"
+  fi
+}
+
+# Function to handle WiFi interfaces
+handle_wifi() {
+  local interface=$1
+  randomize_mac "$interface"
+
+  # Get the new randomized MAC address
+  local mac_address=$(get_mac_address "$interface")
+  
+  # Get the phy number
+  local phy_num=$(iw dev "$interface" info | awk '/wiphy/ {print $2}')
+  
+  # Check for the corresponding monitor interface
+  local mon_interface="mon${phy_num}"
+  if ! iw dev | grep -q "^$mon_interface"; then
+    iw "$interface" interface add "$mon_interface" type monitor
+  fi
+  
+  # Synchronize the MAC address of the monitor interface with the wlan interface
+  set_mac_address "$mon_interface" "$mac_address"
+}
+
+# Helper function to get the MAC address of a given interface
+get_mac_address() {
+  local interface=$1
+  cat /sys/class/net/"$interface"/address
+}
+
+# Helper function to set the MAC address of a given interface
+set_mac_address() {
+  local interface=$1
+  local mac_address=$2
+  ip link set dev "$interface" down
+  ip link set dev "$interface" address "$mac_address"
+}
+
+# Function to rename and change mode to monitor
+rename_monitor() {
+  local interface=$1
+  randomize_mac "$interface"
+  local phy_num=$(iw dev "$interface" info | awk '/wiphy/ {print $2}')
+  local mon_interface="mon${phy_num}"
+  ip link set dev "$interface" down
+  ip link set dev "$interface" name "$mon_interface"
+  iw "$mon_interface" set monitor none
+}
+
+# Main execution block
+case "$1" in
+  randomize-mac)
+    randomize_mac "$2"
+    ;;
+  handle-interface)
+    handle_interface "$2"
+    ;;
+  *)
+    echo "Usage: $0 {randomize-mac|handle-interface} interface"
+    exit 1
+    ;;
+esac

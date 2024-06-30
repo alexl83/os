@@ -1,0 +1,8 @@
+# Assign static name "sta0" to wireless devices with the driver "unisoc_wifi"
+SUBSYSTEM=="net", ACTION!="remove", ENV{DEVTYPE}=="wlan", DRIVERS=="unisoc_wifi", NAME="sta0"
+
+# Randomize MAC address for all cabled Ethernet devices, excluding Bluetooth and WLAN
+SUBSYSTEM=="net", ACTION!="remove", ENV{DEVTYPE}!="wlan", ENV{DEVTYPE}!="bluetooth", RUN+="/usr/local/sbin/changemacmon randomize-mac %k"
+
+# Handle wireless interfaces (wlan)
+SUBSYSTEM=="net", ACTION!="remove", ENV{DEVTYPE}=="wlan", NAME!="sta0", ATTR{type}!="803" ENV{NM_UNMANAGED}="1", RUN+="/usr/local/sbin/changemacmon handle-interface %k"

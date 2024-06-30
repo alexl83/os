@@ -234,18 +234,16 @@ function pre_customize_image__256_setup_stealth_networking()
 {
 	display_alert "Setting up udev-based mac randomization and automatic monitor interfaces creations" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	if [ "${BOARD}" != "nanopi-r5c" ] && [[ "${BOARD}" != "orangepi5-plus"* ]]; then
-		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/udev-v7/70-persistent-net.rules "${SDCARD}"/etc/udev/rules.d
+		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/udev-v9/70-persistent-net.rules "${SDCARD}"/etc/udev/rules.d
 	else
-		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/udev-v7/70-persistent-net.rules "${SDCARD}"/etc/udev/rules.d/71-persistent-net.rules
+		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/udev-v9/70-persistent-net.rules "${SDCARD}"/etc/udev/rules.d/71-persistent-net.rules
 	fi
 
 	if [ ! -d "${SDCARD}"/usr/local/sbin ]; then
 		run_host_command_logged mkdir -p "${SDCARD}"/usr/local/sbin
 	fi
-	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/udev-v7/helpers/changemac.sh "${SDCARD}"/usr/local/sbin
-	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/udev-v7/helpers/createmon.sh "${SDCARD}"/usr/local/sbin
-	run_host_command_logged chmod +x "${SDCARD}"/usr/local/sbin/createmon.sh
-	run_host_command_logged chmod +x "${SDCARD}"/usr/local/sbin/changemac.sh
+	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/udev-v9/helpers/* "${SDCARD}"/usr/local/sbin
+	run_host_command_logged chmod +x "${SDCARD}"/usr/local/sbin/*
 
 }
 
