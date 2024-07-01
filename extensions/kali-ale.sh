@@ -185,6 +185,9 @@ function pre_customize_image__252_manage_config_files() {
 
 	display_alert "Setting ZSH as default shell" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged sed -i 's/^#DSHELL\=.*/DSHELL\="\/usr\/bin\/zsh"/g' "${SDCARD}"/etc/adduser.conf
+
+	display_alert "Trimming down initramfs size" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+	run_host_command_logged sed -i 's/^MODULES\=.*/MODULES\=dep/g' "${SDCARD}"/etc/initramfs-tools/initramfs.conf
 	
 }
 
