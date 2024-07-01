@@ -309,7 +309,7 @@ function pre_customize_image__261_install_user_overlays()
 			run_host_command_logged mkdir "${SDCARD}"/tmpinst
 			display_alert "Installing user overlays" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 			tgtfile=$(basename "${file}")
-			display_alert "installing ${tgtfile} overlay" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+			display_alert "installing $(basename "${tgtfile}" .dts) overlay" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 			run_host_command_logged cp "${file}" "${SDCARD}"/tmpinst
 			chroot_sdcard armbian-add-overlay /tmpinst/"${tgtfile}"
 			run_host_command_logged rm -rf "${SDCARD}"/tmpinst
