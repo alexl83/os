@@ -200,8 +200,6 @@ function pre_customize_image__252_manage_config_files() {
 				display_alert "Error: invalid COUNTRY CODE ${REGDOM} - not configuring" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 			fi
 	fi
-
-			
 }
 
 function pre_customize_image__254_enable_disable_services() {
