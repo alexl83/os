@@ -278,4 +278,4 @@ alias ao='if [ ! -d ${HOME}/AO ]; then mkdir ${HOME}/AO; fi && cd ${HOME}/AO && 
 alias dmesg='dmesg --color=always'
 alias less='less -r'
 alias pwcat='pwgen -scny 25 1'
-alias morrownr="/usr/local/bin/update_rtl_improved.sh && sed -i 's/^alias\ morrownr/#alias\ morrownr/g' ${HOME}/.zshrc"
+alias morrownr="/usr/local/bin/update_rtl_improved && sed -i 's/^alias\ morrownr/#alias\ morrownr/g' ${HOME}/.zshrc"
