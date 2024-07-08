@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 set -euo pipefail
-#set -x
 
 # Logging setup
 LOG_FILE="/var/log/driver_update.log"
@@ -9,12 +8,25 @@ log() {
     echo "$(date +"%Y-%m-%d %T") - $*" | sudo tee -a "$LOG_FILE"
 }
 
+# Source external file for options
+source /etc/default/update_rtl_options
+
 # Input validation and sanitization
-validate_paths() {
+validate_and_prepare_paths() {
     for path in "$@"; do
         if [ ! -d "$path" ]; then
-            log "Error: $path does not exist or is not a directory."
-            exit 1
+            log "$path does not exist. Creating directory and cloning repository."
+            git clone "https://github.com/morrownr/$(basename "$path").git" "$path" || {
+                log "Error: Failed to clone repository for $(basename "$path")."
+                exit 1
+            }
+        else
+            log "$path exists. Checking for updates."
+            cd "$path"
+            git fetch origin || {
+                log "Error: Failed to fetch updates for $(basename "$path")."
+                exit 1
+            }
         fi
     done
 }
@@ -27,74 +39,73 @@ if [[ "${1:-}" == "--dry-run" ]]; then
     shift
 fi
 
-# Validate and sanitize driver paths
-validate_paths "${HOME}/8821au-20210708" "${HOME}/88x2bu-20210702"
-
 # Set variables
-drivers=("8821au-20210708" "${HOME}/88x2bu-20210702")
+drivers=("${HOME}/8821au-20210708" "${HOME}/88x2bu-20210702")
 modprobe_path="/etc/modprobe.d"
-rtl8821au_opts="options 8821au rtw_drv_log_level=0 rtw_led_ctrl=0 rtw_dfs_region_domain=3"
-rtl88x2bu_opts="options 88x2bu rtw_drv_log_level=0 rtw_led_ctrl=0 rtw_vht_enable=1 rtw_switch_usb_mode=0 rtw_dfs_region_domain=3"
 declare -A module_opts
 module_opts["8821au"]="$rtl8821au_opts"
 module_opts["88x2bu"]="$rtl88x2bu_opts"
 
-# Function to fetch updates
-fetch_updates() {
-    cd "$1"
-    git fetch origin || { log "Error: Failed to fetch updates for $module."; return 1; }
-}
-
 # Function to check if update is available
 check_for_update() {
     if [ "$(git rev-parse HEAD)" = "$(git rev-parse "@{u}")" ]; then
-        log "$module is up-to-date!"
+        log "$1 is up-to-date!"
         return 1
     else
-        log "$module needs updating"
+        log "$1 needs updating"
         return 0
     fi
 }
 
 # Function to update the driver
 update_driver() {
- 
-   log "Pulling latest $module sources"
-    if ! "$dry_run"; then
-        git pull || { log "Error: Failed to pull latest suorces from git."; return 1; }
+    log "Pulling latest $1 sources"
+    if ! $dry_run; then
+        git pull || { log "Error: Failed to pull latest sources from git."; return 1; }
     fi
-    log "Uninstalling old $module release"
-    if ! "$dry_run"; then
-        sudo ./remove-driver.sh NoPrompt || { log "Error: Failed to uninstall old $module release."; return 1; }
-    fi
-
-    log "Compiling and installing current $module release"
-    if ! "$dry_run"; then
-        sudo ./install-driver.sh NoPrompt || { log "Error: Failed to install current $module release."; return 1; }
+    log "Uninstalling old $1 release"
+    if ! $dry_run; then
+        sudo ./remove-driver.sh NoPrompt || { log "Error: Failed to uninstall old $1 release."; return 1; }
     fi
 
-    log "Updating $module modprobe options"
-    if ! "$dry_run"; then
-#      sudo  sed -e "s/^(options).*/${module_opts[$module]}/1" "${modprobe_path}/${module}.conf" || { log "Error: Failed to update modprobe configuration for $module."; return 1; }
-      sed -r "s/^(options).*/${module_opts[$module]}/1" "${modprobe_path}/${module}.conf" | sudo tee "${modprobe_path}/${module}.conf" > /dev/null ||  { log "Error: Failed to update modprobe configuration for $module."; return 1; }
+    log "Compiling and installing current $1 release"
+    if ! $dry_run; then
+        sudo ./install-driver.sh NoPrompt || { log "Error: Failed to install current $1 release."; return 1; }
     fi
 
-    log "$module updated!"
+    log "Updating $1 modprobe options"
+    if ! $dry_run; then
+        echo "${module_opts[$1]}" | sudo tee "${modprobe_path}/${1}.conf" > /dev/null || { log "Error: Failed to update modprobe configuration for $1."; return 1; }
+    fi
+
+    log "$1 updated!"
+    return 0
 }
 
+# Validate and prepare driver paths
+validate_and_prepare_paths "${drivers[@]}"
+
 # Main loop to iterate over drivers
-for driver in "${drivers[@]}"
-    do
+reboot_required=false
+for driver in "${drivers[@]}"; do
     module=$(basename "$driver" | cut -d - -f1)
 
+    # Change to driver directory
+    cd "$driver"
+
     # Fetch updates
-    fetch_updates "$driver" || continue
+    git fetch origin || continue
 
     # Check for updates
-    if check_for_update; then
-        update_driver || continue
+    if check_for_update "$module"; then
+        if update_driver "$module"; then
+            reboot_required=true
+        fi
     fi
 done
 
-echo "You should reboot your system now!"
-#exit 0
+if $reboot_required; then
+    echo "At least one driver has been updated. You should reboot your system now!"
+else
+    echo "No driver updates were necessary. No reboot required."
+fi

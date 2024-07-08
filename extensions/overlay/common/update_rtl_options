@@ -1,0 +1,2 @@
+rtl8821au_opts="options 8821au rtw_drv_log_level=0 rtw_led_ctrl=0"
+rtl88x2bu_opts="options 88x2bu rtw_drv_log_level=0 rtw_led_ctrl=0 rtw_vht_enable=1 rtw_switch_usb_mode=0"

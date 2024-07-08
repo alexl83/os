@@ -180,6 +180,14 @@ function pre_customize_image__252_manage_config_files() {
 	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/update_rtl_improved.sh "${SDCARD}"/usr/local/bin
 	run_host_command_logged chmod +x "${SDCARD}"/usr/local/bin/update_rtl_improved.sh
 
+	if [ -f "${EXTENSION_DIR}"/overlay/common/update_rtl_options_custom ]; then
+		display_alert "Installing custom options file for update_rtl_improved"
+		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/update_rtl_options_custom "${SDCARD}"/etc/default
+	else
+		display_alert "Installing default options file for update_rtl_improved"
+		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/update_rtl_options "${SDCARD}"/etc/default
+	fi
+
 	display_alert "Disabling pam_systemd" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	chroot_sdcard pam-auth-update --disable systemd
 
