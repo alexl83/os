@@ -319,6 +319,7 @@ function pre_customize_image__259_disablettys()
 		run_host_command_logged mkdir "${SDCARD}"/etc/systemd/resolved.conf.d/
 	fi
 	display_alert "Setting system-wide DNS over TLS and systemd-resolved tweaks" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+	run_host_command_logged mv "${SDCARD}"/etc/systemd/resolved.conf.d/00-armbian-default-dns.conf "${SDCARD}"/etc/systemd/resolved.conf.d/00-armbian-default-dns.conf.disabled 
 	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/resolved*.conf "${SDCARD}"/etc/systemd/resolved.conf.d/
 
 
