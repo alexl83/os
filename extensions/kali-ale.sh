@@ -238,7 +238,7 @@ function pre_customize_image__254_enable_disable_services() {
 	fi
 	if [ "${BOARD}" == "nanopi-r5c" ]; then
 		display_alert "Enable armbian-leds service for ${BOARD}"
-		chroot_sdcard systemctl --no-reload armbian-led-state.service
+		chroot_sdcard systemctl --no-reload enable armbian-led-state.service
 	fi
 }
 

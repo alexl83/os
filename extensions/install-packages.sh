@@ -4,16 +4,12 @@ function pre_customize_image__251_install_custom_packages(){
 	rem_pkgs=(ifupdown keyboard-configuration exim4-daemon-light haveged armbian-plymouth-theme armbian-zsh unattended-upgrades)
 	rtc_board=(orangepi5-plus* nanopi-r5c)
 	ir_board=(orangepi5-plus* orangepizero3 orangepizero2w)
-	for rtc_match in "${rtc_board[@]}"; do
-		if [[ "${rtc_match}" =~ "${BOARD}" ]]; then
+		if [[ "${rtc_board[*]}" =~ "${BOARD}" ]]; then
 			rem_pkgs+=(fake-hwclock)
 		fi
-	done
-	for ir_match in "${ir_board[@]}"; do
-		if [[ "${ir_match}" =~ "${BOARD}" ]]; then
+		if [[ "${ir_board[*]}" =~ "${BOARD}" ]]; then
 			pkgs+=(lirc)
 		fi
-	done
 	display_alert "Updating package list" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	do_with_retries 3 chroot_sdcard_apt_get_update
 
