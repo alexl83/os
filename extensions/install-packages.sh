@@ -10,7 +10,7 @@ function pre_customize_image__251_install_custom_packages(){
 		fi
 	done
 	for ir_match in "${ir_board[@]}"; do
-		if [ "${BOARD}" == "${ir_match}" ]; then
+		if [[ "${BOARD}" == "${ir_match}" ]]; then
 			pkgs+=(lirc)
 		fi
 	done
@@ -18,8 +18,8 @@ function pre_customize_image__251_install_custom_packages(){
 	do_with_retries 3 chroot_sdcard_apt_get_update
 
 	display_alert "Installing ${#pkgs[@]} packages:" "${pkgs[*]}" "info"
-	do_with_retries 3 chroot_sdcard_apt_get_install "${pkgs[@]}"
+	do_with_retries 3 chroot_sdcard_apt_get_install "${pkgs[*]}"
 	display_alert "Purging ${#rem_pkgs[@]} packages:" "${rem_pkgs[*]}" "info"
-	do_with_retries 3 chroot_sdcard_apt_get_remove --auto-remove "${rem_pkgs[@]}"
+	do_with_retries 3 chroot_sdcard_apt_get_remove --auto-remove "${rem_pkgs[*]}"
 
 }
