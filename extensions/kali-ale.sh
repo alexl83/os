@@ -237,7 +237,7 @@ function pre_customize_image__254_enable_disable_services() {
 		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/rfcomm.default "${SDCARD}"/etc/default/rfcomm
 	fi
 	if [ "${BOARD}" == "nanopi-r5c" ]; then
-		display_alert "Enable armbian-leds service for ${BOARD}"
+		display_alert "Enable armbian-leds service for ${BOARD}" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 		chroot_sdcard systemctl --no-reload enable armbian-led-state.service
 	fi
 }
