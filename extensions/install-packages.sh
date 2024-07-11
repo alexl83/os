@@ -5,12 +5,12 @@ function pre_customize_image__251_install_custom_packages(){
 	rtc_board=(orangepi5-plus* nanopi-r5c)
 	ir_board=(orangepi5-plus* orangepizero3 orangepizero2w)
 	for rtc_match in "${rtc_board[@]}"; do
-		if [[ "${BOARD}" == "${rtc_match}" ]]; then
+		if [[ "${rtc_match}" =~ "${BOARD}" ]]; then
 			rem_pkgs+=(fake-hwclock)
 		fi
 	done
 	for ir_match in "${ir_board[@]}"; do
-		if [[ "${BOARD}" == "${ir_match}" ]]; then
+		if [[ "${ir_match}" =~ "${BOARD}" ]]; then
 			pkgs+=(lirc)
 		fi
 	done
