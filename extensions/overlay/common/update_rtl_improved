@@ -5,7 +5,7 @@ set -euo pipefail
 LOG_FILE="/var/log/driver_update.log"
 
 log() {
-    echo "$(date +"%d-%m-%Y %T") - $*" | sudo tee -a "$LOG_FILE"
+	echo "$(date +"%d-%m-%Y %T") - $*" | sudo tee -a "$LOG_FILE"
 }
 
 # Source external file for options
@@ -13,39 +13,39 @@ source /etc/default/update_rtl_options
 
 # Function to install the driver
 install_driver() {
-    local module=$1
-    local path=$2
-    log "Installing driver for $module"
-    cd "$path"
-    if ! $dry_run; then
-        sudo ./install-driver.sh NoPrompt >/dev/null || { log "Error: Failed to install driver for $module."; return 1; }
-        sed -r "s/^(options).*/${module_opts[$module]}/1" "${modprobe_path}/${module}.conf" | sudo tee "${modprobe_path}/${module}.conf" > /dev/null ||  { log "Error: Failed to update modprobe configuration for $module."; return 1; }
-    fi
-    log "$module driver installed successfully!"
-    return 0
+	local module=$1
+	local path=$2
+	log "Installing driver for $module"
+	cd "$path"
+	if ! $dry_run; then
+		sudo ./install-driver.sh NoPrompt >/dev/null || { log "Error: Failed to install driver for $module."; return 1; }
+		sed -r "s/^(options).*/${module_opts[$module]}/1" "${modprobe_path}/${module}.conf" | sudo tee "${modprobe_path}/${module}.conf" > /dev/null ||  { log "Error: Failed to update modprobe configuration for $module."; return 1; }
+	fi
+	log "$module driver installed successfully!"
+	return 0
 }
 
 # Function to check if update is available
 check_for_update() {
-    cd "$1"
-    git fetch origin
-    if [ "$(git rev-parse HEAD)" = "$(git rev-parse "@{u}")" ]; then
-        log "$2 is up-to-date!"
-        return 1
-    else
-        log "$2 needs updating"
-        git pull
-        log "$2 updated to latest trunk"
-        return 0
-    fi
+	cd "$1"
+	git fetch origin
+	if [ "$(git rev-parse HEAD)" = "$(git rev-parse "@{u}")" ]; then
+		log "$2 is up-to-date!"
+		return 1
+	else
+		log "$2 needs updating"
+		git pull
+		log "$2 updated to latest trunk"
+		return 0
+	fi
 }
 
 # Dry run mode
 dry_run=false
 if [[ "${1:-}" == "--dry-run" ]]; then
-    dry_run=true
-    log "Dry run mode activated."
-    shift
+	dry_run=true
+	log "Dry run mode activated."
+	shift
 fi
 
 # Set variables
@@ -58,29 +58,29 @@ module_opts["88x2bu"]="$rtl88x2bu_opts"
 # Main loop to iterate over drivers
 reboot_required=false
 for path in "${drivers[@]}"; do
-    if [ ! -d "$path" ]; then
-        log "$path does not exist. Creating directory and cloning repository."
-        git clone "https://github.com/morrownr/$(basename "$path").git" "$path" && {
-            log "Repository cloned, installing drivers for $(basename "$path")."
-            install_driver "$(basename "$path" | cut -d - -f1)" "$path"
-            reboot_required=true
-        } || {
-            log "Error: Failed to clone repository for $(basename "$path")."
-            exit 1
-        }
-    else
-        log "$path exists. Checking for updates."
-        module=$(basename "$path" | cut -d - -f1)
-        if check_for_update "$path" "$module"; then
-            if install_driver "$module" "$path"; then
-                reboot_required=true
-            fi
-        fi
-    fi
+	if [ ! -d "$path" ]; then
+		log "$path does not exist. Creating directory and cloning repository."
+		git clone "https://github.com/morrownr/$(basename "$path").git" "$path" && {
+			log "Repository cloned, installing drivers for $(basename "$path")."
+			install_driver "$(basename "$path" | cut -d - -f1)" "$path"
+			reboot_required=true
+		} || {
+			log "Error: Failed to clone repository for $(basename "$path")."
+			exit 1
+		}
+	else
+		log "$path exists. Checking for updates."
+		module=$(basename "$path" | cut -d - -f1)
+		if check_for_update "$path" "$module"; then
+			if install_driver "$module" "$path"; then
+				reboot_required=true
+			fi
+		fi
+	fi
 done
 
 if $reboot_required; then
-    log "At least one driver has been installed or updated. You should reboot your system now!"
+	log "At least one driver has been installed or updated. You should reboot your system now!"
 else
-    log "No driver installations or updates were necessary. No reboot required."
+	log "No driver installations or updates were necessary. No reboot required."
 fi
