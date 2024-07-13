@@ -18,7 +18,7 @@ install_driver() {
     log "Installing driver for $module"
     cd "$path"
     if ! $dry_run; then
-        sudo ./install-driver.sh NoPrompt || { log "Error: Failed to install driver for $module."; return 1; }
+        sudo ./install-driver.sh NoPrompt >/dev/null || { log "Error: Failed to install driver for $module."; return 1; }
         sed -r "s/^(options).*/${module_opts[$module]}/1" "${modprobe_path}/${module}.conf" | sudo tee "${modprobe_path}/${module}.conf" > /dev/null ||  { log "Error: Failed to update modprobe configuration for $module."; return 1; }
     fi
     log "$module driver installed successfully!"
@@ -34,6 +34,8 @@ check_for_update() {
         return 1
     else
         log "$2 needs updating"
+	git pull
+	log "$2 updated to latest trunk"
         return 0
     fi
 }
