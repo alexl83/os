@@ -34,8 +34,8 @@ check_for_update() {
         return 1
     else
         log "$2 needs updating"
-	git pull
-	log "$2 updated to latest trunk"
+        git pull
+        log "$2 updated to latest trunk"
         return 0
     fi
 }
