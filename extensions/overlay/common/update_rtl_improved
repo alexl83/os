@@ -34,9 +34,10 @@ check_for_update() {
 		return 1
 	else
 		log "$2 needs updating"
-        if ! $dry_run; then
-            git pull || { log "Error: Failed to pull latest git revision for $2" }
-            log "$2 updated to latest trunk"
+		if ! $dry_run; then
+			git pull || { log "Error: Failed to pull latest git revision for $2" }
+		fi
+			log "$2 updated to latest trunk"
 		return 0
 	fi
 }
