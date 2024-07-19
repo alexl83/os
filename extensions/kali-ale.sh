@@ -386,11 +386,15 @@ function pre_customize_image__262_setup_gpsd() {
 }
 
 function pre_customize_image__263_freeze_bsp() {
-	if [[ "${BSPFREEZE:-"no"}" != "yes" && -x "${SDCARD}"/usr/sbin/armbian-config ]]; then
-		display_alert "Freezing bsp packages" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-		chroot_sdcard /usr/sbin/armbian-config main=System selection=Freeze ">" /dev/null "2>&1"
-	else
-		display_alert "Cannot freeze bsp packages: please check your configuration" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-	fi
-
+	if [[ "${BSPFREEZE:-"no"}" != "yes" ]]; then
+		local pkg_list=(linux-u-boot-${BOARD}-${BRANCH} linux-image-${BRANCH}-${LINUXFAMILY} linux-dtb-${BRANCH}-${LINUXFAMILY} linux-headers-${BRANCH}-${LINUXFAMILY})
+		for bsp_package in "{pkg_list[@]}"; do
+			local DPKG_Status="$(dpkg -s "$1" 2>/dev/null | awk -F": " '/^Status/ {print $2}')"
+			if [[ "X${DPKG_Status}" = "X" || "${DPKG_Status}" = *deinstall* ]]; then
+				display_alert "nothing to freeze" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "debug"
+			else
+				display_alert "Freezing bsp packages" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+				chroot_sdcard apt-mark hold "${bsp_package}"
+			fi
+		done
 }
