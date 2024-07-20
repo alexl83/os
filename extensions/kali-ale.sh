@@ -397,4 +397,5 @@ function pre_customize_image__263_freeze_bsp() {
 				chroot_sdcard apt-mark hold "${bsp_package}"
 			fi
 		done
+	fi
 }
