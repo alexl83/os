@@ -394,7 +394,7 @@ function pre_customize_image__263_freeze_bsp() {
 #				display_alert "nothing to freeze" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "debug"
 #			else
 				display_alert "Freezing bsp package ${bsp_package}" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-				chroot_sdcard apt-mark hold "${bsp_package}"
+				chroot_sdcard apt-mark hold "${bsp_package}" ">" /dev/null
 #			fi
 		done
 	fi
