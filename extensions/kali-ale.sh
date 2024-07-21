@@ -17,11 +17,7 @@ function post_family_tweaks__orangepi5-plus_udev_network_interfaces() {
 function post_aggregate_packages__250_1_tweak_package_list() {
 	rem_pkgs=(armbian-plymouth-theme armbian-zsh)
 	for package in "${rem_pkgs[@]}"; do
-		for element in "${!AGGREGATED_PACKAGES_IMAGE[@]}"; do
-			if [[ "${AGGREGATED_PACKAGES_IMAGE[element]}" == "${package}" ]]; then
-				unset 'AGGREGATED_PACKAGES_IMAGE[element]'
-			fi
-		done
+		PACKAGE_LIST_RM+=("${package}")
 	done
 }
 
