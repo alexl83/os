@@ -14,6 +14,17 @@ function post_family_tweaks__orangepi5-plus_udev_network_interfaces() {
 	fi
 }
 
+function post_aggregate_packages__tweak_package_list() {
+	rem_pkgs=(armbian-plymouth-theme armbian-zsh)
+	for package in "${rem_pkgs[@]}"; do
+		for element in "${!AGGREGATED_PACKAGES_IMAGE[@]}"; do
+			if [[ "${AGGREGATED_PACKAGES_IMAGE[element]}" == "${package}" ]]; then
+				unset 'AGGREGATED_PACKAGES_IMAGE[element]'
+			fi
+		done
+	done
+}
+
 function pre_customize_image__250_1_install_kali_repositories() {
 
 	display_alert "Adding gpg-key for Kali repository" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
