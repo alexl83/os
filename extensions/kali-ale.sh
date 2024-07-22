@@ -2,7 +2,7 @@ function extension_prepare_config__docker() {
 	EXTRA_IMAGE_SUFFIXES+=("-kali_ale") # global array
 	display_alert "Target image will have Kali repository preinstalled" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	add_pkgs=(command-not-found)
-	add_packages_to_image "${add_pkgs[*]}"
+	add_packages_to_rootfs "${add_pkgs[*]}"
 }
 
 function post_family_tweaks__orangepi5-plus_udev_network_interfaces() {
