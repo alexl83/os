@@ -5,7 +5,7 @@
 - Support for OragePiZero3, OrangePiZero2w (AllWinner BRANCH=current,edge)
 - Support for OrangePi5-Plus (rk3588 BRANCH=vendor,current,edge)
 - Support for nanopi-r5c (rockchip64 BRANCH=current,edge)
-- Kali injection patches from official [GitLab](https://gitlab.com/kalilinux/packages/linux/-/blob/kali/master/debian/patches/series?ref_type=heads) (reworked to apply to kernel 6.6/6.7/6.8)
+- Kali injection patches from official [GitLab](https://gitlab.com/kalilinux/packages/linux/-/blob/kali/master/debian/patches/series?ref_type=heads) (reworked to apply to kernel 6.6/6.7/6.8/6.10)
 - HID input disabled
 - Armbian Extension to add Kali repos and pin Kali packages to Armbian
 - Customizations providing a bunch of stuff (udev-based auto monitor mode creation and mac randomization | disabling of serial UARTS | disabling of video output | ...)
