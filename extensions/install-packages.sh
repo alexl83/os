@@ -4,10 +4,10 @@ function pre_customize_image__251_install_custom_packages() {
 	rem_pkgs=(ifupdown keyboard-configuration exim4-daemon-light haveged unattended-upgrades)
 	rtc_board=(orangepi5-plus nanopi-r5c)
 	ir_board=(orangepi5-plus orangepizero3 orangepizero2w)
-		if [[ " ${rtc_board[*]} " =~ " ${BOARD%-*} " ]]; then
+		if [[ " ${rtc_board[*]} " =~ " ${BOARD%-*} " ]] || [[ " ${rtc_board[*]} " =~ " ${BOARD} " ]]; then
 			rem_pkgs+=(fake-hwclock)
 		fi
-		if [[ " ${ir_board[*]} " =~ " ${BOARD%-*} " ]]; then
+		if [[ " ${ir_board[*]} " =~ " ${BOARD%-*} " ]] || [[ " ${ir_board[*]} " =~ " ${BOARD} " ]]; then
 			pkgs+=(lirc)
 		fi
 	display_alert "Updating package list" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
