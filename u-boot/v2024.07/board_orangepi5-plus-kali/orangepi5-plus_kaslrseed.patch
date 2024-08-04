@@ -1,5 +1,5 @@
---- orangepi-5-plus-rk3588_defconfig	2024-08-04 13:44:14
-+++ orangepi-5-plus-rk3588_defconfig_patched	2024-08-04 13:45:55
+--- a/configs/orangepi-5-plus-rk3588_defconfig	2024-08-04 13:44:14
++++ b/configs/orangepi-5-plus-rk3588_defconfig	2024-08-04 13:45:55
 @@ -38,6 +38,7 @@ CONFIG_CMD_USB=y
  CONFIG_CMD_MMC=y
  CONFIG_CMD_PCI=y
