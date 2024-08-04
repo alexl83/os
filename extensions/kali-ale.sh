@@ -391,7 +391,12 @@ function pre_customize_image__263_freeze_bsp() {
 	if [[ "${BSPFREEZE:-"no"}" != "yes" ]]; then
 		bsp_list=("linux-u-boot-${BOARD}-${BRANCH}" "linux-image-${BRANCH}-${LINUXFAMILY}" "linux-dtb-${BRANCH}-${LINUXFAMILY}" "linux-headers-${BRANCH}-${LINUXFAMILY}" "armbian-firmware*")
 		if [ "${BRANCH}" == "current" ]; then
-			bsp_list+=("armbian-bsp-cli-${BOARD}-${BRANCH}")
+			local DPKG_Status="$(chroot_sdcard dpkg -s "armbian-bsp-cli-${BOARD}" 2">"/dev/null "|" awk -F": " '/^Status/ {print $2}')"
+			if [[ "X${DPKG_Status}" = "X" || "${DPKG_Status}" = *deinstall* ]]; then
+				return 1
+			else
+				bsp_list+=("armbian-bsp-cli-${BOARD}")
+			fi
 		fi
 		for bsp_package in "${bsp_list[@]}"; do
 				display_alert "Freezing bsp package ${bsp_package}" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
