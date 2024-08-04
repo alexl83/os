@@ -391,7 +391,7 @@ function pre_customize_image__263_freeze_bsp() {
 	if [[ "${BSPFREEZE:-"no"}" != "yes" ]]; then
 		bsp_list=("linux-u-boot-${BOARD}-${BRANCH}" "linux-image-${BRANCH}-${LINUXFAMILY}" "linux-dtb-${BRANCH}-${LINUXFAMILY}" "linux-headers-${BRANCH}-${LINUXFAMILY}" "armbian-firmware*")
 		if [ "${BRANCH}" == "current" ]; then
-			bsp_list+=("armbian-bsp-cli-${BOARD}")
+			bsp_list+=("armbian-bsp-cli-${BOARD}-${BRANCH}")
 		fi
 		for bsp_package in "${bsp_list[@]}"; do
 				display_alert "Freezing bsp package ${bsp_package}" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
