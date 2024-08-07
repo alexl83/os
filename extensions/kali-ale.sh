@@ -212,7 +212,7 @@ function pre_customize_image__252_manage_config_files() {
 			if [[ "${countryCodes[*]}" =~ "${REGDOM}" ]]; then
 				display_alert "Setting wireless regdomain \"${REGDOM}\"" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 				run_host_command_logged cat <<- EOF > "${SDCARD}"/etc/modprobe.d/cfg80211.conf
-					options cfg80211 ieee80211_regdom="${country}"
+					options cfg80211 ieee80211_regdom="${REGDOM}"
 					EOF
 			else
 				display_alert "Error: invalid COUNTRY CODE ${REGDOM} - not configuring" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
