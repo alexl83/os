@@ -39,12 +39,18 @@
 		};
 
 	fragment@5 {
-		target-path ="/display-subsystem";
-		_overlay__ {
+		target-path = "/display-subsystem";
+		__overlay__ {
 		status = "disabled";
 			};
 		};
 
+	fragment@6 {
+		target-path = "/i2c@fec90000";
+		__overlay__ {
+		status = "disabled";
+			};
+		};
 	};
 
 
