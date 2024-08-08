@@ -71,6 +71,14 @@ function pre_customize_image__252_manage_config_files() {
 		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/"${sourcefile}" "${SDCARD}"/etc/modprobe.d/"${destfile}"
 	fi
 
+	if [ -e "${EXTENSION_DIR}"/overlay/common/blacklist-sound-"${BOARD}".conf ]; then
+		file="${EXTENSION_DIR}"/overlay/common/blacklist-sound-"${BOARD}".conf
+		sourcefile=$(basename "${file}")
+		destfile=$(basename "${file}" | sed "s/-"${BOARD}"//g")
+		display_alert "Disabling audio support" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/"${sourcefile}" "${SDCARD}"/etc/modprobe.d/"${destfile}"
+	fi
+
 	if [ -e "${EXTENSION_DIR}"/overlay/common/blacklist-misc-"${BOARD}".conf ]; then
 		file="${EXTENSION_DIR}"/overlay/common/blacklist-misc-"${BOARD}".conf
 		sourcefile=$(basename "${file}")
