@@ -253,10 +253,10 @@ function pre_customize_image__254_0_enable_disable_services() {
 }
 
 function pre_customize_image__254_1_fix_freeze_defreeze_legacy_armbianconfig() {
-	if [ -f "${SDCARD}/usr/lib/armbian-config/jobs.sh ]; then
+	if [ -f "${SDCARD}"/usr/lib/armbian-config/jobs.sh ]; then
 		tgtfile="${SDCARD}/usr/lib/armbian-config/jobs.sh"
 		display_alert "Fixing legacy armbian-config Freeze/Defreeze kernel packages functionality" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-		run_host_command_logged sed -i 's/check_if_installed armbian-bsp-cli-${BOARD} && PACKAGE_LIST+=" armbian-bsp-cli-${BOARD}"/check_if_installed armbian-bsp-cli-${BOARD}-${BRANCH} && PACKAGE_LIST+=" armbian-bsp-cli-${BOARD}-${BRANCH}"/g' "${tgtfile}"
+		run_host_command_logged sed -i 's/check_if_installed armbian-bsp-cli-${BOARD} && PACKAGE_LIST+=" armbian-bsp-cli-${BOARD}"/check_if_installed armbian-bsp-cli-${BOARD}-${BRANCH} && PACKAGE_LIST+=" armbian-bsp-cli-${BOARD}-${BRANCH}"/g' ${tgtfile}
 	fi
 }
 
