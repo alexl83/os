@@ -1,0 +1,33 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: John Doe <john.doe@somewhere.on.planet>
+Date: Sun, 11 Aug 2024 02:00:03 +0000
+Subject: Patching kernel file drivers/net/wireless/mediatek/mt76/mac80211.c:
+ MT76: disable advertising NL80211_FEATURE_ACTIVE_MONITOR
+
+Signed-off-by: John Doe <john.doe@somewhere.on.planet>
+---
+ drivers/net/wireless/mediatek/mt76/mac80211.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/wireless/mediatek/mt76/mac80211.c b/drivers/net/wireless/mediatek/mt76/mac80211.c
+index e8ba2e4e8..beb19c294 100644
+--- a/drivers/net/wireless/mediatek/mt76/mac80211.c
++++ b/drivers/net/wireless/mediatek/mt76/mac80211.c
+@@ -430,12 +430,12 @@ mt76_phy_init(struct mt76_phy *phy, struct ieee80211_hw *hw)
+ 	spin_lock_init(&phy->tx_lock);
+ 
+ 	SET_IEEE80211_DEV(hw, dev->dev);
+ 	SET_IEEE80211_PERM_ADDR(hw, phy->macaddr);
+ 
+-	wiphy->features |= NL80211_FEATURE_ACTIVE_MONITOR |
+-			   NL80211_FEATURE_AP_MODE_CHAN_WIDTH_CHANGE;
++	wiphy->features &= ~NL80211_FEATURE_ACTIVE_MONITOR;
++	wiphy->features |= NL80211_FEATURE_AP_MODE_CHAN_WIDTH_CHANGE;
+ 	wiphy->flags |= WIPHY_FLAG_HAS_CHANNEL_SWITCH |
+ 			WIPHY_FLAG_SUPPORTS_TDLS |
+ 			WIPHY_FLAG_AP_UAPSD;
+ 
+ 	wiphy_ext_feature_set(wiphy, NL80211_EXT_FEATURE_CQM_RSSI_LIST);
+-- 
+Created with Armbian build tools https://github.com/armbian/build
+
