@@ -198,6 +198,10 @@ function pre_customize_image__252_manage_config_files() {
 		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/update_rtl_options "${SDCARD}"/etc/default
 	fi
 
+	display_alert "Installing AngryOxide update script" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/instangryox "${SDCARD}"/usr/local/bin
+	run_host_command_logged chmod +x "${SDCARD}"/usr/local/bin/instangryox
+
 	display_alert "Disabling pam_systemd" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	chroot_sdcard pam-auth-update --disable systemd
 

@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+if [ ! -d /tmp/tmpag ]; then
+	mkdir -p /tmp/tmpao
+fi
+
+cd /tmp/tmpao
+wget -q https://github.com/Ragnt/AngryOxide/releases/latest/download/angryoxide-linux-aarch64-musl.tar.gz
+tar xfz angryoxide-linux-aarch64-musl.tar.gz
+chmod +x ./install.sh
+echo -e "\nDownloading AngryOxide latest release\n"
+sudo ./install.sh install
+cd /tmp
+rm -rf /tmp/tmpao
+echo -e "\n$(angryoxide -V) installed succesfully on $(hostname)!"
