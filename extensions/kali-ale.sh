@@ -409,7 +409,14 @@ function pre_customize_image__262_setup_gpsd() {
 
 function pre_customize_image__263_freeze_bsp() {
 	if [[ "${BSPFREEZE:-"no"}" != "yes" ]]; then
-		bsp_list=("linux-u-boot-${BOARD}-${BRANCH}" "linux-image-${BRANCH}-${LINUXFAMILY}" "linux-dtb-${BRANCH}-${LINUXFAMILY}" "linux-headers-${BRANCH}-${LINUXFAMILY}" "armbian-bsp-cli-${BOARD}-${BRANCH}" "armbian-firmware*")
+		bsp_list=("linux-u-boot-${BOARD}-${BRANCH}" "linux-image-${BRANCH}-${LINUXFAMILY}" "linux-dtb-${BRANCH}-${LINUXFAMILY}" "linux-headers-${BRANCH}-${LINUXFAMILY}" "armbian-bsp-cli-${BOARD}-${BRANCH}")
+		
+		if [[ "${INSTALL_ARMBIAN_FIRMWARE:-"yes"}" == "yes" ]] && [[ "${BOARD_FIRMWARE_INSTALL:-""}" != "-full" ]]; then
+			bsp_list+=("armbian-firmware")
+		elif [[ "${INSTALL_ARMBIAN_FIRMWARE:-"yes"}" == "yes" ]] && [[ "${BOARD_FIRMWARE_INSTALL:-""}" == "-full" ]]; then
+			bsp_list+=("armbian-firmware-full")
+		fi
+
 		for bsp_package in "${bsp_list[@]}"; do
 				display_alert "Freezing bsp package ${bsp_package}" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 				chroot_sdcard apt-mark hold "${bsp_package}" ">" /dev/null
