@@ -320,8 +320,8 @@ function pre_customize_image__257_0_install_angryoxide()
 function pre_customize_image__257_1_install_airgeddon()
  {
 	display_alert "Installing latest airgeddon-dev from gh:v1s1t0r/airgeddon" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-	run_host_command_logged mkdir -p "${SDCARD}"/usr/local/share/airgeddon
-	chroot_sdcard cd "${SDCARD}"/usr/local/share
+	run_host_command_logged mkdir -p "${SDCARD}"/usr/local/share
+	chroot_sdcard cd /usr/local/share
 	chroot_sdcard wget -q https://github.com/v1s1t0r1sh3r3/airgeddon/archive/refs/heads/dev.zip
 	chroot_sdcard unzip -qq dev.zip
 	chroot_sdcard mv airgeddon-dev airgeddon
