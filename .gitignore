@@ -29,3 +29,4 @@ Temporary Items
 wifi-whitelist
 rfcomm.default_custom
 custom-*.nmconnection
+*_custom*
