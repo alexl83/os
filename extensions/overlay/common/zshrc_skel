@@ -283,6 +283,7 @@ alias kismet='if [ ! -d ${HOME}/kismet ]; then mkdir ${HOME}/kismet; fi && cd ${
 alias update='sudo apt update && sudo apt full-upgrade -y && sudo apt full-upgrade -y -t kali-rolling && sudo apt autoclean -y && sudo apt autoremove --purge -y && sudo apt clean && update_rtl_improved && sudo fstrim -av'
 alias ao='if [ ! -d ${HOME}/AO ]; then mkdir ${HOME}/AO; fi && cd ${HOME}/AO && sudo angryoxide -b2,5,6 --noactive --disablemouse --whitelist /usr/local/etc/wifi-whitelist --targetlist /usr/local/etc/wifi-targets'
 alias dmesg='sudo dmesg --color=always'
+alias netstat='sudo netstat -anp | grep -e tcp -e udp'
 alias less='less -r'
 alias pwcat='pwgen -scny 25 1'
 alias shnano='nano ~/.zshrc'
