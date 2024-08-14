@@ -11,6 +11,7 @@
 #
 # By default this script does nothing.
 
+echo -e "\033[9;0]" > /dev/tty0
 ethtool -s eth0 wol g
 
 exit 0

@@ -1,0 +1,5 @@
+SUBSYSTEM=="net", ACTION!="remove", DRIVERS=="unisoc_wifi", ATTR{type}=="1", NAME="sta0"
+SUBSYSTEM=="net", ACTION!="remove", ENV{DEVTYPE}!="wlan", ENV{DEVTYPE}!="bluetooth", ATTR{type}=="1", RUN+="/usr/local/sbin/changemac.sh $name" 
+SUBSYSTEM=="net", ACTION!="remove", NAME!="sta0", ATTR{type}=="803", ENV{NM_UNMANAGED}="1", RUN+="/usr/local/sbin/changemac.sh $name"
+SUBSYSTEM=="net", ACTION!="remove", ENV{DEVTYPE}=="wlan", NAME!="sta0", ATTR{type}!="803", ENV{NM_UNMANAGED}="1", RUN+="/usr/local/sbin/changemac.sh $name", RUN+="/usr/local/sbin/createmon.sh $name %n"
+
