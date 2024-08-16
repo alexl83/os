@@ -44,7 +44,7 @@ handle_wifi() {
   # Check for the corresponding monitor interface
   local mon_interface="mon${phy_num}"
   if ! iw dev | grep -q "^$mon_interface"; then
-    iw "$interface" interface add "$mon_interface" type monitor
+    iw "$interface" interface add "$mon_interface" type monitor flags none
   fi
   
   # Synchronize the MAC address of the monitor interface with the wlan interface
