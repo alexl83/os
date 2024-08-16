@@ -5,8 +5,8 @@ if [ ! -d /tmp/tmpag ]; then
 fi
 
 cd /tmp/tmpao
-wget -q https://github.com/Ragnt/AngryOxide/releases/latest/download/angryoxide-linux-aarch64-musl.tar.gz
-tar xfz angryoxide-linux-aarch64-musl.tar.gz
+wget -q https://github.com/Ragnt/AngryOxide/releases/latest/download/angryoxide-linux-aarch64-gnu.tar.gz
+tar xfz angryoxide-linux-aarch64-gnu.tar.gz
 chmod +x ./install.sh
 echo -e "\nDownloading AngryOxide latest release\n"
 sudo ./install.sh install
