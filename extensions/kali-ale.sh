@@ -307,7 +307,7 @@ function pre_customize_image__257_0_install_angryoxide()
 {
 	if [ -x "${SDCARD}"/usr/local/bin/instangryox ]; then
 		display_alert "Installing latest AngryOxide build from gh:Ragnt/AngryOxide" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-		chroot_sdcard /usr/local/bin(instangryox 
+		chroot_sdcard /usr/local/bin/instangryox 
 		display_alert "Done installing AngryOxide" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	fi
 }
