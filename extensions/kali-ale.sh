@@ -306,12 +306,13 @@ function pre_customize_image__256_setup_stealth_networking()
 function pre_customize_image__257_0_install_angryoxide()
 {
 	display_alert "Installing latest AngryOxide build from gh:Ragnt/AngryOxide" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-	run_host_command_logged mkdir "${SDCARD}"/tmpinst
-	chroot_sdcard wget -q https://github.com/Ragnt/AngryOxide/releases/latest/download/angryoxide-linux-aarch64-gnu.tar.gz -O /tmpinst/angryoxide-linux-aarch64-gnu.tar.gz
-	chroot_sdcard tar xfz /tmpinst/angryoxide-linux-aarch64-gnu.tar.gz -C /tmpinst
-	chroot_sdcard chmod +x /tmpinst/install.sh
-	chroot_sdcard /tmpinst/install.sh install
-	run_host_command_logged rm -rf "${SDCARD}"/tmpinst
+	run_host_command_logged mkdir "${SDCARD}"/tmp/AO
+	chroot_sdcard wget -q https://github.com/Ragnt/AngryOxide/releases/latest/download/angryoxide-linux-aarch64-gnu.tar.gz -O /tmp/AO/angryoxide-linux-aarch64-gnu.tar.gz
+	chroot_sdcard tar xfz /tmp/AO/angryoxide-linux-aarch64-gnu.tar.gz -C /tmp/AO
+	chroot_sdcard chmod +x /tmp/AO/install.sh
+	chroot_sdcard cd /tmp/AO
+	chroot_sdcard ./install.sh install
+	run_host_command_logged rm -rf "${SDCARD}"/tmp/AO
 	display_alert "Done installing AngryOxide" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 }
 
