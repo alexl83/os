@@ -304,7 +304,7 @@ function pre_customize_image__256_setup_stealth_networking()
 }
 
 function pre_customize_image__257_0_install_angryoxide()
-{
+ {
 	display_alert "Installing latest AngryOxide build from gh:Ragnt/AngryOxide" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged mkdir "${SDCARD}"/tmpinst
 	chroot_sdcard cd /tmpinst
@@ -318,7 +318,7 @@ function pre_customize_image__257_0_install_angryoxide()
 }
 
 function pre_customize_image__257_1_install_airgeddon()
-{
+ {
 	display_alert "Installing latest airgeddon-dev from gh:v1s1t0r/airgeddon" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged mkdir -p "${SDCARD}"/usr/local/share
 	chroot_sdcard cd /usr/local/share
