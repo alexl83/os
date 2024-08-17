@@ -308,8 +308,8 @@ function pre_customize_image__257_0_install_angryoxide()
 	display_alert "Installing latest AngryOxide build from gh:Ragnt/AngryOxide" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged mkdir "${SDCARD}"/tmpinst
 	chroot_sdcard cd /tmpinst
-	chroot_sdcard wget -q https://github.com/Ragnt/AngryOxide/releases/latest/download/angryoxide-linux-aarch64-musl.tar.gz
-	chroot_sdcard tar xfz angryoxide-linux-aarch64-musl.tar.gz
+	chroot_sdcard wget -q https://github.com/Ragnt/AngryOxide/releases/latest/download/angryoxide-linux-aarch64-gnu.tar.gz
+	chroot_sdcard tar xfz angryoxide-linux-aarch64-gnu.tar.gz
 	chroot_sdcard chmod +x ./install.sh
 	chroot_sdcard ./install.sh install
 	chroot_sdcard cd /
