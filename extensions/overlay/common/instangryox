@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [ ! -d /tmp/tmpag ]; then
+if [ ! -d /tmp/tmpao ]; then
 	mkdir -p /tmp/tmpao
 fi
 
