@@ -3,11 +3,50 @@
 # Enable strict mode:
 set -euo pipefail
 
-# Function to randomize MAC address using macchanger
+OUI_LIST_FILE="/var/lib/ieee-data/oui.txt"
+
+# Function to generate a random hex value for the device-specific part of the MAC address
+generate_random_hex() {
+    local count=$1
+    local hex_value=$(openssl rand -hex "$count")
+    echo $hex_value
+}
+
+# Function to generate a valid random MAC address using an OUI from the local IEEE list
+generate_mac_address() {
+    # Check if the OUI list file exists and has the expected content
+    if [ ! -f "$OUI_LIST_FILE" ] || [ ! -s "$OUI_LIST_FILE" ] || ! grep -q "(base 16)" "$OUI_LIST_FILE"; then
+        echo "OUI list file does not exist or is not in the expected format."
+        exit 1
+    fi
+
+    # Extract OUIs from the list (assuming they are in the format 'XX-XX-XX   (hex)')
+    local ouis=($(grep "(base 16)" "$OUI_LIST_FILE" | awk '{print tolower($1)}'))
+    
+    # Select a random OUI from the list
+    local random_index=$((RANDOM % ${#ouis[@]}))
+    local oui=${ouis[$random_index]}
+    # Format the OUI with colons after every two characters
+    oui="${oui:0:2}:${oui:2:2}:${oui:4:2}"
+
+    # Generate the remaining three octets for the device portion of the MAC address
+    local device_id=$(generate_random_hex 3)
+    # Format the device-specific part of the MAC address with colons
+    local mac_device_part="${device_id:0:2}:${device_id:2:2}:${device_id:4:2}"
+
+    # Combine the OUI and the device-specific part to form a MAC address
+    local mac_address="$oui:$mac_device_part"
+    echo $mac_address
+}
+
+
+# Function to randomize MAC address using a sane 'rnetlink' way
 randomize_mac() {
+  local mac=$(generate_mac_address)
   local interface=$1
   ip link set dev "$interface" down
-  macchanger -r "$interface"
+  ip link set dev "$interface" address $mac
+
 }
 
 # Function to check the driver and handle the interface accordingly
@@ -43,7 +82,7 @@ handle_wifi() {
   
   # Check for the corresponding monitor interface
   local mon_interface="mon${phy_num}"
-  if ! iw dev | grep -q "^$mon_interface"; then
+  if ! iw dev | grep -q "$mon_interface"; then
     iw "$interface" interface add "$mon_interface" type monitor
   fi
   
