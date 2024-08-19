@@ -4,7 +4,7 @@ function pre_customize_image__251_install_custom_packages() {
 	rem_pkgs=(ifupdown keyboard-configuration exim4-daemon-light haveged unattended-upgrades)
 	rtc_board=(orangepi5-plus nanopi-r5c rock-5b)
 	ir_board=(orangepi5-plus orangepizero3 orangepizero2w)
-	spi_nor_board=(orangepizero2w orangepi5-plus rock-5b)
+	spi_nor_board=(orangepizero2w orangepizero3 orangepi5-plus rock-5b)
 		if [[ " ${rtc_board[*]} " =~ " ${BOARD%-*} " ]] || [[ " ${rtc_board[*]} " =~ " ${BOARD} " ]]; then
 			rem_pkgs+=(fake-hwclock)
 		fi
