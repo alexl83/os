@@ -1,6 +1,6 @@
 function pre_customize_image__251_install_custom_packages() {
 
-	pkgs=(byobu git dkms gpsd zsh-autosuggestions avahi-daemon vnstat gpsd-tools libnss-mdns pwgen arping zerotier-one rfkill bluetooth bluez bluez-tools libpam-google-authenticator dnsmasq-base)
+	pkgs=(byobu git dkms gpsd zsh-autosuggestions avahi-daemon ieee-data vnstat gpsd-tools libnss-mdns pwgen arping zerotier-one rfkill bluetooth bluez bluez-tools libpam-google-authenticator dnsmasq-base)
 	rem_pkgs=(ifupdown keyboard-configuration exim4-daemon-light haveged unattended-upgrades)
 	rtc_board=(orangepi5-plus nanopi-r5c rock-5b)
 	ir_board=(orangepi5-plus orangepizero3 orangepizero2w)
