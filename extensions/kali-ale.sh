@@ -211,7 +211,7 @@ function pre_customize_image__252_manage_config_files() {
 	display_alert "Trimming down initramfs size" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged sed -i 's/^MODULES\=.*/MODULES\=dep/g' "${SDCARD}"/etc/initramfs-tools/initramfs.conf
 	
-	if [[ "${BOARD}" == "orangepi5-plus"* ]]; then
+	if [[ "${BOARD}" == "orangepi5-plus"* || "${BOARD}" == "rock-5b" ]]; then
 		modules=(dm-mod rk8xx-core rk8xx-spi phy-rockchip-snps-pcie3 rk808-regulator)
 		for module in "${modules[@]}"; do
 			display_alert "Adding module ${module} to trimmed initramfs" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
