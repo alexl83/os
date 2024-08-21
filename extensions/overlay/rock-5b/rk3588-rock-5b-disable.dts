@@ -51,4 +51,11 @@
                 status = "disabled";
                         };
                 };
+
+        fragment@7 {
+                target-path = "/serial@feb90000";
+                __overlay__ {
+                status = "disabled";
+                        };
+                };
         };
