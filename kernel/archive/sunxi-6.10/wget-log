@@ -1,11 +1,0 @@
---2024-08-18 15:54:34--  https://gitlab.com/kalilinux/packages/linux/-/raw/kali/6.10.3-1kali1/debian/patches/features/all/kali-wifi-injection.patch?ref_type=tags
-Risoluzione di gitlab.com (gitlab.com)... 172.65.251.78, 2606:4700:90:0:f22e:fbec:5bed:a9b9
-Connessione a gitlab.com (gitlab.com)|172.65.251.78|:443... connesso.
-Richiesta HTTP inviata, in attesa di risposta... 200 OK
-Lunghezza: 4300 (4,2K) [text/plain]
-Salvataggio in: ‘kali-wifi-injection.patch?ref_type=tags’
-
-kali-wifi-injection.patch?ref_type=tags           0%[                                                                                                       ]       0  --.-KB/s               kali-wifi-injection.patch?ref_type=tags         100%[======================================================================================================>]   4,20K  --.-KB/s    in 0,001s  
-
-2024-08-18 15:54:35 (4,29 MB/s) - ‘kali-wifi-injection.patch?ref_type=tags’ salvato [4300/4300]
-
