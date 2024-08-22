@@ -5,13 +5,26 @@ function extension_prepare_config__docker() {
 	add_packages_to_rootfs "${add_pkgs[*]}"
 }
 
-function post_family_tweaks__orangepi5-plus_udev_network_interfaces() {
-	if [[ "${BOARD}" == "orangepi5-plus"* ]]; then
-		display_alert "${BOARD}" "Renaming interfaces WAN LAN" "info"
+function post_family_tweaks__board_udev_network_interfaces() {
+	if [[ "${BOARD}" == "orangepi5-plus" ]]; then
+		display_alert "${BOARD}" "Renaming interfaces WAN LAN WLAN" "info"
 		mkdir -p $SDCARD/etc/udev/rules.d/
 		cat <<- EOF > "${SDCARD}/etc/udev/rules.d/70-persistent-net.rules"
-			SUBSYSTEM=="net", ACTION=="add", KERNELS=="0004:41:00.0", NAME:="lan"
-			SUBSYSTEM=="net", ACTION=="add", KERNELS=="0003:31:00.0", NAME:="wan"
+			SUBSYSTEM=="net", ACTION=="!remove", KERNELS=="0002:21:00.0", NAME:="wlan0"
+			SUBSYSTEM=="net", ACTION=="!remove", KERNELS=="0004:41:00.0", NAME:="lan"
+			SUBSYSTEM=="net", ACTION=="!remove", KERNELS=="0003:31:00.0", NAME:="wan"
+		EOF
+	fi
+
+	if [[ "${BOARD}" == "rock-5b" ]]; then
+		cat <<- EOF > "${SDCARD}/etc/udev/rules.d/70-persistent-net.rules"
+			SUBSYSTEM=="net", ACTION=="!remove", KERNELS=="0002:21:00.0", NAME:="wlan0"
+		EOF
+	fi
+
+	if [[ "${BOARD}" == "nanopi-r5c" ]]; then
+		cat <<- EOF > "${SDCARD}/etc/udev/rules.d/70-persistent-net.rules"
+			SUBSYSTEM=="net", ACTION=="!remove", KERNELS=="0000:01:00.0", NAME:="wlan0"
 		EOF
 	fi
 }
@@ -289,7 +302,7 @@ function pre_customize_image__255_update_armbian_env() {
 function pre_customize_image__256_setup_stealth_networking()
 {
 	display_alert "Setting up udev-based mac randomization and automatic monitor interfaces creations" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-	if [ "${BOARD}" != "nanopi-r5c" ] && [[ "${BOARD}" != "orangepi5-plus"* ]]; then
+	if [[ "${BOARD}" != "nanopi-r5c" ]] && [[ "${BOARD}" != "orangepi5-plus" ]] && [[ "${BOARD}" != "rock-5b" ]]; then
 		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/udev-v10/70-persistent-net.rules "${SDCARD}"/etc/udev/rules.d
 	else
 		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/udev-v10/70-persistent-net.rules "${SDCARD}"/etc/udev/rules.d/71-persistent-net.rules
