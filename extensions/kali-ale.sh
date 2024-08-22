@@ -10,21 +10,21 @@ function post_family_tweaks__board_udev_network_interfaces() {
 		display_alert "${BOARD}" "Renaming interfaces WAN LAN WLAN" "info"
 		mkdir -p $SDCARD/etc/udev/rules.d/
 		cat <<- EOF > "${SDCARD}/etc/udev/rules.d/70-persistent-net.rules"
-			SUBSYSTEM=="net", ACTION=="!remove", KERNELS=="0002:21:00.0", NAME:="wlan0"
-			SUBSYSTEM=="net", ACTION=="!remove", KERNELS=="0004:41:00.0", NAME:="lan"
-			SUBSYSTEM=="net", ACTION=="!remove", KERNELS=="0003:31:00.0", NAME:="wan"
+			SUBSYSTEM=="net", ACTION!="remove", KERNELS=="0002:21:00.0", NAME:="wlan0"
+			SUBSYSTEM=="net", ACTION!="remove", KERNELS=="0004:41:00.0", NAME:="lan"
+			SUBSYSTEM=="net", ACTION!="remove", KERNELS=="0003:31:00.0", NAME:="wan"
 		EOF
 	fi
 
 	if [[ "${BOARD}" == "rock-5b" ]]; then
 		cat <<- EOF > "${SDCARD}/etc/udev/rules.d/70-persistent-net.rules"
-			SUBSYSTEM=="net", ACTION=="!remove", KERNELS=="0002:21:00.0", NAME:="wlan0"
+			SUBSYSTEM=="net", ACTION!="remove", KERNELS=="0002:21:00.0", NAME:="wlan0"
 		EOF
 	fi
 
 	if [[ "${BOARD}" == "nanopi-r5c" ]]; then
 		cat <<- EOF > "${SDCARD}/etc/udev/rules.d/70-persistent-net.rules"
-			SUBSYSTEM=="net", ACTION=="!remove", KERNELS=="0000:01:00.0", NAME:="wlan0"
+			SUBSYSTEM=="net", ACTION!="remove", KERNELS=="0000:01:00.0", NAME:="wlan0"
 		EOF
 	fi
 }
