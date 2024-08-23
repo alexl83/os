@@ -10,21 +10,28 @@ function post_family_tweaks__board_udev_network_interfaces() {
 		display_alert "${BOARD}" "Renaming interfaces WAN LAN WLAN" "info"
 		mkdir -p $SDCARD/etc/udev/rules.d/
 		cat <<- EOF > "${SDCARD}/etc/udev/rules.d/70-persistent-net.rules"
-			SUBSYSTEM=="net", ACTION!="remove", KERNELS=="0002:21:00.0", NAME:="wlan0"
-			SUBSYSTEM=="net", ACTION!="remove", KERNELS=="0004:41:00.0", NAME:="lan"
-			SUBSYSTEM=="net", ACTION!="remove", KERNELS=="0003:31:00.0", NAME:="wan"
+			SUBSYSTEM=="net", ACTION!="remove", KERNELS=="0002:21:00.0", NAME="wlan0"
+			SUBSYSTEM=="net", ACTION!="remove", KERNELS=="0004:41:00.0", NAME="lan"
+			SUBSYSTEM=="net", ACTION!="remove", KERNELS=="0003:31:00.0", NAME="wan"
 		EOF
 	fi
 
 	if [[ "${BOARD}" == "rock-5b" ]]; then
+		display_alert "${BOARD}" "Renaming interfaces WAN LAN WLAN" "info"
+		mkdir -p $SDCARD/etc/udev/rules.d/
 		cat <<- EOF > "${SDCARD}/etc/udev/rules.d/70-persistent-net.rules"
-			SUBSYSTEM=="net", ACTION!="remove", KERNELS=="0002:21:00.0", NAME:="wlan0"
+			SUBSYSTEM=="net", ACTION!="remove", KERNELS=="0002:21:00.0", NAME="wlan0"
+			SUBSYSTEM=="net", ACTION!="remove", KERNELS=="0004:41:00.0", NAME="eth0"
 		EOF
 	fi
 
 	if [[ "${BOARD}" == "nanopi-r5c" ]]; then
+		display_alert "${BOARD}" "Renaming interfaces WAN LAN WLAN" "info"
+		mkdir -p $SDCARD/etc/udev/rules.d/
 		cat <<- EOF > "${SDCARD}/etc/udev/rules.d/70-persistent-net.rules"
-			SUBSYSTEM=="net", ACTION!="remove", KERNELS=="0000:01:00.0", NAME:="wlan0"
+			SUBSYSTEM=="net", ACTION!="remove", KERNELS=="0000:01:00.0", NAME="wlan0"
+			SUBSYSTEM=="net", ACTION!="remove", KERNELS=="0001:01:00.0", NAME="lan"
+			SUBSYSTEM=="net", ACTION!="remove", KERNELS=="0002:01:00.0", NAME="wan"
 		EOF
 	fi
 }
@@ -182,6 +189,7 @@ function pre_customize_image__252_manage_config_files() {
 				run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/network_manager/"${sourcefile}" "${SDCARD}"/etc/NetworkManager/dispatcher.d/"${destfile}"
 				run_host_command_logged chmod 0744 "${SDCARD}"/etc/NetworkManager/dispatcher.d/"${destfile}"
 				run_host_command_logged chown root:root "${SDCARD}"/etc/NetworkManager/dispatcher.d/"${destfile}"
+				run_host_command_logged ln -s "${SDCARD}"/etc/NetworkManager/dispatcher.d/"${destfile}" "${SDCARD}"/etc/NetworkManager/dispatcher.d/no-wait.d/"${destfile}"
 			fi
 		done
 	fi
@@ -305,7 +313,7 @@ function pre_customize_image__256_setup_stealth_networking()
 	if [[ "${BOARD}" != "nanopi-r5c" ]] && [[ "${BOARD}" != "orangepi5-plus" ]] && [[ "${BOARD}" != "rock-5b" ]]; then
 		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/udev-v10/70-persistent-net.rules "${SDCARD}"/etc/udev/rules.d
 	else
-		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/udev-v10/70-persistent-net.rules "${SDCARD}"/etc/udev/rules.d/71-persistent-net.rules
+		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/udev-v10/70-persistent-net.rules "${SDCARD}"/etc/udev/rules.d/79-persistent-net.rules
 	fi
 
 	if [ ! -d "${SDCARD}"/usr/local/sbin ]; then
