@@ -8,7 +8,7 @@ function extension_prepare_config__docker() {
 function post_family_tweaks__orangepi5-plus_udev_network_interfaces() {
 	case "${BOARD}" in
 		orangepi5-plus*)
-		display_alert "${BOARD}" "Renaming interfaces WAN LAN WLAN" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+		display_alert "Renaming interfaces WAN LAN WLAN" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 		mkdir -p "${SDCARD}"/etc/udev/rules.d/
 		cat <<- EOF > "${SDCARD}/etc/udev/rules.d/70-persistent-net.rules"
 			SUBSYSTEM=="net", ACTION!="remove", KERNELS=="0002:21:00.0", NAME="wlan0"
@@ -18,7 +18,7 @@ function post_family_tweaks__orangepi5-plus_udev_network_interfaces() {
 		;;
 
 		nanopi-r5c)
-		display_alert "${BOARD}" "Renaming interfaces WAN LAN WLAN" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+		display_alert "Renaming interfaces WAN LAN WLAN" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 		mkdir -p "${SDCARD}"/etc/udev/rules.d/
 		cat <<- EOF > "${SDCARD}/etc/udev/rules.d/70-persistent-net.rules"
 			SUBSYSTEM=="net", ACTION!="remove", KERNELS=="0000:01:00.0", NAME="wlan0"
@@ -28,7 +28,7 @@ function post_family_tweaks__orangepi5-plus_udev_network_interfaces() {
 		;;
 
 		rock-5b)
-		display_alert "${BOARD}" "Renaming interfaces ETH WLAN" "info"
+		display_alert "Renaming interfaces ETH WLAN" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 		mkdir -p "${SDCARD}"/etc/udev/rules.d/
 		cat <<- EOF > "${SDCARD}/etc/udev/rules.d/70-persistent-net.rules"
 			SUBSYSTEM=="net", ACTION!="remove", KERNELS=="0002:21:00.0", NAME="wlan0"
