@@ -39,7 +39,6 @@ generate_mac_address() {
     echo $mac_address
 }
 
-
 # Function to randomize MAC address using a sane 'rnetlink' way
 randomize_mac() {
   local mac=$(generate_mac_address)
@@ -72,22 +71,26 @@ handle_interface() {
 # Function to handle WiFi interfaces
 handle_wifi() {
   local interface=$1
+  interface_number=${interface##*[!0-9]}
   randomize_mac "$interface"
 
   # Get the new randomized MAC address
   local mac_address=$(get_mac_address "$interface")
   
-  # Get the phy number
-  local phy_num=$(iw dev "$interface" info | awk '/wiphy/ {print $2}')
-  
   # Check for the corresponding monitor interface
-  local mon_interface="mon${phy_num}"
+  local mon_interface="mon${interface_number}"
   if ! iw dev | grep -q "$mon_interface"; then
     iw "$interface" interface add "$mon_interface" type monitor
   fi
   
   # Synchronize the MAC address of the monitor interface with the wlan interface
   set_mac_address "$mon_interface" "$mac_address"
+}
+
+# Helper function to get the MAC address of a given interface
+get_mac_address() {
+  local interface=$1
+  cat /sys/class/net/"$interface"/address
 }
 
 # Helper function to get the MAC address of a given interface
@@ -107,12 +110,13 @@ set_mac_address() {
 # Function to rename and change mode to monitor
 rename_monitor() {
   local interface=$1
+  interface_number=${interface##*[!0-9]}
   randomize_mac "$interface"
-  local phy_num=$(iw dev "$interface" info | awk '/wiphy/ {print $2}')
-  local mon_interface="mon${phy_num}"
+  local mon_interface="mon${interface_number}"
   ip link set dev "$interface" down
   ip link set dev "$interface" name "$mon_interface"
   iw "$mon_interface" set monitor none
+  iw $interface set monitor none
 }
 
 # Main execution block

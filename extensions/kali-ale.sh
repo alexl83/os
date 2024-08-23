@@ -5,6 +5,7 @@ function extension_prepare_config__docker() {
 	add_packages_to_rootfs "${add_pkgs[*]}"
 }
 
+<<<<<<< HEAD
 function post_family_tweaks__board_udev_network_interfaces() {
 	if [[ "${BOARD}" == "orangepi5-plus" ]]; then
 		display_alert "${BOARD}" "Renaming interfaces WAN LAN WLAN" "info"
@@ -32,8 +33,42 @@ function post_family_tweaks__board_udev_network_interfaces() {
 			SUBSYSTEM=="net", ACTION!="remove", KERNELS=="0000:01:00.0", NAME="wlan0"
 			SUBSYSTEM=="net", ACTION!="remove", KERNELS=="0001:01:00.0", NAME="lan"
 			SUBSYSTEM=="net", ACTION!="remove", KERNELS=="0002:01:00.0", NAME="wan"
+=======
+function post_family_tweaks__orangepi5-plus_udev_network_interfaces() {
+	case "${BOARD}" in
+		orangepi5-plus*)
+		display_alert "${BOARD}" "Renaming interfaces WAN LAN WLAN" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+		mkdir -p "${SDCARD}"/etc/udev/rules.d/
+		cat <<- EOF > "${SDCARD}/etc/udev/rules.d/70-persistent-net.rules"
+			SUBSYSTEM=="net", ACTION!="remove", KERNELS=="0002:21:00.0", NAME="wlan0"
+			SUBSYSTEM=="net", ACTION!="remove", KERNELS=="0004:41:00.0", NAME:="lan"
+			SUBSYSTEM=="net", ACTION!="remove", KERNELS=="0003:31:00.0", NAME:="wan"
+>>>>>>> 4a093ee (Misc upgrades:)
 		EOF
-	fi
+		;;
+
+		nanopi-r5c)
+		display_alert "${BOARD}" "Renaming interfaces WAN LAN WLAN" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+		mkdir -p "${SDCARD}"/etc/udev/rules.d/
+		cat <<- EOF > "${SDCARD}/etc/udev/rules.d/70-persistent-net.rules"
+			SUBSYSTEM=="net", ACTION!="remove", KERNELS=="0000:01:00.0", NAME="wlan0"
+			SUBSYSTEM=="net", ACTION!="remove", KERNELS=="0001:01:00.0", NAME="lan"
+			SUBSYSTEM=="net", ACTION!="remove", KERNELS=="0002:01:00.0", NAME="wan"
+		EOF
+		;;
+
+		rock-5b)
+		display_alert "${BOARD}" "Renaming interfaces ETH WLAN" "info"
+		mkdir -p "${SDCARD}"/etc/udev/rules.d/
+		cat <<- EOF > "${SDCARD}/etc/udev/rules.d/70-persistent-net.rules"
+			SUBSYSTEM=="net", ACTION!="remove", KERNELS=="0002:21:00.0", NAME="wlan0"
+			SUBSYSTEM=="net", ACTION!="remove", KERNELS=="0004:41:00.0", NAME="eth0"
+		EOF
+		;;
+
+		*)
+		;;
+	esac
 }
 
 function pre_customize_image__250_1_install_kali_repositories() {
@@ -131,7 +166,7 @@ function pre_customize_image__252_manage_config_files() {
 			if [ -e "${file}" ]; then
 				sourcefile=$(basename "${file}")
 				destfile=$(echo "${sourcefile}" | sed "s/"${BOARD}-"//g") 
-				display_alert "Setting up ${BOARD}-specific modules autoload: ${destfile}" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+				display_alert "Setting up ${BOARD}-specific modules autoload: $(basename "${destfile}" .conf)" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 				run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/modules-load.d/"${sourcefile}" "${SDCARD}"/etc/modules-load.d/"${destfile}"
 			fi
 		done
@@ -262,15 +297,18 @@ function pre_customize_image__254_0_enable_disable_services() {
 		else display_alert "${service} service not found" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 		fi
 	done
+
 	display_alert "installing rfcomm service for bluetooth GPS" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/rfcomm.service "${SDCARD}"/etc/systemd/system
 	if [ -f "${EXTENSION_DIR}"/overlay/common/rfcomm.default_custom ]; then
+
 		display_alert "Found custom rfcomm settings file: enabling service" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/rfcomm.default_custom "${SDCARD}"/etc/default/rfcomm
 		chroot_sdcard systemctl --no-reload enable rfcomm.service
 		else
 		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/rfcomm.default "${SDCARD}"/etc/default/rfcomm
 	fi
+
 	if [ "${BOARD}" == "nanopi-r5c" ]; then
 		display_alert "Enable armbian-leds service for ${BOARD}" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 		chroot_sdcard systemctl --no-reload enable armbian-led-state.service
@@ -293,14 +331,21 @@ function pre_customize_image__255_update_armbian_env() {
 		run_host_command_logged sed -i 's/^bootlogo.*/bootlogo\=false/g' "${SDCARD}"/boot/armbianEnv.txt
 		run_host_command_logged sed -i 's/^console.*/console\=none/g' "${SDCARD}"/boot/armbianEnv.txt
 
-		if [ "${BOARD}" == "orangepizero3" ]; then
+		case "${BOARD}" in
+
+			orangepizero3)
 			display_alert "Enabling IR and UART5 overlays by default" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 			run_host_command_logged echo "overlays=ir uart5-ph" ">>" "${SDCARD}"/boot/armbianEnv.txt
-		elif [[ "${BOARD}" == "orangepi5-plus"* ]]; then
+			;;
+
+			orangepi5-plus*)
 			display_alert "Enabling UART3-M1 (ttyS3) overlay by default" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 			run_host_command_logged echo "overlays=uart3-m1" ">>" "${SDCARD}"/boot/armbianEnv.txt
-		fi
+			;;
 
+			*)
+			;;
+		esac
 		display_alert "Disabling Predictable net interface naming and kernel/splash verbosity" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 		run_host_command_logged echo "extraargs=net.ifnames=0 quiet vt.global_cursor_default=0 nosplash" ">>" "${SDCARD}"/boot/armbianEnv.txt
 	fi
@@ -310,16 +355,23 @@ function pre_customize_image__255_update_armbian_env() {
 function pre_customize_image__256_setup_stealth_networking()
 {
 	display_alert "Setting up udev-based mac randomization and automatic monitor interfaces creations" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+<<<<<<< HEAD
 	if [[ "${BOARD}" != "nanopi-r5c" ]] && [[ "${BOARD}" != "orangepi5-plus" ]] && [[ "${BOARD}" != "rock-5b" ]]; then
 		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/udev-v10/70-persistent-net.rules "${SDCARD}"/etc/udev/rules.d
 	else
 		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/udev-v10/70-persistent-net.rules "${SDCARD}"/etc/udev/rules.d/79-persistent-net.rules
+=======
+	if [ "${BOARD}" != "nanopi-r5c" ] && [[ "${BOARD}" != "orangepi5-plus"* ]]; then
+		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/udev-v11/70-persistent-net.rules "${SDCARD}"/etc/udev/rules.d
+	else
+		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/udev-v11/70-persistent-net.rules "${SDCARD}"/etc/udev/rules.d/71-persistent-net.rules
+>>>>>>> 4a093ee (Misc upgrades:)
 	fi
 
 	if [ ! -d "${SDCARD}"/usr/local/sbin ]; then
 		run_host_command_logged mkdir -p "${SDCARD}"/usr/local/sbin
 	fi
-	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/udev-v10/helpers/* "${SDCARD}"/usr/local/sbin
+	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/udev-v11/helpers/* "${SDCARD}"/usr/local/sbin
 	run_host_command_logged chmod +x "${SDCARD}"/usr/local/sbin/*
 
 }
@@ -349,28 +401,33 @@ function pre_customize_image__258_1_install_dnsleaktest()
 	display_alert "Installing dnsleaktest from gh:macvk/dnsleaktest" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	chroot_sdcard curl -s https://raw.githubusercontent.com/macvk/dnsleaktest/master/dnsleaktest.sh -o /usr/local/bin/dnsleaktest
 	chroot_sdcard chmod +x /usr/local/bin/dnsleaktest
-
 }
 
-function pre_customize_image__259_disablettys()
+function pre_customize_image__259_disable_ttys()
 {
 	display_alert "Disabling serial consoles" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	for ((c=0; c<=9; c++)); do
 		chroot_sdcard systemctl mask serial-getty@ttyS"${c}".service
 	done
+
 	if [ "${BRANCH}" == "vendor" ] || [ "${BRANCH}" == "legacy" ]; then
 		chroot_sdcard systemctl mask serial-getty@ttyFIQ0.service
 	fi
+
 		display_alert "Disabling virtual consoles" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 		chroot_sdcard systemctl mask getty@tty1
 		chroot_sdcard systemctl mask console-setup
+
 	if [ ! -d "${SDCARD}"/etc/systemd/logind.conf.d/ ]; then
 		run_host_command_logged mkdir "${SDCARD}"/etc/systemd/logind.conf.d/
 	fi
+
 	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/logind_00-disable-vtty.conf "${SDCARD}"/etc/systemd/logind.conf.d/disable-vtty.conf
+
 	if [ ! -d "${SDCARD}"/etc/systemd/resolved.conf.d/ ]; then
 		run_host_command_logged mkdir "${SDCARD}"/etc/systemd/resolved.conf.d/
 	fi
+
 	display_alert "Setting system-wide DNS over TLS and systemd-resolved tweaks" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	run_host_command_logged mv "${SDCARD}"/etc/systemd/resolved.conf.d/00-armbian-default-dns.conf "${SDCARD}"/etc/systemd/resolved.conf.d/00-armbian-default-dns.conf.disabled 
 	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/resolved*.conf "${SDCARD}"/etc/systemd/resolved.conf.d/
@@ -421,13 +478,13 @@ function pre_customize_image__262_setup_gpsd() {
 	run_host_command_logged sed -i 's/^DEVICES\=.*/DEVICES\="\/dev\/ttyS3"/g' "${SDCARD}"/etc/default/gpsd
 	;;
 
-	nanopi-r5c)
-	display_alert "Setting up GPSD" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-	run_host_command_logged sed -i 's/^DEVICES\=.*/DEVICES\="\/dev\/rfcomm0"/g' "${SDCARD}"/etc/default/gpsd
-	run_host_command_logged sed -i 's/^GPSD_OPTIONS\=\"\"/GPSD_OPTIONS\=\"-b\"/g' "${SDCARD}"/etc/default/gpsd
+	nanopi-r5c|rock-5b)
 	;;
 
 	*)
+	display_alert "Setting up GPSD" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+	run_host_command_logged sed -i 's/^DEVICES\=.*/DEVICES\="\/dev\/rfcomm0"/g' "${SDCARD}"/etc/default/gpsd
+	run_host_command_logged sed -i 's/^GPSD_OPTIONS\=\"\"/GPSD_OPTIONS\=\"-b\"/g' "${SDCARD}"/etc/default/gpsd
 	;;
 
 	esac
