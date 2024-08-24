@@ -68,7 +68,6 @@ handle_interface() {
   fi
 }
 
-# Function to handle WiFi interfaces
 handle_wifi() {
   local interface=$1
   interface_number=${interface##*[!0-9]}
@@ -93,12 +92,6 @@ get_mac_address() {
   cat /sys/class/net/"$interface"/address
 }
 
-# Helper function to get the MAC address of a given interface
-get_mac_address() {
-  local interface=$1
-  cat /sys/class/net/"$interface"/address
-}
-
 # Helper function to set the MAC address of a given interface
 set_mac_address() {
   local interface=$1
@@ -110,13 +103,12 @@ set_mac_address() {
 # Function to rename and change mode to monitor
 rename_monitor() {
   local interface=$1
-  interface_number=${interface##*[!0-9]}
   randomize_mac "$interface"
-  local mon_interface="mon${interface_number}"
+  local phy_num=$(iw dev "$interface" info | awk '/wiphy/ {print $2}')
+  local mon_interface="mon${phy_num}"
   ip link set dev "$interface" down
   ip link set dev "$interface" name "$mon_interface"
   iw "$mon_interface" set monitor none
-  iw $interface set monitor none
 }
 
 # Main execution block
