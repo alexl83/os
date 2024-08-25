@@ -11,7 +11,7 @@ function post_family_tweaks__orangepi5-plus_udev_network_interfaces() {
 		display_alert "Renaming interfaces WAN LAN WLAN" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 		mkdir -p "${SDCARD}"/etc/udev/rules.d/
 		cat <<- EOF > "${SDCARD}/etc/udev/rules.d/70-persistent-net.rules"
-			SUBSYSTEM=="net", ACTION!="remove", KERNELS=="0002:21:00.0", NAME="wlan0"
+			SUBSYSTEM=="net", ACTION!="move|remove", KERNELS=="0002:21:00.0", NAME="wlan0"
 			SUBSYSTEM=="net", ACTION!="remove", KERNELS=="0004:41:00.0", NAME:="lan"
 			SUBSYSTEM=="net", ACTION!="remove", KERNELS=="0003:31:00.0", NAME:="wan"
 		EOF
@@ -21,7 +21,7 @@ function post_family_tweaks__orangepi5-plus_udev_network_interfaces() {
 		display_alert "Renaming interfaces WAN LAN WLAN" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 		mkdir -p "${SDCARD}"/etc/udev/rules.d/
 		cat <<- EOF > "${SDCARD}/etc/udev/rules.d/70-persistent-net.rules"
-			SUBSYSTEM=="net", ACTION!="remove", KERNELS=="0000:01:00.0", NAME="wlan0"
+			SUBSYSTEM=="net", ACTION!="move|remove", KERNELS=="0000:01:00.0", NAME="wlan0"
 			SUBSYSTEM=="net", ACTION!="remove", KERNELS=="0001:01:00.0", NAME="lan"
 			SUBSYSTEM=="net", ACTION!="remove", KERNELS=="0002:01:00.0", NAME="wan"
 		EOF
@@ -31,7 +31,7 @@ function post_family_tweaks__orangepi5-plus_udev_network_interfaces() {
 		display_alert "Renaming interfaces ETH WLAN" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 		mkdir -p "${SDCARD}"/etc/udev/rules.d/
 		cat <<- EOF > "${SDCARD}/etc/udev/rules.d/70-persistent-net.rules"
-			SUBSYSTEM=="net", ACTION!="remove", KERNELS=="0002:21:00.0", NAME="wlan0"
+			SUBSYSTEM=="net", ACTION!="move|remove", KERNELS=="0002:21:00.0", NAME="wlan0"
 			SUBSYSTEM=="net", ACTION!="remove", KERNELS=="0004:41:00.0", NAME="eth0"
 		EOF
 		;;
@@ -326,15 +326,15 @@ function pre_customize_image__256_setup_stealth_networking()
 {
 	display_alert "Setting up udev-based mac randomization and automatic monitor interfaces creations" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 	if [ "${BOARD}" != "nanopi-r5c" ] && [[ "${BOARD}" != "orangepi5-plus"* ]]; then
-		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/udev-v11/70-persistent-net.rules "${SDCARD}"/etc/udev/rules.d
+		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/udev-v12/70-persistent-net.rules "${SDCARD}"/etc/udev/rules.d
 	else
-		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/udev-v11/70-persistent-net.rules "${SDCARD}"/etc/udev/rules.d/71-persistent-net.rules
+		run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/udev-v12/70-persistent-net.rules "${SDCARD}"/etc/udev/rules.d/71-persistent-net.rules
 	fi
 
 	if [ ! -d "${SDCARD}"/usr/local/sbin ]; then
 		run_host_command_logged mkdir -p "${SDCARD}"/usr/local/sbin
 	fi
-	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/udev-v11/helpers/* "${SDCARD}"/usr/local/sbin
+	run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/udev-v12/helpers/* "${SDCARD}"/usr/local/sbin
 	run_host_command_logged chmod +x "${SDCARD}"/usr/local/sbin/*
 
 }

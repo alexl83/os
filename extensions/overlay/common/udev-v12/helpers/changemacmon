@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+set -x
 # Enable strict mode:
 set -euo pipefail
 
@@ -70,18 +70,43 @@ handle_interface() {
 
 handle_wifi() {
   local interface=$1
+  local max_attempts=10
+  local attempt_count=1
+  interface_name=${interface%[0-9]*}
   interface_number=${interface##*[!0-9]}
+
+  if [[ "${interface_name}" == "mon" ]]; then
+    exit 0
+  fi
+
   randomize_mac "$interface"
 
   # Get the new randomized MAC address
   local mac_address=$(get_mac_address "$interface")
-  
+
   # Check for the corresponding monitor interface
   local mon_interface="mon${interface_number}"
-  if ! iw dev | grep -q "$mon_interface"; then
+  local wlan_interface=${interface_name}${interface_number}
+
+  if [[ "${interface_number}" == "0" ]] && ! iw dev | grep -q "Interface ${mon_interface}" ; then
     iw "$interface" interface add "$mon_interface" type monitor
+  elif [[ "${interface_number}" != "0" ]]; then
+    while iw dev | grep -q "$mon_interface"; do
+    interface_number=$(($interface_number + 1))
+    mon_interface="mon${interface_number}"
+    wlan_interface=${interface_name}${interface_number}
+    ((attempt_count++))
+    if [ $attempt_count -ge $max_attempts ]; then
+      echo "Error: Unable to find available interface names after $max_attempts attempts."
+      exit 1
+    fi
+    done
+    ip link set dev "$interface" down
+    ip link set dev "$interface" name "$wlan_interface"
+    iw "$wlan_interface" interface add "$mon_interface" type monitor
   fi
-  
+
+
   # Synchronize the MAC address of the monitor interface with the wlan interface
   set_mac_address "$mon_interface" "$mac_address"
 }
