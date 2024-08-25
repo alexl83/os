@@ -1,0 +1,12 @@
+/dts-v1/;
+/plugin/;
+
+/ {
+        compatible = "radxa,rock-5b\0rockchip,rk3588";
+        fragment@0 {
+                target-path = "/mmc@fe2d0000";
+                __overlay__ {
+                status = "disabled";
+                        };
+                };
+};
