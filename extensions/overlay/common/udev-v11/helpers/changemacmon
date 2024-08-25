@@ -52,7 +52,7 @@ randomize_mac() {
 handle_interface() {
   local interface=$1
   local driver
-  driver=$(udevadm info --query=property --path=/sys/class/net/"$interface" | awk -F'=' '/DRIVER/ {print $2}')
+  driver=$(udevadm info --query=property --path=/sys/class/net/"$interface" | awk -F'=' '/ID_NET_DRIVER/ {print $2}')
 
   # Check if the interface is wireless
   if [[ $(iw dev "$interface" info &>/dev/null; echo $?) -eq 0 ]]; then
@@ -104,8 +104,17 @@ set_mac_address() {
 rename_monitor() {
   local interface=$1
   randomize_mac "$interface"
-  local phy_num=$(iw dev "$interface" info | awk '/wiphy/ {print $2}')
-  local mon_interface="mon${phy_num}"
+  local int_number=${interface##*[!0-9]}
+  local mon_interface="mon${int_number}"
+
+  # Check if the interface already exists and find an unused one
+  while ip link show "$mon_interface" &> /dev/null; do
+    # Interface exists, increment the number and try again
+    int_number=$((int_number + 1))
+    mon_interface="mon${int_number}"
+  done
+
+  # Once an unused interface name is found, set up the interface
   ip link set dev "$interface" down
   ip link set dev "$interface" name "$mon_interface"
   iw "$mon_interface" set monitor none
