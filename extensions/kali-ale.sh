@@ -11,7 +11,7 @@ function post_family_tweaks__orangepi5-plus_udev_network_interfaces() {
 		display_alert "Renaming interfaces WAN LAN WLAN" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 		mkdir -p "${SDCARD}"/etc/udev/rules.d/
 		cat <<- EOF > "${SDCARD}/etc/udev/rules.d/70-persistent-net.rules"
-			SUBSYSTEM=="net", ACTION!="move|remove", KERNELS=="0002:21:00.0", NAME="wlan0"
+			SUBSYSTEM=="net", ACTION!="move|remove", ATTR{type}=="1", KERNELS=="0002:21:00.0", NAME="wlan0"
 			SUBSYSTEM=="net", ACTION!="remove", KERNELS=="0004:41:00.0", NAME:="lan"
 			SUBSYSTEM=="net", ACTION!="remove", KERNELS=="0003:31:00.0", NAME:="wan"
 		EOF
@@ -21,7 +21,7 @@ function post_family_tweaks__orangepi5-plus_udev_network_interfaces() {
 		display_alert "Renaming interfaces WAN LAN WLAN" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 		mkdir -p "${SDCARD}"/etc/udev/rules.d/
 		cat <<- EOF > "${SDCARD}/etc/udev/rules.d/70-persistent-net.rules"
-			SUBSYSTEM=="net", ACTION!="move|remove", KERNELS=="0000:01:00.0", NAME="wlan0"
+			SUBSYSTEM=="net", ACTION!="move|remove", ATTR{type}=="1", KERNELS=="0000:01:00.0", NAME="wlan0"
 			SUBSYSTEM=="net", ACTION!="remove", KERNELS=="0001:01:00.0", NAME="lan"
 			SUBSYSTEM=="net", ACTION!="remove", KERNELS=="0002:01:00.0", NAME="wan"
 		EOF
@@ -31,7 +31,7 @@ function post_family_tweaks__orangepi5-plus_udev_network_interfaces() {
 		display_alert "Renaming interfaces ETH WLAN" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 		mkdir -p "${SDCARD}"/etc/udev/rules.d/
 		cat <<- EOF > "${SDCARD}/etc/udev/rules.d/70-persistent-net.rules"
-			SUBSYSTEM=="net", ACTION!="move|remove", KERNELS=="0002:21:00.0", NAME="wlan0"
+			SUBSYSTEM=="net", ACTION!="move|remove", ATTR{type}=="1", KERNELS=="0002:21:00.0", NAME="wlan0"
 			SUBSYSTEM=="net", ACTION!="remove", KERNELS=="0004:41:00.0", NAME="eth0"
 		EOF
 		;;
