@@ -13,6 +13,11 @@ function post_family_tweaks__orangepi5-plus_udev_network_interfaces() {
 		# COMFAST CF-WU782AC WiFi Dongle, TEROW ROW02FD WiFi Dongle, COMFAST CF-WU785AC WiFi Dongle
 		ATTR{idVendor}=="0e8d", ATTR{idProduct}=="2870", RUN+="usb_modeswitch '/%k'"
 	EOF
+
+	if [ ! -d "${SDCARD}/usr/share/usb_modeswitch/" ]; then
+		mkdir -p "${SDCARD}/usr/share/usb_modeswitch"
+	fi
+
 	cat <<- EOF > "${SDCARD}/usr/share/usb_modeswitch/0e8d:2870"
 		# COMFAST CF-WU782AC WiFi Dongle, TEROW ROW02FD WiFi Dongle, COMFAST CF-WU785AC WiFi Dongle
 		TargetVendor=0x0e8d
