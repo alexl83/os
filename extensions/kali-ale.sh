@@ -6,10 +6,22 @@ function extension_prepare_config__docker() {
 }
 
 function post_family_tweaks__orangepi5-plus_udev_network_interfaces() {
+	if [ ! -d "${SDCARD}/etc/udev/rules.d/" ]; then
+		mkdir -p "${SDCARD}/etc/udev/rules.d/"
+	fi
+	cat <<- EOF > "${SDCARD}/etc/udev/rules.d/40-usb_modeswitch.rules"
+		# COMFAST CF-WU782AC WiFi Dongle, TEROW ROW02FD WiFi Dongle, COMFAST CF-WU785AC WiFi Dongle
+		ATTR{idVendor}=="0e8d", ATTR{idProduct}=="2870", RUN+="usb_modeswitch '/%k'"
+	EOF
+	cat <<- EOF > "${SDCARD}/usr/share/usb_modeswitch/0e8d:2870"
+		# COMFAST CF-WU782AC WiFi Dongle, TEROW ROW02FD WiFi Dongle, COMFAST CF-WU785AC WiFi Dongle
+		TargetVendor=0x0e8d
+		TargetProductList="7612"
+		StandardEject=1
+	EOF
 	case "${BOARD}" in
 		orangepi5-plus*)
 		display_alert "Renaming interfaces WAN LAN WLAN" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-		mkdir -p "${SDCARD}"/etc/udev/rules.d/
 		cat <<- EOF > "${SDCARD}/etc/udev/rules.d/70-persistent-net.rules"
 			SUBSYSTEM=="net", ACTION!="move|remove", ATTR{type}=="1", KERNELS=="0002:21:00.0", NAME="wlan0"
 			SUBSYSTEM=="net", ACTION!="remove", KERNELS=="0004:41:00.0", NAME:="lan"
@@ -19,7 +31,6 @@ function post_family_tweaks__orangepi5-plus_udev_network_interfaces() {
 
 		nanopi-r5c)
 		display_alert "Renaming interfaces WAN LAN WLAN" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-		mkdir -p "${SDCARD}"/etc/udev/rules.d/
 		cat <<- EOF > "${SDCARD}/etc/udev/rules.d/70-persistent-net.rules"
 			SUBSYSTEM=="net", ACTION!="move|remove", ATTR{type}=="1", KERNELS=="0000:01:00.0", NAME="wlan0"
 			SUBSYSTEM=="net", ACTION!="remove", KERNELS=="0001:01:00.0", NAME="lan"
