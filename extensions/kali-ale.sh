@@ -154,6 +154,7 @@ function pre_customize_image__252_manage_config_files() {
 				destfile=$(echo "${sourcefile}" | sed "s/"${BOARD}-"//g") 
 				display_alert "Setting up ${BOARD}-specific modules autoload: $(basename "${destfile}" .conf)" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 				run_host_command_logged cp "${EXTENSION_DIR}"/overlay/common/modules-load.d/"${sourcefile}" "${SDCARD}"/etc/modules-load.d/"${destfile}"
+				run_host_command_logged echo "$(basename "${destfile}" .conf)" ">>" "${SDCARD}"/etc/initramfs-tools/modules
 			fi
 		done
 	fi
