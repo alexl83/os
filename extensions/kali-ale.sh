@@ -325,12 +325,18 @@ function pre_customize_image__255_update_armbian_env() {
 			;;
 
 			orangepi5-plus*)
-			display_alert "Enabling UART3-M1 (ttyS3) overlay by default" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
-			run_host_command_logged echo "overlays=uart3-m1" ">>" "${SDCARD}"/boot/armbianEnv.txt
+			display_alert "Enabling UART3-M1 (ttyS3) and fanctrl overlay by default" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+			run_host_command_logged echo "overlays=uart3-m1 fanctrl" ">>" "${SDCARD}"/boot/armbianEnv.txt
+			;;
+
+			rock-5b)
+			display_alert "Enabling fanctrl overlay by default" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
+			run_host_command_logged echo "overlays=fanctrl" ">>" "${SDCARD}"/boot/armbianEnv.txt
 			;;
 
 			*)
 			;;
+			
 		esac
 		display_alert "Disabling Predictable net interface naming and kernel/splash verbosity" "${BOARD}:${RELEASE}-${BRANCH} :: ${EXTENSION}" "info"
 		run_host_command_logged echo "extraargs=net.ifnames=0 quiet vt.global_cursor_default=0 nosplash" ">>" "${SDCARD}"/boot/armbianEnv.txt
